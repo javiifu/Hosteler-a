@@ -13,14 +13,11 @@ public class Mesa {
     }
 
     // Getters
-    public int getCapacidad() {
-        return capacidad;
-    }
+    public String getCodigo() { return codigo; }
+    public int getCapacidad() { return capacidad; }
 
     // Setters
-    public void setCapacidad(int capacidad) {
-        this.capacidad = capacidad;
-    }
+    public void setCapacidad(int capacidad) { this.capacidad = capacidad; }
 
     // Metodos
     public void cambiarEstadoMesa() {

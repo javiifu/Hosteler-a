@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 public class CartaVIEW {
     Scanner sc = new Scanner(System.in);
+    CategoriaVIEW categoriaVIEW = new CategoriaVIEW();
+    PlatoVIEW platoVIEW = new PlatoVIEW();
 
     //Menu principal de la clase Carta
     public void menu() {
@@ -43,7 +45,7 @@ public class CartaVIEW {
 
             switch (opcion) {
                 case 1 -> { categoriaVIEW.modificarCategoria(); }
-                case 2 -> { platoVIEW.modificarPlato(); }
+                case 2 -> { productoVIEW.modificarProducto(); }
                 case 0 -> System.out.println("Volviendo al menu anterior. ");
                 default -> System.out.println("ERR0R: No se reconoció esa opción");
             }
@@ -56,14 +58,14 @@ public class CartaVIEW {
         do {
             System.out.println("Qué desea hacer con la carta?");
             System.out.println("1. Crear categoria");
-            System.out.println("2. Crear plato");
+            System.out.println("2. Crear producto");
             System.out.println("0. Atrás");
             System.out.print(">>> ");
             opcion = sc.nextInt();
 
             switch (opcion) {
                 case 1 -> { categoriaVIEW.crearCategoria(); }
-                case 2 -> { platoVIEW.crearPlato(); }
+                case 2 -> { productoVIEW.crearProducto(); }
                 case 0 -> System.out.println("Volviendo al menu anterior. ");
                 default -> System.out.println("ERR0R: No se reconoció esa opción");
             }

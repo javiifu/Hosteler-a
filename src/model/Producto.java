@@ -8,12 +8,11 @@ public class Producto {
     private boolean disponible;
     private int categoriaCodigo;
 
-    public Producto(String nombre, String descripcion, double precio, boolean disponible, int categoriaCodigo) {
+    public Producto(String nombre, String descripcion, double precio, boolean disponible) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.disponible = disponible;
-        this.categoriaCodigo = categoriaCodigo;
     }
 
     // Getters
@@ -28,7 +27,7 @@ public class Producto {
     public void setNombre(String nombre) { this.nombre = nombre; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
     public void setPrecio(double precio) { this.precio = precio; }
-    public void setDisponible(boolean disponible) { this.disponible = disponible; }
+    public void cambiarEstadoProducto() { this.disponible = !this.disponible; } // Cambia el estado de disponibilidad
     public void setCategoriaCodigo(int categoriaCodigo) { this.categoriaCodigo = categoriaCodigo; }
 
     @Override

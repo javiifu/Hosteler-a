@@ -15,6 +15,7 @@ public class Mesa {
     // Getters
     public String getCodigo() { return codigo; }
     public int getCapacidad() { return capacidad; }
+    public Boolean getEstado() { return estado; }
 
     // Setters
     public void setCapacidad(int capacidad) { this.capacidad = capacidad; }

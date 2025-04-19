@@ -5,7 +5,8 @@ import java.util.Scanner;
 public class CartaVIEW {
     Scanner sc = new Scanner(System.in);
     CategoriaVIEW categoriaVIEW = new CategoriaVIEW();
-    PlatoVIEW platoVIEW = new PlatoVIEW();
+    ProductoVIEW productoVIEW = new ProductoVIEW();
+    CartaDAO cartaDAO = new CartaDAO();
 
     //Menu principal de la clase Carta
     public void menu() {

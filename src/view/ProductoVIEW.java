@@ -117,7 +117,7 @@ public class ProductoVIEW {
 
     public void modificarDisponibilidadProducto() {
         Producto producto = this.buscarProducto();
-        System.out.println("Disponibilidad actual del producto: " + producto.isDisponible());
+        System.out.println("Disponibilidad actual del producto: " + (producto.isDisponible() ? "Disponible" : "No disponible"));
 
         int opcion;
         boolean cambiarDisponibilidad = false;
@@ -134,14 +134,14 @@ public class ProductoVIEW {
             } else if (opcion == 2) {
             cambiarDisponibilidad = false;
             } else {
-            System.out.println("Opción no válida. Intente nuevamente.");
+            System.out.println("ERR0R: No se reconoció esa opción");
             }
         } while (opcion != 1 && opcion != 2);
 
         if (cambiarDisponibilidad) {
             System.out.println("Cambiando la disponibilidad del producto...");
             producto.cambiarEstadoProducto();
-            System.out.println("Disponibilidad cambiada a: " + producto.isDisponible());
+            System.out.println("Disponibilidad cambiada a: " + (producto.isDisponible() ? "Disponible" : "Ocupada"));
 
             productoDAO.modificarDisponibilidadProducto(producto.getCodigo(), producto.isDisponible());
         } else {
@@ -156,7 +156,7 @@ public class ProductoVIEW {
         System.out.print("Nuevo código de categoría del producto: ");
         int categoriaCodigo = sc.nextInt();
 
-        
+
         // productoDAO.modificarCategoriaProducto(codigo, categoriaCodigo);
     }
 }

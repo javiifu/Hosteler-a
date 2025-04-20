@@ -7,13 +7,13 @@ public class Mesa {
     private int capacidad;
     private boolean estado; 
 
-    public void Mesa(int numero, int capacidad, boolean estado) {
+    public Mesa(int numero, int capacidad, boolean estado) {
         this.numero = numero;
         this.capacidad = capacidad;
         this.estado = estado;
 }
     //Constructor para consultas y actualizaciones (con el id)
-    public void Mesa(int id, int numero, int capacidad, boolean estado) {
+    public Mesa(int id, int numero, int capacidad, boolean estado) {
     this.id = id;
     this.numero = numero;
     this.capacidad = capacidad;

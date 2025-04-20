@@ -1,6 +1,6 @@
 package model;
 
-public class mesa {
+public class Mesa {
     //Atributos
     private int id;
     private int numero;

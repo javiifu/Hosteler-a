@@ -1,55 +1,55 @@
 {
-    "nombre_restaurante": "",
-    "numero_mesas": "",
+    "nombre_restaurante": "HOSTELER-A",
+    "numero_mesas": "24",
     "usuarios": [
         {
-            "user": "",
-            "password": "",
-            "admin": ""
+            "user": "Javi",
+            "password": "123",
+            "admin": "Y"
         },
         {
-            "user": "",
-            "password": "",
-            "admin": ""
+            "user": "CarlosDZ",
+            "password": "abc",
+            "admin": "N"
         }
     ],
     "taxes": [
         {
-            "zona": "",
-            "valor": ""
+            "zona": "Mesa",
+            "valor": "0.05"
         },
         {
-            "zona": "",
-            "valor": ""
+            "zona": "Terraza",
+            "valor": "0.10"
         }
     ],
     "impresoras": [
         {
-            "ubicacion": "",
-            "url": ""
+            "ubicacion": "Barra",
+            "url": "Placeholder1"
         },
         {
-            "ubicacion": "",
-            "url": ""
+            "ubicacion": "Cocina",
+            "url": "Placeholder2"
         }
     ],
     "horarios":[
         {
-            "nombre": "",
-            "inicio": "",
-            "fin": ""
+            "nombre": "Mañana",
+            "inicio": "8:00",
+            "fin": "13:00"
         },
         {
-            "nombre": "",
-            "inicio": "",
-            "fin": ""
+            "nombre": "Tarde",
+            "inicio": "13:01",
+            "fin": "23:00"
         }
     ],
     "config_caja": [
         {
-            "permitir_cambios": "",
-            "permitir_descuentos": "",
-            "max_descuento": ""
+            "permitir_cambios": "Y",
+            "permitir_descuentos": "Y",
+            "max_descuento": "0.15"
         }
     ]
     

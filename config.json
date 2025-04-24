@@ -5,12 +5,12 @@
         {
             "user": "Javi",
             "password": "123",
-            "admin": "Y"
+            "admin": true
         },
         {
             "user": "CarlosDZ",
             "password": "abc",
-            "admin": "N"
+            "admin": false
         }
     ],
     "taxes": [
@@ -20,7 +20,7 @@
         },
         {
             "zona": "Terraza",
-            "valor": "0.10"
+            "valor": 0.10
         }
     ],
     "impresoras": [
@@ -45,12 +45,9 @@
             "fin": "23:00"
         }
     ],
-    "config_caja": [
-        {
-            "permitir_cambios": "Y",
-            "permitir_descuentos": "Y",
-            "max_descuento": "0.15"
-        }
-    ]
-    
+    "config_caja": {
+        "permitir_cambios": true,
+        "permitir_descuentos": true,
+        "max_descuento": "0.15"
+    }
 }

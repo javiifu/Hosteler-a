@@ -1,0 +1,56 @@
+{
+    "nombre_restaurante": "",
+    "numero_mesas": "",
+    "usuarios": [
+        {
+            "user": "",
+            "password": "",
+            "admin": ""
+        },
+        {
+            "user": "",
+            "password": "",
+            "admin": ""
+        }
+    ],
+    "taxes": [
+        {
+            "zona": "",
+            "valor": ""
+        },
+        {
+            "zona": "",
+            "valor": ""
+        }
+    ],
+    "impresoras": [
+        {
+            "ubicacion": "",
+            "url": ""
+        },
+        {
+            "ubicacion": "",
+            "url": ""
+        }
+    ],
+    "horarios":[
+        {
+            "nombre": "",
+            "inicio": "",
+            "fin": ""
+        },
+        {
+            "nombre": "",
+            "inicio": "",
+            "fin": ""
+        }
+    ],
+    "config_caja": [
+        {
+            "permitir_cambios": "",
+            "permitir_descuentos": "",
+            "max_descuento": ""
+        }
+    ]
+    
+}

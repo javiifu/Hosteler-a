@@ -1,6 +1,6 @@
 {
     "nombre_restaurante": "HOSTELER-A",
-    "numero_mesas": "24",
+    "numero_mesas": 24,
     "usuarios": [
         {
             "user": "Javi",
@@ -16,7 +16,7 @@
     "taxes": [
         {
             "zona": "Mesa",
-            "valor": "0.05"
+            "valor": 0.05
         },
         {
             "zona": "Terraza",
@@ -48,6 +48,6 @@
     "config_caja": {
         "permitir_cambios": true,
         "permitir_descuentos": true,
-        "max_descuento": "0.15"
+        "max_descuento": 0.15
     }
 }

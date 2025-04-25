@@ -1,0 +1,53 @@
+{
+    "nombre_restaurante": "HOSTELER-A",
+    "numero_mesas": 24,
+    "usuarios": [
+        {
+            "user": "Javi",
+            "password": "123",
+            "admin": true
+        },
+        {
+            "user": "CarlosDZ",
+            "password": "abc",
+            "admin": false
+        }
+    ],
+    "taxes": [
+        {
+            "zona": "Mesa",
+            "valor": 0.05
+        },
+        {
+            "zona": "Terraza",
+            "valor": 0.10
+        }
+    ],
+    "impresoras": [
+        {
+            "ubicacion": "Barra",
+            "url": "Placeholder1"
+        },
+        {
+            "ubicacion": "Cocina",
+            "url": "Placeholder2"
+        }
+    ],
+    "horarios":[
+        {
+            "nombre": "Mañana",
+            "inicio": "8:00",
+            "fin": "13:00"
+        },
+        {
+            "nombre": "Tarde",
+            "inicio": "13:01",
+            "fin": "23:00"
+        }
+    ],
+    "config_caja": {
+        "permitir_cambios": true,
+        "permitir_descuentos": true,
+        "max_descuento": 0.15
+    }
+}

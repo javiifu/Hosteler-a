@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS Mesa (
     estado BOOLEAN DEFAULT TRUE /*Cambiar variable.*/
 );
 /*Crear tabla Catergoría, producto tabla aux de categoría */
-CREATE TABLE IF NOT EXISTS Plato ( /*Cambiar a producto. */
-    codigo VARCHAR PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS Producto ( /*Cambiar a producto. */
+    codigo INT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     descripcion TEXT NOT NULL,
     precio DECIMAL(8,2)
@@ -22,10 +22,10 @@ CREATE TABLE IF NOT EXISTS Pedido (
 CREATE TABLE IF NOT EXISTS Pedido_plato (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_pedido INT NOT NULL,
-    codigo_plato VARCHAR(20) NOT NULL,
+    codigo_plato INT NOT NULL,
     cantidad INT NOT NULL,
-    FOREIGN KEY (id_pedido) REFERENCES Pedido(id)
-    FOREIGN KEY (codigo_plato) REFERENCES Plato(codigo)
+    FOREIGN KEY (id_pedido) REFERENCES Pedido(id),
+    FOREIGN KEY (codigo_plato) REFERENCEs Producto(codigo)
 );
 
 /*De momento no*/
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Empleado (
     nombre VARCHAR(40),
     apellidos VARCHAR (100),
     direccion VARCHAR (100),
-    telefono INT(20),
+    telefono VARCHAR (20),
     salario DECIMAL(8,2),
     puesto VARCHAR (40),
     cuenta_bancaria VARCHAR(50) 
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS Inventario (
 
 CREATE TABLE IF NOT EXISTS Flujo_caja (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tipo ('INGRESO', 'GASTO') NOT NULL,
+    tipo ENUM('INGRESO', 'GASTO') NOT NULL,
     descripcion TEXT NOT NULL,
     cantidad DECIMAL(10,2) NOT NULL,
     fecha DATE NOT NULL,

@@ -1,8 +1,4 @@
 
-/*Creacion base de datos*/
-CREATE DATABASE Hosteleria;
-USE DATABASE Hosteleria;
-
 /*Creacion de tablas*/
 CREATE TABLE IF NOT EXISTS Mesa (
     numero INT PRIMARY KEY,

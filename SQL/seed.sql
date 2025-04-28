@@ -1,15 +1,11 @@
-/*Creacion base de datos*/
-CREATE DATABASE Hosteleria;
-USE DATABASE Hosteleria;
 
 /*Creacion de tablas*/
 CREATE TABLE IF NOT EXISTS Mesa (
     numero INT PRIMARY KEY,
-    espacios INT DEFAULT 4,
-    estado BOOLEAN DEFAULT TRUE
+    estado BOOLEAN DEFAULT TRUE /*Cambiar variable.*/
 );
-
-CREATE TABLE IF NOT EXISTS Plato (
+/*Crear tabla Catergoría, producto tabla aux de categoría */
+CREATE TABLE IF NOT EXISTS Plato ( /*Cambiar a producto. */
     codigo VARCHAR PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     descripcion TEXT NOT NULL,
@@ -20,9 +16,8 @@ CREATE TABLE IF NOT EXISTS Pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     precio_total DECIMAL(8,2),
     hora_pedido TIME,
-    completado BOOLEAN DEFAULT FALSE,
-    
-);
+    completado BOOLEAN DEFAULT FALSE
+    );
 
 CREATE TABLE IF NOT EXISTS Pedido_plato (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,6 +28,7 @@ CREATE TABLE IF NOT EXISTS Pedido_plato (
     FOREIGN KEY (codigo_plato) REFERENCES Plato(codigo)
 );
 
+/*De momento no*/
 CREATE TABLE IF NOT EXISTS Empleado (
     dni VARCHAR(20) PRIMARY KEY,
     nombre VARCHAR(40),
@@ -43,14 +39,14 @@ CREATE TABLE IF NOT EXISTS Empleado (
     puesto VARCHAR (40),
     cuenta_bancaria VARCHAR(50) 
 );
-
+/*De momento no*/
 CREATE TABLE IF NOT EXISTS Proveedor (
     codigo VARCHAR(20) PRIMARY KEY,
     nombre VARCHAR(40),
     direccion VARCHAR (100),
     cuenta_bancaria VARCHAR(50)
 );
-
+/*De momento no*/
 CREATE TABLE IF NOT EXISTS Inventario (
     codigo_producto VARCHAR(20) PRIMARY KEY,
     cantidad INT NOT NULL,
@@ -66,6 +62,8 @@ CREATE TABLE IF NOT EXISTS Flujo_caja (
     fecha DATE NOT NULL,
     categoria VARCHAR(50) NOT NULL
 );
+
+
 
 
 

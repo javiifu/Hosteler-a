@@ -13,17 +13,13 @@ public class Pedido {
         this.horaPedido = horaPedido;
     }
 
-    // Getters y setters para todos los atributos
+    // Getters y setters
     public int getId() { return id;}
     public int getNumeroMesa() {return numeroMesa; }
     public LocalDateTime getHoraPedido() { return horaPedido; }
 
     @Override
     public String toString() {
-        return "Pedido{" +
-               "id=" + id +
-               ", numeroMesa=" + numeroMesa +
-               ", horaPedido=" + horaPedido +
-               '}';
+        return "Pedido: id = " + id + ", numeroMesa = " + numeroMesa + ", horaPedido = " + horaPedido ;
     }
 }

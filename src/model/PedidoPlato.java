@@ -19,10 +19,6 @@ public class PedidoPlato {
 
     @Override
     public String toString() {
-        return "PedidoPlato{" +
-               ", pedidoId=" + pedidoId +
-               ", codigoProducto=" + codigoProducto +
-               ", cantidad=" + cantidad +
-               '}';
+        return "PedidoPlato: id = " + pedidoId +  ", codigoProducto = " + codigoProducto + ", cantidad = " + cantidad;
     }
 }

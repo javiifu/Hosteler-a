@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS Pedido (
     fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
     numero_mesa INT,
     completado BOOLEAN DEFAULT FALSE,
+    pagado BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (numero_mesa) REFERENCES Mesa(numero)
     );
 
@@ -44,6 +45,12 @@ CREATE TABLE IF NOT EXISTS Producto_Alergeno (
     PRIMARY KEY (id_producto, id_alergeno), 
     FOREIGN KEY (id_producto) REFERENCES Producto(codigo),
     FOREIGN KEY (id_alergeno) REFERENCES Alergeno(id)
+);
+
+CREATE TABLE IF NOT EXISTS Estadisticas_venta (
+    id_producto INT NOT NULL,
+    cantidad INT,
+    FOREIGN KEY (id_producto) REFERENCES Producto(id_producto)
 );
 /*INSERT INTO Alergeno (nombre) VALUES
 ('Leche'),
@@ -124,6 +131,26 @@ END;
 DELIMITER ;
 
 
+/*Trigger para actualizar las estadisticas de ventas cada vez que se vende un producto*/
+
+DELIMITER //
+CREATE TRIGGER agregar_actualizar_estadisticas_venta
+AFTER INSERT ON Pedido_plato
+FOR EACH ROW
+BEGIN
+    
+    DECLARE producto_id INT;
+    SELECT id_producto INTO producto_id
+    FROM Producto
+    WHERE codigo = NEW.codigo_plato;
+
+    INSERT INTO Estadisticas_venta (id_producto, cantidad)
+    VALUES (producto_id, NEW.cantidad)
+    ON DUPLICATE KEY UPDATE cantidad = cantidad + NEW.cantidad;
+
+END;
+//
+DELIMITER ;
 
 
 

@@ -112,6 +112,7 @@ public class PedidoDAO {
                 ResultSet rs = stmt.executeQuery();
                 
                 while (rs.next()) {
+                    //Obtiene nombre del plato y cantidad y lo mete en el mapa
                     String nombrePlato = rs.getString("nombre_plato");
                     int cantidad = rs.getInt("cantidad");
                     mapaPlatosPedido.put(nombrePlato, cantidad);
@@ -123,5 +124,40 @@ public class PedidoDAO {
         }
         return mapaPlatosPedido;
     }
+    
     //Metodo Obtener precio total
+    public static double calcularCuenta(Integer numeroMesa) {
+        Map<String, Integer> platosPedido = obtenerPlatosPedido(numeroMesa);
+        double precioTotal = 0.0;
+        Connection conexion = ConexionBD.conectar();
+
+        if (conexion != null && platosPedido != null && !platosPedido.isEmpty()) {
+            String query = "SELECT precio FROM Producto WHERE nombre = ?";
+
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                //Recorre el hasmap y saca el nombre y cantidad
+                for (Map.Entry<String, Integer> entrada : platosPedido.entrySet()) {
+                    String nombrePlato = entrada.getKey();
+                    int cantidad = entrada.getValue();
+
+                    //Pasa el nombre de plato en la query
+                    stmt.setString(1, nombrePlato);
+                    ResultSet rs = stmt.executeQuery();
+
+                    if (rs.next()) {
+                        //Calcula el precio total
+                        double precioUnitario = rs.getDouble("precio");
+                        precioTotal += precioUnitario * cantidad;
+                    } else {
+                        System.out.println("Error: No se encontró el precio del plato: " + nombrePlato);
+                    }
+                }
+                
+            } catch (SQLException e) {
+                System.out.println("Error al calcular el precio total del pedido: " + e.getMessage());
+            }
+        }
+        return precioTotal;
+    }
+
 }

@@ -103,9 +103,27 @@ CREATE TABLE IF NOT EXISTS Flujo_caja (
 CREATE TABLE IF NOT EXISTS Usuarios (
     id INT AUTO_INCREMENTE PRIMARY KEY, 
     administrador BOOLEAN DEFAULT FALSE,
-    
-)
+    nombre_usuario VARCHAR(50) NOT NULL UNIQUE,
+    contraseña VARCHAR(50) NOT NULL 
+);
 
+/*De momento vamos a hacer que solo haya un administrador*/
+DELIMITER //
+
+CREATE TRIGGER prevenir_multiples_admins
+BEFORE INSERT ON usuarios
+FOR EACH ROW
+BEGIN
+  IF NEW.es_admin = TRUE THEN
+    IF (SELECT COUNT(*) FROM usuarios WHERE es_admin = TRUE) > 0 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Solo puede existir un administrador.';
+    END IF;
+  END IF;
+END;
+//
+
+DELIMITER ;
 
 
 

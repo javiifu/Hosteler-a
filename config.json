@@ -1,18 +1,5 @@
 {
     "nombre_restaurante": "HOSTELER-A",
-    "numero_mesas": 24,
-    "usuarios": [
-        {
-            "user": "Javi",
-            "password": "123",
-            "admin": true
-        },
-        {
-            "user": "CarlosDZ",
-            "password": "abc",
-            "admin": false
-        }
-    ],
     "taxes": [
         {
             "zona": "Mesa",

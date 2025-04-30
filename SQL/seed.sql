@@ -107,6 +107,16 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     contraseña VARCHAR(50) NOT NULL 
 );
 
+CREATE TABLE IF NOT EXISTS Historial_sesiones(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo ENUM('INICIO_SESION', 'CIERRE_SESION') NOT NULL,
+    concepto VARCHAR(300),
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    id_usuario INT NOT NULL,
+    CONSTRAINT FOREIGN KEY(id_usuario) REFERENCES Usuarios(id)
+);
+
 /*De momento vamos a hacer que solo haya un administrador*/
 DELIMITER //
 

@@ -1,10 +1,10 @@
 package dao;
-import model.Log;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-public class HistorialDAO {
-    public static void newLog(Log log){
+import model.LogSesion;
+public class HistorialSesionesDAO {
+    public static void newLog(LogSesion log){
         Connection conexion = ConexionBD.conectar();
         String sql = "INSERT INTO Historial (fecha, hora, id_usuario, tipo, concepto) VALUES (?, ?, ?, ?, ?)";
         try {

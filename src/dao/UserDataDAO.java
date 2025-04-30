@@ -55,4 +55,49 @@ public class UserDataDAO {
         }
         return null;
     }
+
+    public static boolean existenUsuarios(){
+        String sql = "SELECT COUNT(*) FROM Usuarios";
+        Connection conexion = ConexionBD.conectar();
+        try {
+            PreparedStatement statement = conexion.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al verificar usuarios: " + e.getMessage());
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }
+        return false;
+    }
+
+    public static void newUsuario(String user, String password, boolean admin){
+        String sql = "INSERT INTO Usuarios (nombre_usuario, contraseña, administrador) VALUES (?, ?, ?)";
+        Connection conexion = ConexionBD.conectar();
+        try {
+            PreparedStatement statement = conexion.prepareStatement(sql);
+            statement.setString(1, user);
+            statement.setString(2, password);
+            statement.setBoolean(3, admin);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al insertar usuario: " + e.getMessage());
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }
+    }
 }

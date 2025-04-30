@@ -1,3 +1,4 @@
+package main;
 import javax.swing.*;
 
 import config.ColorPaleta;
@@ -8,12 +9,13 @@ import java.awt.event.ActionEvent;
 
 import view.VistaMesas;
 
-public class TPVMain extends JFrame {
+public class TPVMain extends JFrame implements ActionListener {
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private VistaMesas vistaMesas;
     private VistaMenu vistaMenu;
-    private VistaPedidos vistaPedidos;
+    private VistaConfiguracion vistaConfiguracion;
+
 
     public TPVMain() {
         setTitle("TPV - Restaurante/Bar");
@@ -24,15 +26,16 @@ public class TPVMain extends JFrame {
         
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
-
-        pedidoActual = new Pedido(); 
+ 
         vistaMesas = new VistaMesas(this);
-        vistaMenu = new VistaMenu(this, pedidoActual);
-        vistaPedidos = new VistaPedidos(this, pedidoActual); // Pasar el pedido actual a la vista de pedidos
+        vistaMenu = new VistaMenu(this);
+        vistaConfiguracion = new VistaConfiguracion(this);
+
         
         mainPanel.add(vistaMesas, "Mesas");
         mainPanel.add(vistaMenu, "Menu");
-        mainPanel.add(vistaPedidos, "Pedidos");
+        mainPanel.add(vistaConfiguracion, "Configuracion");
+
 
         add(mainPanel);
 

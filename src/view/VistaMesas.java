@@ -12,6 +12,7 @@ public class VistaMesas extends JPanel {
         setLayout(new BorderLayout()); // Diseño por regiones
         JLabel titulo = new JLabel("Gestion de mesas", SwingConstants.CENTER);
         add(titulo, BorderLayout.NORTH); // Añadir título en la parte superior
+        setBackground(new Color(0x222222)); // Color de fondo gris oscuro
 
         JPanel panelMesas = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Panel para las mesas
         int numeroMesas = config.getNumero_mesas();  // Obtener el número de mesas desde la configuración

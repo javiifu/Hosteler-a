@@ -16,7 +16,7 @@ public class TPVMain extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null); // Centra la ventana en la pantalla
-        setBackground(Color.LIGHT_GRAY);
+        setBackground(Color(0x2222222)); // Color de fondo gris oscuro
         
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);

@@ -6,7 +6,7 @@ import model.LogSesion;
 public class HistorialSesionesDAO {
     public static void newLog(LogSesion log){
         Connection conexion = ConexionBD.conectar();
-        String sql = "INSERT INTO Historial (fecha, hora, id_usuario, tipo, concepto) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Historial_sesiones (fecha, hora, id_usuario, tipo, concepto) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = conexion.prepareStatement(sql);
             ps.setDate(1, log.getFecha());

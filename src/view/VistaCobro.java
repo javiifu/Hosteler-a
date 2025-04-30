@@ -2,48 +2,51 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.Flow;
 
 import main.TPVMain;
 import model.Pedido;
 import config.ColorPaleta;
 
-public class VistaCobro extends JPanel {
-    private JTextArea areaPedido;
-    private JLabel etiquetaTotal;
-    private JButton botonEfectivo;
-    private JButton botonTarjeta;
-    private JButton botonVolver;
+public class VistaCobro extends JPanel implements ActionListener {
+    private JLabel mesaLabel;
+    private JLabel totalLabel;
+    private JTextArea detalleCuentaArea;
+    private JButton efectivoButton;
+    private JButton tarjetaButton;
+    private JButton volverButton;
+
+    private Pedido pedidoActual;
     
     public VistaCobro(TPVMain tpvMain, Pedido pedido) {
-        setLayout(new BorderLayout());
-        JLabel titulo = new JLabel("Cobro", SwingConstants.CENTER);
+        this.pedidoActual = pedido;
+
         setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
-        titulo.setForeground(ColorPaleta.TEXTO_PRINCIPAL_CLARO); // Color del texto del título
-        add(titulo, BorderLayout.NORTH); // Añadir título en la parte superior
+        setLayout(new BorderLayout()); // Diseño por regiones
 
-        areaPedido = new JTextArea(10, 30);
-        areaPedido.setEditable(false); // Hacer el área de texto no editable
-        areaPedido.setBackground(ColorPaleta.TEXTAREA_FONDO); // Color de fondo del área de texto
-        areaPedido.setForeground(ColorPaleta.TEXTAREA_TEXTO); // Color del texto del área de texto
-        add(new JScrollPane(areaPedido), BorderLayout.CENTER); // Añadir área de texto con scroll
+        // Informacion de la mesa y total (NORTH)
+        JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        infoPanel.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
+        mesaLabel = new JLabel("Mesa: " + pedido.getNumeroMesa());
+        mesaLabel.setForeground(ColorPaleta.TEXTO_PRINCIPAL_CLARO); // Color del texto del título
+        infoPanel.add(mesaLabel);
+        add(infoPanel, BorderLayout.NORTH);
 
-        
-        botonEfectivo = new Boton("Pagar en Efectivo");
-        botonEfectivo.setBackground(ColorPaleta.BOTON_PRIMARIO_FONDO); // Color de fondo del botón
-        botonEfectivo.setForeground(ColorPaleta.BOTON_PRIMARIO_TEXTO); // Color del texto del botón
-        botonEfectivo.setActionCommand("Pagar en Efectivo");
-        botonEfectivo.addActionListener(tpvMain); // Usar tpvMain como ActionListener
-        
-        botonTarjeta = new Boton("Pagar con Tarjeta");
-        botonTarjeta.setBackground(ColorPaleta.BOTON_PRIMARIO_FONDO); // Color de fondo del botón
-        botonTarjeta.setForeground(ColorPaleta.BOTON_PRIMARIO_TEXTO); // Color del texto del botón
-        botonTarjeta.setActionCommand("Pagar con Tarjeta");
-        botonTarjeta.addActionListener(tpvMain); // Usar tpvMain como ActionListener
+        // Detalle de la cuenta y total (CENTER)
+        detalleCuentaArea = new JTextArea("...");
+        detalleCuentaArea.setEditable(false);
+        detalleCuentaArea.setBackground(ColorPaleta.TEXTAREA_FONDO); // Color de fondo gris claro
+        detalleCuentaArea.setForeground(ColorPaleta.TEXTAREA_TEXTO); // Color del texto gris oscuro
+        add(new JScrollPane(detalleCuentaArea), BorderLayout.CENTER); // Agrega el área de texto con scroll
 
-        JPanel panelBotones = new JPanel( new GridLayout(2, 1, 0, 10)); // Panel para los botones
-        panelBotones.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo del panel de botones
-        panelBotones.add(botonEfectivo); // Añadir botón de efectivo
-        panelBotones.add(botonTarjeta); // Añadir botón de tarjeta
-        add(panelBotones, BorderLayout.EAST); // Añadir panel de botones a la derecha
+        // JPanel para boton de volver (SOUTH)
+        JPanel volverPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        volverPanel.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
+        volverButton = new Boton("Volver");
+        volverButton.setActionCommand("volver");
+        volverButton.addActionListener(this);
+        volverPanel.add(volverButton);
+        add(volverPanel, BorderLayout.SOUTH);
+
     }
 }

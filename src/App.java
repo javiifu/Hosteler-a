@@ -1,5 +1,7 @@
 import config.*;
 import dao.ConexionBD;
+import model.UserData;
+
 import java.awt.FlowLayout;
 import java.sql.Connection;
 import javax.swing.JButton;
@@ -7,8 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import view.PlatoVIEW;
-
+import dao.UserDataDAO;
 public class App {
     static JFrame frame = new JFrame("Hosteler-a");
     static UserData userData = null;
@@ -57,10 +58,9 @@ public class App {
             String user = txt_user.getText();
             String password = txt_pass.getText();
 
-            if (true) { // validar si el usuario es correcto en DB  USAR PREPAREDSTATEMENT IMPORTANTE
-                int id = 1; // consulta en db
-                boolean isAdmin = true; //consulta en db
-                currentUser[0] = new UserData(id, isAdmin, user, password);
+            if (UserDataDAO.validarCredenciales(user, password)) {
+                currentUser[0] = UserDataDAO.obtenerUsuario(user);
+                JOptionPane.showMessageDialog(dialog, "Bienvenido " + user);
             
                 dialog.dispose();
             } else {

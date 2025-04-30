@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import model.UserData;
 public class App {
@@ -42,7 +43,7 @@ public class App {
 
 
     JTextField txt_user = new JTextField(16);
-    JTextField txt_pass = new JTextField(16);
+    JPasswordField txt_pass = new JPasswordField(16);
 
     JButton btn_login = new JButton("Iniciar Sesión");
 

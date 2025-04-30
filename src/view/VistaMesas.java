@@ -3,28 +3,33 @@ package view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.FileReader;
-import config.Config;
+
+import config.*;
 import javax.swing.*;
 
 public class VistaMesas extends JPanel {
     Config config = new Config(); // Instancia de la clase Config para acceder a la configuración
+
     public VistaMesas(TPVMain tpvMain) {
         setLayout(new BorderLayout()); // Diseño por regiones
         JLabel titulo = new JLabel("Gestion de mesas", SwingConstants.CENTER);
+        setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
+        titulo.setForeground(ColorPaleta.TEXTO_PRINCIPAL_CLARO); // Color del texto del título
         add(titulo, BorderLayout.NORTH); // Añadir título en la parte superior
-        setBackground(new Color(0x222222)); // Color de fondo gris oscuro
 
         JPanel panelMesas = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Panel para las mesas
+        panelMesas.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo del panel de mesas
         int numeroMesas = config.getNumero_mesas();  // Obtener el número de mesas desde la configuración
         for (int i = 1; i <= numeroMesas; i++) { // Crear botones según el número de mesas configurado
-            JButton botonMesa = new JButton("Mesa " + i);
-            botonMesa.setActionCommand("Mesa " + i);
-            botonMesa.addActionListener(this::mostrarMensaje); // Añadir ActionListener para mostrar mensaje al hacer clic
-            panelMesas.add(botonMesa);
+            Boton botonMesa = new Boton("Mesa " + i); // Crear botón para cada mesa
+            botonMesa.setActionCommand("Mesa " + i); // Establecer el comando de acción del botón
+            botonMesa.addActionListener(tpvMain); // Usar tpvMain como ActionListener
+            botonMesa.addActionListener(this::mostrarMensaje); // Mostrar mensaje al hacer clic
+            panelMesas.add(botonMesa); // Añadir botón al panel de mesas
         }
         add(new JScrollPane(panelMesas), BorderLayout.CENTER); // Añadir panel de mesas a la parte central
 
-        JButton botonMenu = new JButton("Ir al Menu");
+        Boton botonMenu = new Boton("Ir al Menu"); // Crear botón para ir al menú
         botonMenu.setActionCommand("Ir al Menu");
         botonMenu.addActionListener(tpvMain); // Usar tpvMain como ActionListener
         add(botonMenu, BorderLayout.SOUTH); // Añadir botón de menú en la parte inferior

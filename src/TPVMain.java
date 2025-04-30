@@ -1,7 +1,11 @@
 import javax.swing.*;
+
+import config.ColorPaleta;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import view.VistaMesas;
 
 public class TPVMain extends JFrame {
@@ -16,7 +20,7 @@ public class TPVMain extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null); // Centra la ventana en la pantalla
-        setBackground(Color(0x2222222)); // Color de fondo gris oscuro
+        setBackground(ColorPaleta.FONDO_PRINCIPAL); // Color de fondo gris oscuro
         
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);

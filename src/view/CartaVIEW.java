@@ -23,9 +23,9 @@ public class CartaVIEW {
             opcion = sc.nextInt();
 
             switch (opcion) {
-                case 1 -> cartaDAO.mostrarCarta();
+                //case 1 -> cartaDAO.mostrarCarta();
                 case 2 -> this.modificarCarta();
-                case 3 -> cartaDAO.eliminarCarta();
+                //case 3 -> cartaDAO.eliminarCarta();
                 case 4 -> this.crearCarta();
                 case 0 -> System.out.println("Volviendo al menu anterior. ");
                 default -> System.out.println("ERR0R: No se reconoció esa opción");

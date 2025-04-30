@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
+import view.VistaMesas;
 
 public class TPVMain extends JFrame {
     private CardLayout cardLayout;

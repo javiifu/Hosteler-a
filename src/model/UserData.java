@@ -1,3 +1,4 @@
+package model;
 public class UserData {
     private Integer id;
     private boolean isAdmin;

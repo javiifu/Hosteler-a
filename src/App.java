@@ -1,7 +1,6 @@
 import config.*;
 import dao.ConexionBD;
-import model.UserData;
-
+import dao.UserDataDAO;
 import java.awt.FlowLayout;
 import java.sql.Connection;
 import javax.swing.JButton;
@@ -9,7 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import dao.UserDataDAO;
+import model.UserData;
 public class App {
     static JFrame frame = new JFrame("Hosteler-a");
     static UserData userData = null;
@@ -19,7 +18,7 @@ public class App {
         Config config = ConfigLoader.cargarConfig("config.json");
         userData = iniciarSesion(frame);
 
-         PlatoVIEW platoVIEW = new PlatoVIEW();
+         //PlatoVIEW platoVIEW = new PlatoVIEW();
          //Se intenta conectar a la base de datos
          Connection conexion = ConexionBD.conectar();
          if (conexion != null) {
@@ -28,7 +27,7 @@ public class App {
             System.out.println("No se pudo establecer la conexión");
         }
         
-        platoVIEW.menu();
+        //platoVIEW.menu();
 
         frame.dispose();
     }

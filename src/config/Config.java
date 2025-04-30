@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class Config {
     private String nombre_restaurante;
-    private int numero_mesas;
-    private ArrayList<Usuario> usuarios;
     private ArrayList<Tax> taxes;
     private ArrayList<Impresora> impresoras;
     private ArrayList<Horario> horarios;
@@ -18,22 +16,6 @@ public class Config {
 
     public void setNombre_restaurante(String nombre_restaurante) {
         this.nombre_restaurante = nombre_restaurante;
-    }
-
-    public int getNumero_mesas() {
-        return numero_mesas;
-    }
-
-    public void setNumero_mesas(int numero_mesas) {
-        this.numero_mesas = numero_mesas;
-    }
-
-    public ArrayList<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(ArrayList<Usuario> usuarios) {
-        this.usuarios = usuarios;
     }
 
     public ArrayList<Tax> getTaxes() {

@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS Inventario (
     codigo_producto VARCHAR(20) PRIMARY KEY,
     cantidad INT NOT NULL,
     codigo_proveedor VARCHAR(20) NOT NULL,
-    FOREIGN KEY (codigo_proveedor) REFERENCES Proveedor(codigo)
+    CONSTRAINT FOREIGN KEY (codigo_proveedor) REFERENCES Proveedor(codigo)
 );
 
 CREATE TABLE IF NOT EXISTS Flujo_caja (
@@ -62,6 +62,11 @@ CREATE TABLE IF NOT EXISTS Flujo_caja (
     fecha DATE NOT NULL,
     categoria VARCHAR(50) NOT NULL
 );
+CREATE TABLE IF NOT EXISTS Usuarios (
+    id INT AUTO_INCREMENTE PRIMARY KEY, 
+    administrador BOOLEAN DEFAULT FALSE,
+    
+)
 
 
 

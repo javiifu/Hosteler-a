@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.io.FileReader;
 
 import config.*;
+import main.TPVMain;
+
 import javax.swing.*;
 
 public class VistaMesas extends JPanel {

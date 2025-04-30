@@ -160,4 +160,7 @@ public class PedidoDAO {
         return precioTotal;
     }
 
+    // TODO: Implementar metodo para obtener el precio de un plato pasandole el nombre
+    // obtenerPrecioPlato(String nombrePlato) 
+    // Hace falta para la vista de cobro de la interfaz, al calcular el total
 }

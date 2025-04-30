@@ -1,6 +1,6 @@
 import config.*;
 import dao.ConexionBD;
-import dao.HistorialDAO;
+import dao.HistorialSesionesDAO;
 import dao.UserDataDAO;
 import java.awt.FlowLayout;
 import java.sql.Connection;
@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import model.Log;
+import model.LogSesion;
 import model.UserData;
 public class App {
     static JFrame frame = new JFrame("Hosteler-a");
@@ -65,7 +65,7 @@ public class App {
             if (UserDataDAO.validarCredenciales(user, password)) {
                 currentUser[0] = UserDataDAO.obtenerUsuario(user);
                 JOptionPane.showMessageDialog(dialog, "Bienvenido " + user);
-                HistorialDAO.newLog(new Log("INICIO_SESION", "Inicio de sesion del usuario " + user, Date.valueOf(java.time.LocalDate.now()), Time.valueOf(java.time.LocalTime.now()), currentUser[0].getId()));
+                HistorialSesionesDAO.newLog(new LogSesion("INICIO_SESION", "Inicio de sesion del usuario " + user, Date.valueOf(java.time.LocalDate.now()), Time.valueOf(java.time.LocalTime.now()), currentUser[0].getId()));
             
                 dialog.dispose();
             } else {

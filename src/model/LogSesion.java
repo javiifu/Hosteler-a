@@ -2,7 +2,7 @@ package model;
 
 import java.sql.Date;
 import java.sql.Time;
-public class Log {
+public class LogSesion {
     private Integer id;
     private String tipo;
     private String concepto;
@@ -10,7 +10,7 @@ public class Log {
     private Time hora;
     private int id_usuario;
 
-    public Log(int id, String tipo, String concepto, Date fecha, Time hora, int id_usuario) {
+    public LogSesion(int id, String tipo, String concepto, Date fecha, Time hora, int id_usuario) {
         this.id = id;
         this.tipo = tipo;
         this.concepto = concepto;
@@ -18,7 +18,7 @@ public class Log {
         this.hora = hora;
         this.id_usuario = id_usuario;
     }
-    public Log(String tipo, String concepto, Date fecha, Time hora, int id_usuario) {
+    public LogSesion(String tipo, String concepto, Date fecha, Time hora, int id_usuario) {
         this.tipo = tipo;
         this.concepto = concepto;
         this.fecha = fecha;

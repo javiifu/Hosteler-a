@@ -4,14 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import model.Pedido;
 import model.PedidoPlato;
 
 public class PedidoDAO {
-
+    //Metodo para insertar platos en los pedidos
     public boolean insertarPedidoConPlatos(Pedido pedido, List<PedidoPlato> platos) {
         Connection conexion = ConexionBD.conectar();
         PreparedStatement pedidoStmt = null;
@@ -88,4 +88,40 @@ public class PedidoDAO {
         // True o flase
         return resultado;
     }
+
+    //Metodo para obtener todos los platos/bebidas en un hasmap
+    public static Map<String, Integer> obtenerPlatosPedido(Integer numeroMesa) {
+        HashMap<String, Integer> mapaPlatosPedido = new HashMap<>();
+        Connection conexion = ConexionBD.conectar();
+
+        if (conexion != null) {
+                        
+            //Hay que introducir el numero de la mesa
+            String query = "SELECT pr.nombre AS nombre_plato, pp.cantidad " +
+                    "FROM Pedido_plato AS pp " +
+                    "INNER JOIN Producto AS pr ON pp.codigo_plato = pr.codigo " +
+                    "WHERE " + 
+                        "pp.id_pedido = ( " +
+                            "SELECT id FROM Pedido " +
+                            "WHERE numero_mesa = ? " +
+                            "ORDER BY hora_pedido DESC " +
+                            "LIMIT 1 )" ;
+
+            try ( PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setInt(1, numeroMesa);
+                ResultSet rs = stmt.executeQuery();
+                
+                while (rs.next()) {
+                    String nombrePlato = rs.getString("nombre_plato");
+                    int cantidad = rs.getInt("cantidad");
+                    mapaPlatosPedido.put(nombrePlato, cantidad);
+                }
+                
+            } catch (SQLException e) {
+                System.out.println("Error al buscar platos por numero de mesa: " + e.getMessage());
+            }
+        }
+        return mapaPlatosPedido;
+    }
+    //Metodo Obtener precio total
 }

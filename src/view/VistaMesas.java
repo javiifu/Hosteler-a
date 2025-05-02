@@ -21,6 +21,7 @@ public class VistaMesas extends JPanel {
 
         JPanel panelMesas = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Panel para las mesas
         panelMesas.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo del panel de mesas
+        /* TODO: Cambiar el numero de mesas del json de la configuracion
         int numeroMesas = config.getNumero_mesas();  // Obtener el número de mesas desde la configuración
         for (int i = 1; i <= numeroMesas; i++) { // Crear botones según el número de mesas configurado
             Boton botonMesa = new Boton("Mesa " + i); // Crear botón para cada mesa
@@ -28,7 +29,7 @@ public class VistaMesas extends JPanel {
             botonMesa.addActionListener(tpvMain); // Usar tpvMain como ActionListener
             botonMesa.addActionListener(this::mostrarMensaje); // Mostrar mensaje al hacer clic
             panelMesas.add(botonMesa); // Añadir botón al panel de mesas
-        }
+        }*/
         add(new JScrollPane(panelMesas), BorderLayout.CENTER); // Añadir panel de mesas a la parte central
 
         Boton botonMenu = new Boton("Ir al Menu"); // Crear botón para ir al menú

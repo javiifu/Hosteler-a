@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.concurrent.Flow;
 
@@ -12,7 +14,6 @@ import dao.PedidoDAO;
 
 public class VistaCobro extends JPanel implements ActionListener {
     private JLabel mesaLabel;
-    private JLabel totalLabel;
     private JTextArea detalleCuentaArea;
     private JButton efectivoButton;
     private JButton tarjetaButton;
@@ -90,4 +91,19 @@ public class VistaCobro extends JPanel implements ActionListener {
         detalleCuentaArea.setText("No hay pedido.");
     }
 }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String comando = e.getActionCommand();
+        if ("volver".equals(comando)) {
+            // Añadir logica para volver a la vista anterior
+        } else if ("efectivo".equals(comando)) {
+            // Lógica para el pago en efectivo
+            // Tiene que salir una ventana emergente para que el usuario ingrese el dinero
+            // y luego calcular el cambio
+        } else if ("tarjeta".equals(comando)) {
+            // Lógica para el pago con tarjeta
+            // Tiene que salir una ventana emergente para que el usuario ingrese los datos de la tarjeta
+            // y luego procesar el pago
+        }
+    }
 }

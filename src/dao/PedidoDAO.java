@@ -41,13 +41,12 @@ public class PedidoDAO {
                 }
 
                 // Insertar los platos del pedido
-                String platoQuerry = "INSERT INTO Pedido_plato (id_pedido, codigo_producto, cantidad) VALUES (?, ?, ?)";
+                String platoQuerry = "INSERT INTO Pedido_plato (id_pedido, codigo_producto) VALUES (?, ?)";
                 platoStmt = conexion.prepareStatement(platoQuerry);
 
                 for (PedidoPlato plato : platos) {
                     platoStmt.setInt(1, idPedidoGenerado);
                     platoStmt.setInt(2, plato.getCodigoProducto());
-                    platoStmt.setInt(3, plato.getCantidad());
                     platoStmt.addBatch(); // Se ejecute el conjunto de inserciones
                 }
 
@@ -97,7 +96,7 @@ public class PedidoDAO {
         if (conexion != null) {
                         
             //Hay que introducir el numero de la mesa
-            String query = "SELECT pr.nombre AS nombre_plato, pp.cantidad " +
+            String query = "SELECT pr.nombre AS nombre_plato " +
                     "FROM Pedido_plato AS pp " +
                     "INNER JOIN Producto AS pr ON pp.codigo_plato = pr.codigo " +
                     "WHERE " + 
@@ -114,8 +113,9 @@ public class PedidoDAO {
                 while (rs.next()) {
                     //Obtiene nombre del plato y cantidad y lo mete en el mapa
                     String nombrePlato = rs.getString("nombre_plato");
-                    int cantidad = rs.getInt("cantidad");
-                    mapaPlatosPedido.put(nombrePlato, cantidad);
+                    // Si el plato ya está en el mapa suma 1
+                    mapaPlatosPedido.put(nombrePlato, mapaPlatosPedido.getOrDefault(nombrePlato, 0) + 1);
+               
                 }
                 
             } catch (SQLException e) {
@@ -161,6 +161,8 @@ public class PedidoDAO {
     }
 
     // TODO: Implementar metodo para obtener el precio de un plato pasandole el nombre
+    // No entiendo porque necesitamos obtener el precio de un plato, si ya esta el metodo de obtener el precio de la cuenta total
+
     // obtenerPrecioPlato(String nombrePlato) 
     // Hace falta para la vista de cobro de la interfaz, al calcular el total
 }

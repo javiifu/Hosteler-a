@@ -160,7 +160,26 @@ public class PedidoDAO {
         return precioTotal;
     }
 
-    // TODO: Implementar metodo para obtener el precio de un plato pasandole el nombre
-    // obtenerPrecioPlato(String nombrePlato) 
-    // Hace falta para la vista de cobro de la interfaz, al calcular el total
+    public static double obtenerPrecioPlato(String nombrePlato) {
+        double precio = 0.0;
+        Connection conexion = ConexionBD.conectar();
+
+        if (conexion != null) {
+            String query = "SELECT precio FROM Producto WHERE nombre = ?";
+
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setString(1, nombrePlato);
+                ResultSet rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    precio = rs.getDouble("precio");
+                } else {
+                    System.out.println("Error: No se encontró el precio del plato: " + nombrePlato);
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al obtener el precio del plato: " + e.getMessage());
+            }
+        }
+        return precio;
+    }
 }

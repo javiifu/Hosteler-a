@@ -80,7 +80,7 @@ public class MesaDAO {
         Connection conexion = ConexionBD.conectar();
         try {
             PreparedStatement statement = conexion.prepareStatement(sql);
-            statement.setString(1, mesa.getCodigo());
+            statement.setInt(1, mesa.getCodigo());
             statement.setBoolean(2, mesa.getEstado());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -124,7 +124,7 @@ public class MesaDAO {
             PreparedStatement statement = conexion.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                mesas.add(new Mesa(resultSet.getString("numero"), resultSet.getBoolean("estado")));
+                mesas.add(new Mesa(resultSet.getInt("numero"), resultSet.getBoolean("estado")));
             }
         } catch (SQLException e) {
             System.out.println("Error al obtener las mesas: " + e.getMessage());

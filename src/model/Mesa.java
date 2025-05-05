@@ -2,13 +2,13 @@ package model;
 
 public class Mesa {
     // Atributos
-    private String codigo;
+    private int codigo;
     private Boolean estado =true;
 
 
 
     // Getters
-    public String getCodigo() { return codigo; }
+    public int getCodigo() { return codigo; }
     public Boolean getEstado() { return estado; }
 
 
@@ -18,7 +18,7 @@ public class Mesa {
     }
 
     // Constructor
-    public Mesa(String codigo, Boolean estado) {
+    public Mesa(int codigo, Boolean estado) {
         this.codigo = codigo;
         this.estado = estado;
     }

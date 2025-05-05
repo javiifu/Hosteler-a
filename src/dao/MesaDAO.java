@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import model.Mesa;
 
 public class MesaDAO {
-    public static int totalMesas() {
+    public int totalMesas() {
         String sql = "SELECT COUNT(*) FROM Mesa";
         Connection conexion = ConexionBD.conectar();
         try {
@@ -31,7 +31,7 @@ public class MesaDAO {
         return 0;
     }
 
-    public static boolean comprobarOcupada(int num_mesa){
+    public boolean comprobarOcupada(int num_mesa){
         String sql = "SELECT estado FROM Mesa WHERE numero = ?";
         Connection conexion = ConexionBD.conectar();
         try {
@@ -55,7 +55,7 @@ public class MesaDAO {
         return false;
     }
 
-    public static void cambiarEstadoMesa(int num_mesa) {
+    public void cambiarEstadoMesa(int num_mesa) {
         String sql = "UPDATE Mesa SET estado = NOT estado WHERE numero = ?";
         Connection conexion = ConexionBD.conectar();
         try {
@@ -75,7 +75,7 @@ public class MesaDAO {
         }
     }
 
-    public static void newMesa(Mesa mesa){
+    public void newMesa(Mesa mesa){
         String sql = "INSERT INTO Mesa (numero, estado) VALUES (?, ?)";
         Connection conexion = ConexionBD.conectar();
         try {
@@ -96,7 +96,7 @@ public class MesaDAO {
         }
     }
 
-    public static void deleteMesa(int num_mesa) {
+    public void deleteMesa(int num_mesa) {
         String sql = "DELETE FROM Mesa WHERE numero = ?";
         Connection conexion = ConexionBD.conectar();
         try {
@@ -116,7 +116,7 @@ public class MesaDAO {
         }
     }
 
-    public static ArrayList<Mesa> getMesas() {
+    public ArrayList<Mesa> getMesas() {
         ArrayList<Mesa> mesas = new ArrayList<>();
         String sql = "SELECT * FROM Mesa";
         Connection conexion = ConexionBD.conectar();
@@ -140,7 +140,7 @@ public class MesaDAO {
         return mesas;
     }
      //Metodo para actualizar un Mesa
-     public boolean actualizarNumero(Integer numeroNuevo, Integer numeroViejo ) {
+    public boolean actualizarNumero(Integer numeroNuevo, Integer numeroViejo ) {
         Connection conexion = ConexionBD.conectar();
         if (conexion != null) {
             //El primero es el nuemero nuevo y el segunod es el numero viejo
@@ -158,4 +158,29 @@ public class MesaDAO {
         return false;
     }
 
+    //Metodo buscar mesa
+    public Mesa buscarMesa(Integer numeroMesa) {
+        Connection conexion = ConexionBD.conectar();
+
+        if (conexion != null) {
+            Mesa mesa = null;
+            String query = "SELECT * FROM Mesa WHERE numero = " + numeroMesa;
+
+            try ( PreparedStatement stmt = conexion.prepareStatement(query)) {
+                
+                ResultSet rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    mesa = new Mesa(
+                        rs.getInt("numero"),
+                        rs.getBoolean("estado")
+                    );
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al buscar mesa: " + e.getMessage());
+            }
+            return mesa; 
+        }
+        return null; 
+    }
 }

@@ -189,7 +189,7 @@ public class ProductoDAO {
         }
 
         }
-        public ArrayList<String> nombresProdcutArray(){
+        public ArrayList<String> nombresProdcutoArray(){
 
         Connection conexion = ConexionBD.conectar();
         ArrayList<String> nombresProducto = new ArrayList<>();

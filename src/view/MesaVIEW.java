@@ -3,6 +3,7 @@ package view;
 import java.util.Scanner;
 
 import model.Mesa;
+import dao.MesaDAO;
 
 public class MesaVIEW {
     Scanner sc = new Scanner(System.in);

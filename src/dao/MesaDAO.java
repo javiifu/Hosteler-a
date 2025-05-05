@@ -139,5 +139,23 @@ public class MesaDAO {
         }
         return mesas;
     }
+     //Metodo para actualizar un Mesa
+     public boolean actualizarNumero(Integer numeroNuevo, Integer numeroViejo ) {
+        Connection conexion = ConexionBD.conectar();
+        if (conexion != null) {
+            //El primero es el nuemero nuevo y el segunod es el numero viejo
+            String query = "UPDATE Mesa SET numero = ? WHERE numero = ?";
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setInt(1, numeroNuevo); 
+                stmt.setInt(2, numeroViejo); 
+    
+                int filas_afectadas = stmt.executeUpdate();
+                return filas_afectadas == 1;
+            } catch (SQLException e) {
+                System.out.println("Error al actualizar Mesa: " + e.getMessage());
+            } 
+        }
+        return false;
+    }
 
 }

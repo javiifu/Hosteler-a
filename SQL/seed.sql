@@ -12,18 +12,19 @@ CREATE TABLE IF NOT EXISTS Producto ( /*Cambiar a producto. */
     codigo INT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     descripcion TEXT NOT NULL,
-    precio DECIMAL(8,2)
+    precio DECIMAL(8,2),
     id_categoria INT,
-    FOREIGN KEY (id_categoria) REFERENCES Categoría(id),
+    FOREIGN KEY (id_categoria) REFERENCES Categoría(id)
 );
 
 CREATE TABLE IF NOT EXISTS Pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     precio_total DECIMAL(8,2),
-    hora_pedido TIME,
+    fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
     numero_mesa INT,
-    completado BOOLEAN DEFAULT FALSE
-    FOREIGN KEY (numero_mesa) REFERENCES Mesa(numero),
+    completado BOOLEAN DEFAULT FALSE,
+    pagado BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (numero_mesa) REFERENCES Mesa(numero)
     );
 
 CREATE TABLE IF NOT EXISTS Pedido_plato (
@@ -31,8 +32,6 @@ CREATE TABLE IF NOT EXISTS Pedido_plato (
     id_pedido INT NOT NULL,
     codigo_plato INT NOT NULL,
     cantidad INT NOT NULL,
-    numero_mesa INT,
-    FOREIGN KEY (numero_mesa) REFERENCES Mesa(numero),
     FOREIGN KEY (id_pedido) REFERENCES Pedido(id),
     FOREIGN KEY (codigo_plato) REFERENCEs Producto(codigo)
 );
@@ -47,6 +46,12 @@ CREATE TABLE IF NOT EXISTS Producto_Alergeno (
     FOREIGN KEY (id_producto) REFERENCES Producto(codigo),
     FOREIGN KEY (id_alergeno) REFERENCES Alergeno(id)
 );
+
+CREATE TABLE IF NOT EXISTS Estadisticas_venta (
+    id_producto INT NOT NULL,
+    cantidad INT,
+    FOREIGN KEY (id_producto) REFERENCES Producto(id_producto)
+);
 /*INSERT INTO Alergeno (nombre) VALUES
 ('Leche'),
 ('Huevo'),
@@ -60,7 +65,7 @@ CREATE TABLE IF NOT EXISTS Producto_Alergeno (
 ('Apio'),
 ('Mostaza'),
 ('Sulfitos'),
-('Altramuces'),
+('Altramuces'), 
 ('Moluscos');
 
 */
@@ -136,6 +141,26 @@ END;
 DELIMITER ;
 
 
+/*Trigger para actualizar las estadisticas de ventas cada vez que se vende un producto*/
+
+DELIMITER //
+CREATE TRIGGER agregar_actualizar_estadisticas_venta
+AFTER INSERT ON Pedido_plato
+FOR EACH ROW
+BEGIN
+    
+    DECLARE producto_id INT;
+    SELECT id_producto INTO producto_id
+    FROM Producto
+    WHERE codigo = NEW.codigo_plato;
+
+    INSERT INTO Estadisticas_venta (id_producto, cantidad)
+    VALUES (producto_id, NEW.cantidad)
+    ON DUPLICATE KEY UPDATE cantidad = cantidad + NEW.cantidad;
+
+END;
+//
+DELIMITER ;
 
 
 

@@ -1,3 +1,4 @@
+package main;
 import config.*;
 import dao.ConexionBD;
 import dao.HistorialSesionesDAO;
@@ -13,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
 import model.LogSesion;
 import model.UserData;
 public class App {
@@ -101,6 +104,11 @@ public class App {
                 HistorialSesionesDAO.newLog(new LogSesion("INICIO_SESION", "Inicio de sesion del usuario " + user, Date.valueOf(java.time.LocalDate.now()), Time.valueOf(java.time.LocalTime.now()), currentUser[0].getId()));
             
                 dialog.dispose();
+                // Iniciar la aplicacion princial (TPVMain)
+                SwingUtilities.invokeLater(() -> {
+                    TPVMain tpvMain = new TPVMain();
+                    tpvMain.setVisible(true);
+                });
             } else {
                 JOptionPane.showMessageDialog(dialog, "Usuario o contraseña incorrectos.");
             }

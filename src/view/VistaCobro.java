@@ -5,13 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
-import java.util.concurrent.Flow;
 
 import main.TPVMain;
 import model.Pedido;
 import config.ColorPaleta;
 import dao.PedidoDAO;
 
+// TODO: Hay que cambiar esta clase, arreglar fallos y comprobar la logica
 public class VistaCobro extends JPanel implements ActionListener {
     private TPVMain tpvMain;
     private JLabel mesaLabel;
@@ -19,10 +19,10 @@ public class VistaCobro extends JPanel implements ActionListener {
     private JButton efectivoButton;
     private JButton tarjetaButton;
     private JButton volverButton;
-
     private Pedido pedidoActual;
-    
+
     public VistaCobro(TPVMain tpvMain, Pedido pedido) {
+        this.tpvMain = tpvMain;
         this.pedidoActual = pedido;
 
         setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
@@ -66,12 +66,13 @@ public class VistaCobro extends JPanel implements ActionListener {
 
     public void actualizarVista() {
     if (pedidoActual != null) {
+        PedidoDAO pedidoDAO = new PedidoDAO(); 
         // Actualizar el label de la mesa
         mesaLabel.setText("Mesa: " + pedidoActual.getNumeroMesa());
 
         // Detalles del pedido
         StringBuilder sb = new StringBuilder("Pedido:\n");
-        Map<String, Integer> platosPedido = PedidoDAO.obtenerPlatosPedido(pedidoActual.getNumeroMesa());
+        Map<String, Integer> platosPedido = pedidoDAO.obtenerPlatosPedido(pedidoActual.getNumeroMesa());
         for (Map.Entry<String, Integer> entrada : platosPedido.entrySet()) {
             String nombrePlato = entrada.getKey();
             int cantidad = entrada.getValue();
@@ -82,7 +83,7 @@ public class VistaCobro extends JPanel implements ActionListener {
 
         // Lógica para el pago
         sb.append("\n"); // Línea en blanco antes del total
-        double total = PedidoDAO.calcularCuenta(pedidoActual.getNumeroMesa());
+        double total = pedidoDAO.calcularCuenta(pedidoActual.getNumeroMesa());
         sb.append("TOTAL: ").append(String.format("%.2f €", total)); // EJ: 20.00 €
 
         // Ventana emergente para el pago

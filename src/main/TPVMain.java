@@ -63,4 +63,14 @@ public class TPVMain extends JFrame implements ActionListener {
     public void mostrarVista(String vista) {
         cardLayout.show(mainPanel, vista);
     }
+
+    public VistaMesas getVistaMesas() {
+        return vistaMesas;
+    }
+    public VistaMenu getVistaMenu() {
+        return vistaMenu;
+    }
+    public VistaConfiguracion getVistaConfiguracion() {
+        return vistaConfiguracion;
+    }
 }

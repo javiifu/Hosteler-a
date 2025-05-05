@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.concurrent.Flow;
 
@@ -11,8 +13,8 @@ import config.ColorPaleta;
 import dao.PedidoDAO;
 
 public class VistaCobro extends JPanel implements ActionListener {
+    private TPVMain tpvMain;
     private JLabel mesaLabel;
-    private JLabel totalLabel;
     private JTextArea detalleCuentaArea;
     private JButton efectivoButton;
     private JButton tarjetaButton;
@@ -67,20 +69,58 @@ public class VistaCobro extends JPanel implements ActionListener {
         // Actualizar el label de la mesa
         mesaLabel.setText("Mesa: " + pedidoActual.getNumeroMesa());
 
-        // Construir los detalles del pedido
+        // Detalles del pedido
         StringBuilder sb = new StringBuilder("Pedido:\n");
         Map<String, Integer> platosPedido = PedidoDAO.obtenerPlatosPedido(pedidoActual.getNumeroMesa());
         for (Map.Entry<String, Integer> entrada : platosPedido.entrySet()) {
             String nombrePlato = entrada.getKey();
             int cantidad = entrada.getValue();
-            double subtotal = cantidad * obtenerPrecioPlato(nombrePlato); // Método auxiliar para obtener el precio
+            double subtotal = cantidad * PedidoDAO.obtenerPrecioPlato(nombrePlato); // Método auxiliar para obtener el precio
             sb.append(nombrePlato).append(" x ").append(cantidad)
               .append(" = ").append(String.format("%.2f €", subtotal)).append("\n");
         }
 
-        sb.append("\n"); // Añadir una línea en blanco antes del total
+        // Lógica para el pago
+        sb.append("\n"); // Línea en blanco antes del total
         double total = PedidoDAO.calcularCuenta(pedidoActual.getNumeroMesa());
-        sb.append("TOTAL: ").append(String.format("%.2f €", total));
+        sb.append("TOTAL: ").append(String.format("%.2f €", total)); // EJ: 20.00 €
+
+        // Ventana emergente para el pago
+        int opcionPago = JOptionPane.showOptionDialog(
+            this,
+            "Seleccione el método de pago:",
+            "Método de Pago",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            new String[]{"Efectivo", "Tarjeta"},
+            "Tarjeta"
+        );
+
+        if (opcionPago == JOptionPane.YES_OPTION) {
+            // Pago en efectivo
+            String input = JOptionPane.showInputDialog(this, "Ingrese el dinero recibido:");
+            if (input != null) {
+                try {
+                    double dineroRecibido = Double.parseDouble(input);
+                    if (dineroRecibido >= total) {
+                        double cambio = dineroRecibido - total;
+                        JOptionPane.showMessageDialog(this, "Pago exitoso. Cambio: " + String.format("%.2f €", cambio));
+                    } else {
+                        JOptionPane.showMessageDialog(this, "El dinero recibido no es suficiente.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Entrada inválida. Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else if (opcionPago == JOptionPane.NO_OPTION) {
+            // Pago con tarjeta
+            JOptionPane.showMessageDialog(this, "Continue en el datafono");
+
+            if (tpvMain != null) {
+                tpvMain.mostrarVista("Mesas"); // Cambia a la vista del datáfono
+            }
+        }
 
         // Actualizar el área de texto con los detalles del pedido
         detalleCuentaArea.setText(sb.toString());
@@ -90,4 +130,19 @@ public class VistaCobro extends JPanel implements ActionListener {
         detalleCuentaArea.setText("No hay pedido.");
     }
 }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String comando = e.getActionCommand();
+        if ("volver".equals(comando)) {
+            // Añadir logica para volver a la vista anterior
+        } else if ("efectivo".equals(comando)) {
+            // Lógica para el pago en efectivo
+            // Tiene que salir una ventana emergente para que el usuario ingrese el dinero
+            // y luego calcular el cambio
+        } else if ("tarjeta".equals(comando)) {
+            // Lógica para el pago con tarjeta
+            // Tiene que salir una ventana emergente para que el usuario ingrese los datos de la tarjeta
+            // y luego procesar el pago
+        }
+    }
 }

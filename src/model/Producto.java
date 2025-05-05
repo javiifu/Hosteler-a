@@ -41,4 +41,5 @@ public class Producto {
                ",\n  Código de categoría: " + categoriaCodigo +
                "\n}";
     }
+
 }

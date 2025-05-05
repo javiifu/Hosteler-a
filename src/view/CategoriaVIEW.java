@@ -33,10 +33,14 @@ public class CategoriaVIEW {
     public void crearCategoria() {
         System.out.println("Registrar Categoria");
         System.out.print("Nombre de la categoria: ");
-        String nombre = sc.next();
+        String nombreCategoria = sc.next();
 
-        Categoria categoria = new Categoria(nombre);
+        Categoria categoria = new Categoria(nombreCategoria);
         // categoriaDAO.registrarCategoria(categoria);
+    }
+
+    public String getCategoria(String nombreCategoria) {
+        return nombreCategoria;
     }
 
     public void modificarCategoria() {

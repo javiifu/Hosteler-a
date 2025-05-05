@@ -41,13 +41,12 @@ public class PedidoDAO {
                 }
 
                 // Insertar los platos del pedido
-                String platoQuerry = "INSERT INTO Pedido_plato (id_pedido, codigo_producto, cantidad) VALUES (?, ?, ?)";
+                String platoQuerry = "INSERT INTO Pedido_plato (id_pedido, codigo_producto) VALUES (?, ?)";
                 platoStmt = conexion.prepareStatement(platoQuerry);
 
                 for (PedidoPlato plato : platos) {
                     platoStmt.setInt(1, idPedidoGenerado);
                     platoStmt.setInt(2, plato.getCodigoProducto());
-                    platoStmt.setInt(3, plato.getCantidad());
                     platoStmt.addBatch(); // Se ejecute el conjunto de inserciones
                 }
 
@@ -90,14 +89,14 @@ public class PedidoDAO {
     }
 
     //Metodo para obtener todos los platos/bebidas en un hasmap
-    public static Map<String, Integer> obtenerPlatosPedido(Integer numeroMesa) {
+    public Map<String, Integer> obtenerPlatosPedido(Integer numeroMesa) {
         HashMap<String, Integer> mapaPlatosPedido = new HashMap<>();
         Connection conexion = ConexionBD.conectar();
 
         if (conexion != null) {
                         
             //Hay que introducir el numero de la mesa
-            String query = "SELECT pr.nombre AS nombre_plato, pp.cantidad " +
+            String query = "SELECT pr.nombre AS nombre_plato " +
                     "FROM Pedido_plato AS pp " +
                     "INNER JOIN Producto AS pr ON pp.codigo_plato = pr.codigo " +
                     "WHERE " + 
@@ -114,8 +113,9 @@ public class PedidoDAO {
                 while (rs.next()) {
                     //Obtiene nombre del plato y cantidad y lo mete en el mapa
                     String nombrePlato = rs.getString("nombre_plato");
-                    int cantidad = rs.getInt("cantidad");
-                    mapaPlatosPedido.put(nombrePlato, cantidad);
+                    // Si el plato ya está en el mapa suma 1
+                    mapaPlatosPedido.put(nombrePlato, mapaPlatosPedido.getOrDefault(nombrePlato, 0) + 1);
+               
                 }
                 
             } catch (SQLException e) {
@@ -126,7 +126,7 @@ public class PedidoDAO {
     }
     
     //Metodo Obtener precio total
-    public static double calcularCuenta(Integer numeroMesa) {
+    public double calcularCuenta(Integer numeroMesa) {
         Map<String, Integer> platosPedido = obtenerPlatosPedido(numeroMesa);
         double precioTotal = 0.0;
         Connection conexion = ConexionBD.conectar();
@@ -160,6 +160,7 @@ public class PedidoDAO {
         return precioTotal;
     }
 
+
     public static double obtenerPrecioPlato(String nombrePlato) {
         double precio = 0.0;
         Connection conexion = ConexionBD.conectar();
@@ -182,4 +183,60 @@ public class PedidoDAO {
         }
         return precio;
     }
+
+    //Metodo para añadir un plato a la cuenta
+    public boolean añadirPlatoPedido(int numeroMesa, String nombreProducto) {
+        boolean resultado = false;
+    
+        try (Connection conexion = ConexionBD.conectar()) {
+            if (conexion != null) {
+                String query = "INSERT INTO Pedido_plato (id_pedido, codigo_plato) " +
+                                    "SELECT (SELECT id FROM Pedido WHERE numero_mesa = ? ORDER BY hora_pedido DESC LIMIT 1), " +
+                                    "(SELECT codigo FROM Producto WHERE nombre = ?) ";
+                                     
+                try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                    stmt.setInt(1, numeroMesa);
+                    stmt.setString(2, nombreProducto);
+                    int filasInsertadas = stmt.executeUpdate();
+                    resultado = (filasInsertadas > 0);
+                    if (!resultado) {
+                        System.out.println("Error: No se pudo añadir el producto. Puede que no exista el pedido para la mesa o el producto.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al añadir el plato al pedido: " + e.getMessage());
+        }
+        return resultado;
+    }
+    
+    //Metdo eliminar un plato del pedido
+    public boolean quitarPlatoPedido(int numeroMesa, String nombreProducto) {
+        boolean resultado = false;
+    
+        try (Connection conexion = ConexionBD.conectar()) {
+            if (conexion != null) {
+                String query = "DELETE FROM Pedido_plato " +
+                                "WHERE id_pedido = (SELECT id FROM Pedido WHERE numero_mesa = ? ORDER BY hora_pedido DESC LIMIT 1) " +
+                                "AND codigo_producto = (SELECT codigo FROM Producto WHERE nombre = ?) " +
+                                "LIMIT 1" ;
+
+                try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                    stmt.setInt(1, numeroMesa);
+                    stmt.setString(2, nombreProducto);
+                    int filasEliminadas = stmt.executeUpdate();
+                    resultado = (filasEliminadas > 0);
+                    if (!resultado) {
+                        System.out.println("Advertencia: No se encontró el producto en el pedido para ser eliminado.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al quitar el plato del pedido: " + e.getMessage());
+            resultado = false;
+        }
+        return resultado;
+    }
+
+
 }

@@ -89,7 +89,7 @@ public class PedidoDAO {
     }
 
     //Metodo para obtener todos los platos/bebidas en un hasmap
-    public static Map<String, Integer> obtenerPlatosPedido(Integer numeroMesa) {
+    public Map<String, Integer> obtenerPlatosPedido(Integer numeroMesa) {
         HashMap<String, Integer> mapaPlatosPedido = new HashMap<>();
         Connection conexion = ConexionBD.conectar();
 
@@ -126,7 +126,7 @@ public class PedidoDAO {
     }
     
     //Metodo Obtener precio total
-    public static double calcularCuenta(Integer numeroMesa) {
+    public double calcularCuenta(Integer numeroMesa) {
         Map<String, Integer> platosPedido = obtenerPlatosPedido(numeroMesa);
         double precioTotal = 0.0;
         Connection conexion = ConexionBD.conectar();
@@ -161,7 +161,7 @@ public class PedidoDAO {
     }
 
     //Metodo para añadir un plato a la cuenta
-    public static boolean añadirPlatoPedido(int numeroMesa, String nombreProducto) {
+    public boolean añadirPlatoPedido(int numeroMesa, String nombreProducto) {
         boolean resultado = false;
     
         try (Connection conexion = ConexionBD.conectar()) {
@@ -176,7 +176,6 @@ public class PedidoDAO {
                     int filasInsertadas = stmt.executeUpdate();
                     resultado = (filasInsertadas > 0);
                     if (!resultado) {
-                        
                         System.out.println("Error: No se pudo añadir el producto. Puede que no exista el pedido para la mesa o el producto.");
                     }
                 }
@@ -188,7 +187,7 @@ public class PedidoDAO {
     }
     
     //Metdo eliminar un plato del pedido
-    public static boolean quitarPlatoPedido(int numeroMesa, String nombreProducto) {
+    public boolean quitarPlatoPedido(int numeroMesa, String nombreProducto) {
         boolean resultado = false;
     
         try (Connection conexion = ConexionBD.conectar()) {

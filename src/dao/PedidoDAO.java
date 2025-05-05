@@ -227,7 +227,7 @@ public class PedidoDAO {
                     int filasEliminadas = stmt.executeUpdate();
                     resultado = (filasEliminadas > 0);
                     if (!resultado) {
-                        System.out.println("Advertencia: No se encontró el producto en el pedido para ser eliminado.");
+                        System.out.println("Error: No se encontró el producto en el pedido para ser eliminado.");
                     }
                 }
             }
@@ -238,5 +238,23 @@ public class PedidoDAO {
         return resultado;
     }
 
-
+    //Metodo cambiar estado pagado
+    public static void cambiarEstadoPagado(int numeroMesa) {
+        try (Connection conexion = ConexionBD.conectar()) {
+            if (conexion != null) {
+                String query = "UPDATE Mesa SET estado = NOT estado WHERE numero = ?";
+                
+                try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            
+                    stmt.setInt(1, numeroMesa);
+                    stmt.executeUpdate();
+            
+                } catch (SQLException e) {
+                    System.out.println("Error: no se encuentra la mesa " + e.getMessage());
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar a cobrado: " + e.getMessage());
+        }
+    }
 }

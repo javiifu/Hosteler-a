@@ -160,108 +160,57 @@ public class PedidoDAO {
         return precioTotal;
     }
 
-    // TODO: Implementar metodo para obtener el precio de un plato pasandole el nombre
-    // No entiendo porque necesitamos obtener el precio de un plato, si ya esta el metodo de obtener el precio de la cuenta total
-
-    // obtenerPrecioPlato(String nombrePlato) 
-    // Hace falta para la vista de cobro de la interfaz, al calcular el total
-
-
-    //Metodo Quitar praductos, introduciendo numero de mesa, nombre producto y cantidad que se quita
-    public static boolean quitarCantidadProductoPedido(int numeroMesa, String nombreProducto, int cantidadQuitar) {
-        Connection conexion = ConexionBD.conectar();
+    //Metodo para añadir un plato a la cuenta
+    public static boolean añadirPlatoPedido(int numeroMesa, String nombreProducto) {
         boolean resultado = false;
-        Integer idPedidoUltimo;
-        Integer codigoProducto;
-
-        if (conexion != null) {
-            try {
-                //Obtener el ID del pedido más reciente relacionado a la mesa
-                String queryObtenerUltimoPedido = "SELECT id FROM Pedido WHERE numero_mesa = ? ORDER BY hora_pedido DESC LIMIT 1";
-                PreparedStatement stmtObtenerUltimoPedido = conexion.prepareStatement(queryObtenerUltimoPedido);
-                //Se pasa el numero de mesa
-                stmtObtenerUltimoPedido.setInt(1, numeroMesa);
-                ResultSet rsUltimoPedido = stmtObtenerUltimoPedido.executeQuery();
-
-                if (rsUltimoPedido.next()) {
-                    idPedidoUltimo = rsUltimoPedido.getInt("id");
-                    rsUltimoPedido.close();
-                    stmtObtenerUltimoPedido.close();
-
-                    // Obtener el código del producto a partir de su nombre
-                    String queryObtenerCodigoProducto = "SELECT codigo FROM Producto WHERE nombre = ?";
-                    PreparedStatement stmtObtenerCodigoProducto = conexion.prepareStatement(queryObtenerCodigoProducto);
-                    stmtObtenerCodigoProducto.setString(1, nombreProducto);
-                    ResultSet rsCodigoProducto = stmtObtenerCodigoProducto.executeQuery();
-
-                    if (rsCodigoProducto.next()) {
-                        codigoProducto = rsCodigoProducto.getInt("codigo");
-                        rsCodigoProducto.close();
-                        stmtObtenerCodigoProducto.close();
-
-                        // Si se encontraron el pedido y el producto se modifica cantidad 
-                        if (idPedidoUltimo != null && codigoProducto != null) {
-
-                            // Obtener la cantidad actual del producto en el pedido
-                            String querySelect = "SELECT cantidad FROM Pedido_plato WHERE id_pedido = ? AND codigo_plato = ?";
-                            ResultSet rsCantidad;
-                            //Se pasa el codigo del producto y el id del pedido
-                            try (PreparedStatement stmtSelect = conexion.prepareStatement(querySelect)) {
-                                
-                                stmtSelect.setInt(1, idPedidoUltimo);
-                                stmtSelect.setInt(2, codigoProducto);
-                                rsCantidad = stmtSelect.executeQuery();
-
-                                if (rsCantidad.next()) {
-                                    int cantidadActual = rsCantidad.getInt("cantidad");
-                                    int nuevaCantidad = cantidadActual - cantidadQuitar;
     
-                                    // Actualiza cantidad si es mayor que 0
-                                    if (nuevaCantidad > 0) {
-                                        String queryUpdate = "UPDATE Pedido_plato SET cantidad = ? WHERE id_pedido = ? AND codigo_plato = ?";
-                                        try (PreparedStatement stmtUpdate = conexion.prepareStatement(queryUpdate)) {
-                                            stmtUpdate.setInt(1, nuevaCantidad);
-                                            stmtUpdate.setInt(2, idPedidoUltimo);
-                                            stmtUpdate.setInt(3, codigoProducto);
-                                            int filasActualizadas = stmtUpdate.executeUpdate();
-                                            resultado = (filasActualizadas > 0);
-                                        }
-                                        catch (SQLException e) {
-                                            System.out.println("Error al actualizar la cantidad: " + e.getMessage());
-                                        }
-    
-                                    //Eliminar el producto si la cantidad llega a 0
-                                    } else if (nuevaCantidad <= 0) {
-                                        String queryBorrar = "DELETE FROM Pedido_plato WHERE id_pedido = ? AND codigo_plato = ?";
-                                        try (PreparedStatement stmtBorrar = conexion.prepareStatement(queryBorrar)) {
-                                            stmtBorrar.setInt(1, idPedidoUltimo);
-                                            stmtBorrar.setInt(2, codigoProducto);
-                                            int filasEliminadas = stmtBorrar.executeUpdate();
-                                            resultado = (filasEliminadas > 0);
-                                        }
-                                        catch (SQLException e){
-                                            System.out.println("Error al eliminar producto del pedido: " + e.getMessage());
-                                        }
-                                    }
-                                    rsCantidad.close();
-                                } else {
-                                    System.out.println("Error: No se encontró el producto " + nombreProducto + " en el pedido con ID " + idPedidoUltimo);
-                                }
-                            }
-                            catch (SQLException e) {
-                                System.out.println("Error al obtener la cantidad de producto: " + e.getMessage());
-
-                            }
-                        }
-                    } else {
-                        System.out.println("Error: No se encontró ningún producto para la mesa " + numeroMesa);
+        try (Connection conexion = ConexionBD.conectar()) {
+            if (conexion != null) {
+                String query = "INSERT INTO Pedido_plato (id_pedido, codigo_plato) " +
+                                    "SELECT (SELECT id FROM Pedido WHERE numero_mesa = ? ORDER BY hora_pedido DESC LIMIT 1), " +
+                                    "(SELECT codigo FROM Producto WHERE nombre = ?) ";
+                                     
+                try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                    stmt.setInt(1, numeroMesa);
+                    stmt.setString(2, nombreProducto);
+                    int filasInsertadas = stmt.executeUpdate();
+                    resultado = (filasInsertadas > 0);
+                    if (!resultado) {
+                        
+                        System.out.println("Error: No se pudo añadir el producto. Puede que no exista el pedido para la mesa o el producto.");
                     }
-                } else {
-                    System.out.println("Error: No se encontró ningún pedido para la mesa " + numeroMesa);
                 }
-            } catch (SQLException e) {
-                System.out.println("Error al quitar cantidad del producto por mesa y nombre: " + e.getMessage());
             }
+        } catch (SQLException e) {
+            System.out.println("Error al añadir el plato al pedido: " + e.getMessage());
+        }
+        return resultado;
+    }
+    
+    //Metdo eliminar un plato del pedido
+    public static boolean quitarPlatoPedido(int numeroMesa, String nombreProducto) {
+        boolean resultado = false;
+    
+        try (Connection conexion = ConexionBD.conectar()) {
+            if (conexion != null) {
+                String query = "DELETE FROM Pedido_plato " +
+                                "WHERE id_pedido = (SELECT id FROM Pedido WHERE numero_mesa = ? ORDER BY hora_pedido DESC LIMIT 1) " +
+                                "AND codigo_producto = (SELECT codigo FROM Producto WHERE nombre = ?) " +
+                                "LIMIT 1" ;
+
+                try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                    stmt.setInt(1, numeroMesa);
+                    stmt.setString(2, nombreProducto);
+                    int filasEliminadas = stmt.executeUpdate();
+                    resultado = (filasEliminadas > 0);
+                    if (!resultado) {
+                        System.out.println("Advertencia: No se encontró el producto en el pedido para ser eliminado.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al quitar el plato del pedido: " + e.getMessage());
+            resultado = false;
         }
         return resultado;
     }

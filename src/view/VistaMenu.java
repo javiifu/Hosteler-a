@@ -131,4 +131,16 @@ public class VistaMenu extends JPanel {
             areaPedido.append(productoSeleccionado.getNombre() + "\n");
         }
     }
+
+    public void setMesaSeleccionada(int numeroMesa) {
+        // Actualizar la mesa seleccionada
+        this.mesaSeleccionada = new Mesa(numeroMesa);
+
+        // Actualizar el título de la vista
+        JLabel titulo = (JLabel) getComponent(0);
+        titulo.setText("Menu - Mesa " + numeroMesa);
+
+        // Limpiar el área de texto del pedido
+        areaPedido.setText("");
+    }
 }

@@ -2,6 +2,7 @@ package view;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import config.*;
 import dao.MesaDAO;
@@ -23,9 +24,9 @@ public class VistaMesas extends JPanel {
         JPanel panelMesas = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Panel para las mesas
         panelMesas.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo del panel de mesas
         
-        Mesa mesas[] = MesaDAO.getMesas();  // Obtener el número de mesas desde la configuración
-        for (int i = 0; i < mesas.length; i++) {
-            int numeroMesa = mesas(i).getCodigo(); // Crear botones según el número de mesas configurado
+        ArrayList<Mesa> mesas = MesaDAO.getMesas();  // Obtener el número de mesas desde la configuración
+        for (int i = 0; i < mesas.size(); i++) {
+            int numeroMesa = mesas.get(i).getCodigo(); // Crear botones según el número de mesas configurado
             Boton botonMesa = new Boton("Mesa " + numeroMesa); // Crear botón para cada mesa
             botonMesa.setActionCommand("Mesa " + numeroMesa); // Establecer el comando de acción del botón
             botonMesa.addActionListener(tpvMain); // Usar tpvMain como ActionListener

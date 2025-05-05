@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import view.VistaMesas;
+import view.VistaMenu;
 
 public class TPVMain extends JFrame implements ActionListener {
     private CardLayout cardLayout;
@@ -26,7 +27,7 @@ public class TPVMain extends JFrame implements ActionListener {
         
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
- 
+
         vistaMesas = new VistaMesas(this);
         vistaMenu = new VistaMenu(this);
         vistaConfiguracion = new VistaConfiguracion(this);
@@ -40,5 +41,26 @@ public class TPVMain extends JFrame implements ActionListener {
         add(mainPanel);
 
         cardLayout.show(mainPanel, "Mesas"); // Muestra la vista de Mesas al inicio
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String command = e.getActionCommand();
+        switch (command) {
+            case "Ir al Menu":
+                cardLayout.show(mainPanel, "Menu");
+                break;
+            case "Volver":
+                cardLayout.show(mainPanel, "Mesas");
+                break;
+            case "Configuracion":
+                cardLayout.show(mainPanel, "Configuracion");
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void mostrarVista(String vista) {
+        cardLayout.show(mainPanel, vista);
     }
 }

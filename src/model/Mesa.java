@@ -3,22 +3,14 @@ package model;
 public class Mesa {
     // Atributos
     private String codigo;
-    private int capacidad;
-    private Boolean estado;
+    private Boolean estado =true;
 
-    // Constructor
-    public Mesa(int capacidad) {
-        this.capacidad = capacidad;
-        this.estado = true; // Por defecto, la mesa está disponible
-    }
+
 
     // Getters
     public String getCodigo() { return codigo; }
-    public int getCapacidad() { return capacidad; }
     public Boolean getEstado() { return estado; }
 
-    // Setters
-    public void setCapacidad(int capacidad) { this.capacidad = capacidad; }
 
     // Metodos
     public void cambiarEstadoMesa() {
@@ -29,7 +21,6 @@ public class Mesa {
     public String toString() {
         return "Mesa {" +
                "\n  Código de la mesa: " + codigo +
-               ",\n  Capacidad: " + capacidad +
                ",\n  Estado: " + (estado ? "Disponible" : "Ocupada") +
                "\n}";
     }

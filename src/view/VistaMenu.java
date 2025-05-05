@@ -1,81 +1,134 @@
 package view;
-import main.TPVMain;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import java.awt.BorderLayout;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import config.ColorPaleta;
-import model.Pedido;
-import model.Producto; 
+import dao.CategoriaDAO;
+import dao.ProductoDAO;
+import model.Categoria;
+import model.Producto;
+import model.Mesa;
+import main.TPVMain;
 
-public class VistaMenu extends JPanel{
+public class VistaMenu extends JPanel {
+    // Atributos
+    private TPVMain tpvMain;
+    private Mesa mesaSeleccionada;
+    private JList<Categoria> listaCategorias;
+    private JList<Producto> listaProductos;
+    private JTextArea areaPedido;
+    private JButton botonVolver;
+    private JButton botonCobrar;
+    private CardLayout cardLayoutCentral;
+    private JPanel panelCentral;
 
-    public JList<Producto> listaProductos;
-    public JTextArea areaPedido;
-    public JButton botonAñadir;
-    public JButton botonCobrar;
-    public JButton botonVolver;
+    public VistaMenu(TPVMain tpvMain, Mesa mesaSeleccionada) {
+        this.tpvMain = tpvMain;
+        this.mesaSeleccionada = mesaSeleccionada;
 
-    public VistaMenu(TPVMain mainFrame, Pedido pedidoActual) {
         setLayout(new BorderLayout());
-        JLabel titulo = new JLabel("Menu", SwingConstants.CENTER);
-        setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
-        titulo.setForeground(ColorPaleta.TEXTO_PRINCIPAL_CLARO); // Color del texto del título
-        add(titulo, BorderLayout.NORTH); // Añadir título en la parte superior
+        setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
-        DefaultListModel<Producto> modeloLista = new DefaultListModel<>(); // Crear un modelo de lista para los productos
-        listaProductos = new JList<>(modeloLista); // Crear la lista de productos
+        // Titulo
+        JLabel titulo = new JLabel("Menu - Mesa " + mesaSeleccionada.getCodigo(), SwingConstants.CENTER);
+        titulo.setForeground(ColorPaleta.TEXTO_PRINCIPAL_CLARO);
+        add(titulo, BorderLayout.NORTH);
 
-        add(new JScrollPane(listaProductos), BorderLayout.WEST); // Añadir lista en el lado izquierdo
-        
-        //Nombre descripcion Precio disponible consultas sql para contructor
+        // Panel central con CardLayout
+        cardLayoutCentral = new CardLayout();
+        panelCentral = new JPanel(cardLayoutCentral);
+        panelCentral.setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
+        // Panel para categorías
+        JPanel panelCategorias = new JPanel(new BorderLayout());
+        DefaultListModel<Categoria> modeloCategorias = new DefaultListModel<>();
+        listaCategorias = new JList<>(modeloCategorias);
+        listaCategorias.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listaCategorias.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                cargarProductosDeCategoria();
+            }
+        });
+        panelCategorias.add(new JScrollPane(listaCategorias), BorderLayout.CENTER);
+        panelCentral.add(panelCategorias, "Categorias");
 
-        Producto producto = new Producto();
+        // Panel para productos
+        JPanel panelProductos = new JPanel(new BorderLayout());
+        DefaultListModel<Producto> modeloProductos = new DefaultListModel<>();
+        listaProductos = new JList<>(modeloProductos);
+        listaProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listaProductos.addListSelectionListener(e -> agregarProductoAPedido());
+        panelProductos.add(new JScrollPane(listaProductos), BorderLayout.CENTER);
 
-        int numeroMesas = config.getNumero_mesas();  // Obtener el número de mesas desde la configuración
-        for (int i = 1; i <= numeroMesas; i++) { // Crear botones según el número de mesas configurado
+        // Botón para volver a las categorías
+        JButton botonVolverCategorias = new JButton("Volver a Categorías");
+        botonVolverCategorias.addActionListener(e -> cardLayoutCentral.show(panelCentral, "Categorias"));
+        panelProductos.add(botonVolverCategorias, BorderLayout.SOUTH);
 
-            Boton botonMenu = new Boton(producto.getNombre()); // Crear botón para cada mesa
-            botonMenu.setActionCommand(Producto.nombre); // Establecer el comando de acción del botón
-            botonMenu.addActionListener(tpvMain); // Usar tpvMain como ActionListener
-            botonMenu.addActionListener(this::mostrarMensaje); // Mostrar mensaje al hacer clic
-            botonMenu.add(botonMenu, BorderLayout.CENTER); // Añadir botón al panel de mesas
-        }
-        Boton botonMenu = new Boton("Ir al Mesas"); // Crear botón para ir al menú
-        botonMenu.setActionCommand("Ir al Mesas");
-        botonMenu.addActionListener(tpvMain); // Usar tpvMain como ActionListener
-        add(botonMenu, BorderLayout.SOUTH); // Añadir botón de menú en la parte inferior
+        panelCentral.add(panelProductos, "Productos");
 
-        Boton botonMenu = new Boton("Cobrar"); 
-        botonMenu.setActionCommand("Cobrar");
-        botonMenu.addActionListener(tpvMain); 
-        add(botonMenu, BorderLayout.SOUTH); 
+        add(panelCentral, BorderLayout.CENTER);
 
+        // Área de texto para mostrar el pedido
+        areaPedido = new JTextArea();
+        areaPedido.setEditable(false);
+        areaPedido.setBackground(ColorPaleta.TEXTAREA_FONDO);
+        areaPedido.setForeground(ColorPaleta.TEXTAREA_TEXTO);
+        add(new JScrollPane(areaPedido), BorderLayout.EAST);
 
-        public void mostrarMensaje(ActionEvent e) {
-            String command = e.getActionCommand();
-            JOptionPane.showMessageDialog(this, "Has seleccionado " + command);
-        }
+        // Panel inferior para botones
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelBotones.setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
+        botonVolver = new JButton("Volver");
+        botonVolver.addActionListener(e -> tpvMain.mostrarVista("Mesas"));
+        panelBotones.add(botonVolver);
 
-        
+        botonCobrar = new JButton("Cobrar");
+        botonCobrar.addActionListener(e -> tpvMain.mostrarVista("Cobro"));
+        panelBotones.add(botonCobrar);
 
+        add(panelBotones, BorderLayout.SOUTH);
+
+        // Cargar categorías al iniciar
+        cargarCategorias();
     }
 
-    
+    private void cargarCategorias() {
+        CategoriaDAO categoriaDAO = new CategoriaDAO();
+        ArrayList<String> nombresCategorias = categoriaDAO.nombresCategoriaArray();
+        DefaultListModel<Categoria> modeloCategorias = (DefaultListModel<Categoria>) listaCategorias.getModel();
+        modeloCategorias.clear();
+        for (String nombre : nombresCategorias) {
+            modeloCategorias.addElement(new Categoria(nombre));
+        }
+        cardLayoutCentral.show(panelCentral, "Categorias");
+    }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == botonAñadir) {
-
+    private void cargarProductosDeCategoria() {
+        Categoria categoriaSeleccionada = listaCategorias.getSelectedValue();
+        if (categoriaSeleccionada != null) {
+            ProductoDAO productoDAO = new ProductoDAO();
+            ArrayList<String> nombresProductos = productoDAO.nombresProdcutoArray();
+            DefaultListModel<Producto> modeloProductos = (DefaultListModel<Producto>) listaProductos.getModel();
+            modeloProductos.clear();
+            for (String nombre : nombresProductos) {
+                modeloProductos.addElement(new Producto(nombre, "", 0.0, true));
+            }
+            cardLayoutCentral.show(panelCentral, "Productos");
         }
     }
 
+    private void agregarProductoAPedido() {
+        Producto productoSeleccionado = listaProductos.getSelectedValue();
+        if (productoSeleccionado != null) {
+            areaPedido.append(productoSeleccionado.getNombre() + "\n");
+        }
+    }
 }

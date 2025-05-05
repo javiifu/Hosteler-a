@@ -17,6 +17,12 @@ public class Mesa {
         this.estado = !this.estado; // Cambia el estado de la mesa
     }
 
+    // Constructor
+    public Mesa(String codigo, Boolean estado) {
+        this.codigo = codigo;
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
         return "Mesa {" +

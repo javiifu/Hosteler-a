@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import model.Mesa;
 
 public class MesaDAO {
@@ -113,6 +114,30 @@ public class MesaDAO {
                 System.out.println("Error al cerrar la conexión: " + e.getMessage());
             }
         }
+    }
+
+    public static ArrayList<Mesa> getMesas() {
+        ArrayList<Mesa> mesas = new ArrayList<>();
+        String sql = "SELECT * FROM Mesa";
+        Connection conexion = ConexionBD.conectar();
+        try {
+            PreparedStatement statement = conexion.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                mesas.add(new Mesa(resultSet.getString("numero"), resultSet.getBoolean("estado")));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener las mesas: " + e.getMessage());
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }
+        return mesas;
     }
 
 }

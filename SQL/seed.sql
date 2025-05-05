@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS Categoria (
     nombre VARCHAR(50) UNIQUE NOT NULL
 );
 CREATE TABLE IF NOT EXISTS Producto ( /*Cambiar a producto. */
-    codigo INT PRIMARY KEY,
+    codigo INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     descripcion TEXT NOT NULL,
     precio DECIMAL(8,2),

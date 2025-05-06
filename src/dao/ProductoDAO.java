@@ -161,11 +161,11 @@ public class ProductoDAO {
         return productos;
 
     }
-    public Producto buscarProductoByID(int id){
+    public Producto buscarProductoByID(int codigo){
         Connection conexion = ConexionBD.conectar();
         Producto producto = null;
         if(conexion != null){
-            String query = "SELECT * FROM Productos WHERE codigo=" + id;
+            String query = "SELECT * FROM Productos WHERE codigo=" + codigo;
             try (Statement stmt = conexion.createStatement();
                 ResultSet rs = stmt.executeQuery(query)) {
                 

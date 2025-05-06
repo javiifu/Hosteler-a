@@ -141,6 +141,22 @@ public class CategoriaDAO {
         }
         return categorias;
     }
+    public int ObetenerCategoriaPorNombre(String nombre){
+        Connection conexion = ConexionBD.conectar();
+       
+        if(conexion!=null){
+            String query = "SELECT id FROM Categoria WHERE nombre = " + nombre;
+            try (Statement stmt = conexion.createStatement();
+            ResultSet rs = stmt.executeQuery(query)) {
+           
+         
+           return rs.getInt("id");
+        }catch(SQLException e){
+            System.out.println("error al realizar la consulta" + e.getMessage());
+        }    
+    }
+    return 0;
+ }
  }
 
 

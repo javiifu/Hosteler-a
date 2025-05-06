@@ -39,8 +39,7 @@ CREATE TABLE IF NOT EXISTS Pedido_plato (
     FOREIGN KEY (codigo_plato) REFERENCEs Producto(codigo)
 );
 
-/*
-/*De momento no*/
+
 CREATE TABLE IF NOT EXISTS Empleado (
     dni VARCHAR(20) PRIMARY KEY,
     nombre VARCHAR(40),
@@ -50,20 +49,6 @@ CREATE TABLE IF NOT EXISTS Empleado (
     salario DECIMAL(8,2),
     puesto VARCHAR (40),
     cuenta_bancaria VARCHAR(50) 
-);
-/*De momento no*/
-CREATE TABLE IF NOT EXISTS Proveedor (
-    codigo VARCHAR(20) PRIMARY KEY,
-    nombre VARCHAR(40),
-    direccion VARCHAR (100),
-    cuenta_bancaria VARCHAR(50)
-);
-/*De momento no*/
-CREATE TABLE IF NOT EXISTS Inventario (
-    codigo_producto VARCHAR(20) PRIMARY KEY,
-    cantidad INT NOT NULL,
-    codigo_proveedor VARCHAR(20) NOT NULL,
-    CONSTRAINT FOREIGN KEY (codigo_proveedor) REFERENCES Proveedor(codigo)
 );
 */
 CREATE TABLE IF NOT EXISTS Flujo_caja (

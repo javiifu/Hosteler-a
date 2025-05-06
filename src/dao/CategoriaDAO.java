@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CategoriaDAO {
     
@@ -119,6 +121,25 @@ public class CategoriaDAO {
                 return nombresCategorias;
         }
         return null;
+    }
+
+    public static Map<Integer, String> obtenerCategorias() {
+        Map<Integer, String> categorias = new HashMap<>();
+        Connection conexion = ConexionBD.conectar();
+        if (conexion != null) {
+            String query = "SELECT id, nombre FROM Categoria";
+            try (Statement stmt = conexion.createStatement();
+                 ResultSet rs = stmt.executeQuery(query)) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String nombre = rs.getString("nombre");
+                    categorias.put(id, nombre);
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al realizar la consulta: " + e.getMessage());
+            }
+        }
+        return categorias;
     }
  }
 

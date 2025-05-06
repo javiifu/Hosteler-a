@@ -247,7 +247,7 @@ public class PedidoDAO {
         Connection conexion = ConexionBD.conectar();
 
         if (conexion != null) {
-            String query = "SELECT pr.nombre AS nombre_plato, pr.precio AS precio_plato, pp.cantidad AS cantidad_plato" +
+            String query = "SELECT pr.nombre AS nombre_plato, pr.precio AS precio_plato, pr.id_categoria AS categoria, pp.cantidad AS cantidad_plato" +
                     "FROM Pedido_plato AS pp " +
                     "INNER JOIN Producto AS pr ON pp.codigo_producto = pr.codigo " +
                     "WHERE pp.id_pedido = ?";
@@ -260,7 +260,8 @@ public class PedidoDAO {
                     String nombrePlato = rs.getString("nombre_plato");
                     double precioPlato = rs.getDouble("precio_plato");
                     int cantidad = rs.getInt("cantidad");
-                    platosPedido.put(new Producto(nombrePlato, precioPlato), cantidad);
+                    Integer categoria = rs.getInt("categoria");
+                    platosPedido.put(new Producto(nombrePlato, precioPlato, categoria), cantidad);
                 }
             } catch (SQLException e) {
                 System.out.println("Error al obtener los platos del pedido: " + e.getMessage());

@@ -1,7 +1,6 @@
 package view;
 
 import dao.MesaDAO;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 import model.Mesa;
@@ -53,6 +52,7 @@ public class MesaVIEW {
 
     public void cambiarEstadoMesa() {
         Mesa mesa = this.buscarMesa();
+        int numeroMesa = mesa.getNumero();
         System.out.println("Estado actual de la mesa: " + (mesa.getEstado() ? "Disponible" : "Ocupada"));
 
         int opcion;
@@ -79,7 +79,7 @@ public class MesaVIEW {
             mesa.cambiarEstadoMesa();
             System.out.println("Estado cambiado a: " + (mesa.getEstado() ? "Disponible" : "Ocupada"));
             
-            mesaDAO.modificarEstadoMesa(mesa.getCodigo(), mesa.getEstado());
+            mesaDAO.cambiarEstadoMesa(numeroMesa);
         } else {
             System.out.println("No se ha cambiado el estado de la mesa.");
         }
@@ -88,7 +88,7 @@ public class MesaVIEW {
     public void eliminarMesa() {
         System.out.println("Introduce el numero de mesa que quieres eliminar");
         Mesa mesa = this.buscarMesa();
-        mesaDAO.deleteMesa(mesa.getCodigo());
+        mesaDAO.deleteMesa(mesa.getNumero());
     }
 
     //pendiente de haer

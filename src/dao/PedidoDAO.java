@@ -1,14 +1,18 @@
 package dao;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.Pedido;
 import model.PedidoPlato;
+import model.Producto;
 
 public class PedidoDAO {
     //Metodo para insertar platos en los pedidos
@@ -89,7 +93,7 @@ public class PedidoDAO {
     }
 
     //Metodo para obtener todos los platos/bebidas en un hasmap
-    public Map<String, Integer> obtenerPlatosPedido(Integer numeroMesa) {
+    public static Map<String, Integer> obtenerPlatosPedido(Integer numeroMesa) {
         HashMap<String, Integer> mapaPlatosPedido = new HashMap<>();
         Connection conexion = ConexionBD.conectar();
 
@@ -238,6 +242,33 @@ public class PedidoDAO {
         return resultado;
     }
 
+    public static Map<Producto, Integer> listaPlatosPedidoFactura(Pedido pedido) {
+        Map<Producto, Integer> platosPedido = new HashMap<>();
+        Connection conexion = ConexionBD.conectar();
+
+        if (conexion != null) {
+            String query = "SELECT pr.nombre AS nombre_plato, pr.precio AS precio_plato, pp.cantidad AS cantidad_plato" +
+                    "FROM Pedido_plato AS pp " +
+                    "INNER JOIN Producto AS pr ON pp.codigo_producto = pr.codigo " +
+                    "WHERE pp.id_pedido = ?";
+
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setInt(1, pedido.getId());
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    String nombrePlato = rs.getString("nombre_plato");
+                    double precioPlato = rs.getDouble("precio_plato");
+                    int cantidad = rs.getInt("cantidad");
+                    platosPedido.put(new Producto(nombrePlato, precioPlato), cantidad);
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al obtener los platos del pedido: " + e.getMessage());
+            }
+        }
+        return platosPedido;
+    }
+
     //Metodo cambiar estado pagado
     public void cambiarEstadoPagado(int numeroMesa) {
         try (Connection conexion = ConexionBD.conectar()) {
@@ -256,5 +287,31 @@ public class PedidoDAO {
         } catch (SQLException e) {
             System.out.println("Error al cambiar a cobrado: " + e.getMessage());
         }
+
+    }
+
+    public static ArrayList<Pedido> pedidosPorDia(Date fecha){
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+        Connection conexion = ConexionBD.conectar();
+
+        if (conexion != null) {
+            String query = "SELECT * FROM Pedido WHERE fecha = ?";
+
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setDate(1, fecha);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    int numeroMesa = rs.getInt("numero_mesa");
+                    Time horaPedido = rs.getTime("hora_pedido");
+                    String tipo_pago = rs.getString("tipo_pago");
+                    pedidos.add(new Pedido(id, numeroMesa, horaPedido, fecha, tipo_pago));
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al obtener los pedidos por día: " + e.getMessage());
+            }
+        }
+        return pedidos;
     }
 }

@@ -180,6 +180,7 @@ public class ProductoDAO {
             }
             catch (SQLException e) {
                 System.out.println("error al realizar la consulta" + e.getMessage());
+
     
             } 
         }
@@ -195,6 +196,7 @@ public class ProductoDAO {
             
                     stmt.setInt(1, id);
                     stmt.executeUpdate();
+
 
                     int filasActualizadas = stmt.executeUpdate();
                     if (filasActualizadas > 0) {

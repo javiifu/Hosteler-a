@@ -51,8 +51,10 @@ public class ProductoVIEW {
     public Producto buscarProducto() {
         System.out.print("Código del producto: ");
         int codigo = sc.nextInt();
+      
         ProductoDAO productoDAO = new ProductoDAO();
         Producto producto = productoDAO.mostrarProductosByID(codigo);
+
         return producto;
     }
     public void modificarProducto() {

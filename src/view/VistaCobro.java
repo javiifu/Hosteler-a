@@ -42,6 +42,7 @@ public class VistaCobro extends JPanel implements ActionListener {
         detalleCuentaArea.setBackground(ColorPaleta.TEXTAREA_FONDO); // Color de fondo gris claro
         detalleCuentaArea.setForeground(ColorPaleta.TEXTAREA_TEXTO); // Color del texto gris oscuro
         add(new JScrollPane(detalleCuentaArea), BorderLayout.CENTER); // Agrega el área de texto con scroll
+        
         // Opciones de pago (WEST)
         JPanel pagoPanel = new JPanel(new GridLayout(2, 1, 5, 10));
         pagoPanel.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro

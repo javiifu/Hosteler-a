@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 
 import view.VistaMesas;
 import view.VistaMenu;
+import view.VistaConfiguracion;
 
 public class TPVMain extends JFrame implements ActionListener {
     private CardLayout cardLayout;

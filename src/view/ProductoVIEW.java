@@ -3,9 +3,6 @@ package view;
 import dao.ProductoDAO;
 import java.util.List;
 import java.util.Scanner;
-
-import dao.ProductoDAO;
-
 import model.Producto;
 
 public class ProductoVIEW {
@@ -56,7 +53,7 @@ public class ProductoVIEW {
         int codigo = sc.nextInt();
 
         ProductoDAO productoDAO = new ProductoDAO();
-        Producto producto = productoDAO.mostrarProductosByID(codigo);
+        Producto producto = productoDAO.buscarProductoByID(codigo);
 
 
         return producto;

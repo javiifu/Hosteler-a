@@ -1,12 +1,12 @@
 package model;
 
 public class Producto {
-    private int codigo;
+    private Integer codigo;
     private String nombre;
     private String descripcion;
     private double precio;
-    private boolean disponible;
-    private int categoriaCodigo;
+    private Boolean disponible;
+    private Integer categoriaCodigo;
 
     public Producto(String nombre, String descripcion, double precio, boolean disponible) {
         this.nombre = nombre;
@@ -30,6 +30,11 @@ public class Producto {
     public void cambiarEstadoProducto() { this.disponible = !this.disponible; } // Cambia el estado de disponibilidad
     public void setCategoriaCodigo(int categoriaCodigo) { this.categoriaCodigo = categoriaCodigo; }
 
+    public Producto(String nombre, double precio) {
+        this.nombre = nombre;
+        this.precio = precio;
+    }
+
     @Override
     public String toString() {
         return "Producto {" +
@@ -41,4 +46,5 @@ public class Producto {
                ",\n  Código de categoría: " + categoriaCodigo +
                "\n}";
     }
+
 }

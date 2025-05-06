@@ -36,7 +36,7 @@ public class VistaMenu extends JPanel {
         setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
         // Titulo
-        JLabel titulo = new JLabel("Menu - Mesa " + mesaSeleccionada.getCodigo(), SwingConstants.CENTER);
+        JLabel titulo = new JLabel("Menu - Mesa " + mesaSeleccionada.getNumero(), SwingConstants.CENTER);
         titulo.setForeground(ColorPaleta.TEXTO_PRINCIPAL_CLARO);
         add(titulo, BorderLayout.NORTH);
 

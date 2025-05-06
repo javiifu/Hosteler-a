@@ -141,7 +141,7 @@ public class CategoriaDAO {
         }
         return categorias;
     }
-    public int ObetenerCategoriaPorNombre(String nombre){
+    public int ObtenerCategoriaPorNombre(String nombre){
         Connection conexion = ConexionBD.conectar();
        
         if(conexion!=null){
@@ -157,6 +157,8 @@ public class CategoriaDAO {
     }
     return 0;
  }
- }
+
+    // TODO: Implementar metodo borrarCategoriaPorNombre(String nombre)
+}
 
 

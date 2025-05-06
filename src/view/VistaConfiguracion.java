@@ -91,14 +91,14 @@ public class VistaConfiguracion extends JPanel{
             try {
                 double precio = Double.parseDouble(precioTexto);
                 CategoriaDAO categoriaDAO = new CategoriaDAO();
-                int idCategoria = categoriaDAO.obtenerIdCategoriaPorNombre(categoria);
+                int idCategoria = categoriaDAO.ObtenerCategoriaPorNombre(categoria);
 
                 ProductoDAO productoDAO = new ProductoDAO();
                 if (tipo.equals("Crear Producto")) {
                     productoDAO.crearProducto(nombre, descripcion, precio, idCategoria);
                     JOptionPane.showMessageDialog(dialog, "Producto creado con éxito.");
                 } else if (tipo.equals("Eliminar Producto")) {
-                    productoDAO.eliminarProducto(nombre);
+                    productoDAO.borrarProductoPorNombre(nombre);
                     JOptionPane.showMessageDialog(dialog, "Producto eliminado con éxito.");
                 }
 

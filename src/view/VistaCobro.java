@@ -77,7 +77,7 @@ public class VistaCobro extends JPanel implements ActionListener {
         for (Map.Entry<String, Integer> entrada : platosPedido.entrySet()) {
             String nombrePlato = entrada.getKey();
             int cantidad = entrada.getValue();
-            double subtotal = cantidad * PedidoDAO.obtenerPrecioPlato(nombrePlato); // Método auxiliar para obtener el precio
+            double subtotal = cantidad * pedidoDAO.obtenerPrecioPlato(nombrePlato); // Método auxiliar para obtener el precio
             sb.append(nombrePlato).append(" x ").append(cantidad)
               .append(" = ").append(String.format("%.2f €", subtotal)).append("\n");
         }

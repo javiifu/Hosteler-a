@@ -279,8 +279,10 @@ public class ProductoDAO {
     }
     return null;
 }
-public ArrayList<String> obtenerProductosPorCatagoriaArray (int idCategoria){
- 
+    
+    // TODO: Hay que cambiar este metodo para que devuelva un ArrayList de Productos (ArrayList<Producto>)
+    public ArrayList<String> obtenerProductosPorCategoriaArray (int idCategoria){
+
     Connection conexion = ConexionBD.conectar();
     ArrayList<String> nombresProductoCategoria = new ArrayList<>();
     if(conexion!=null){

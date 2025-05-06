@@ -160,10 +160,10 @@ public class ProductoDAO {
             } catch (SQLException e) {
                 System.out.println("error al realizar la consulta" + e.getMessage());
 
+            }
+            }
         }
-        }
-
-        } 
+ 
         public void mostrarProductosByCategoria(int idcategoria){
             Connection conexion = ConexionBD.conectar();
             if(conexion != null){

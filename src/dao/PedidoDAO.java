@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import model.Pedido;
 import model.PedidoPlato;
+import model.Producto;
 
 public class PedidoDAO {
     //Metodo para insertar platos en los pedidos
@@ -89,7 +90,7 @@ public class PedidoDAO {
     }
 
     //Metodo para obtener todos los platos/bebidas en un hasmap
-    public Map<String, Integer> obtenerPlatosPedido(Integer numeroMesa) {
+    public static Map<String, Integer> obtenerPlatosPedido(Integer numeroMesa) {
         HashMap<String, Integer> mapaPlatosPedido = new HashMap<>();
         Connection conexion = ConexionBD.conectar();
 
@@ -238,6 +239,33 @@ public class PedidoDAO {
         return resultado;
     }
 
+    public static Map<Producto, Integer> listaPlatosPedidoFactura(Pedido pedido) {
+        Map<Producto, Integer> platosPedido = new HashMap<>();
+        Connection conexion = ConexionBD.conectar();
+
+        if (conexion != null) {
+            String query = "SELECT pr.nombre AS nombre_plato, pr.precio AS precio_plato, pp.cantidad AS cantidad_plato" +
+                    "FROM Pedido_plato AS pp " +
+                    "INNER JOIN Producto AS pr ON pp.codigo_producto = pr.codigo " +
+                    "WHERE pp.id_pedido = ?";
+
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setInt(1, pedido.getId());
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    String nombrePlato = rs.getString("nombre_plato");
+                    double precioPlato = rs.getDouble("precio_plato");
+                    int cantidad = rs.getInt("cantidad");
+                    platosPedido.put(new Producto(nombrePlato, precioPlato), cantidad);
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al obtener los platos del pedido: " + e.getMessage());
+            }
+        }
+        return platosPedido;
+    }
+
     //Metodo cambiar estado pagado
     public static void cambiarEstadoPagado(int numeroMesa) {
         try (Connection conexion = ConexionBD.conectar()) {
@@ -256,5 +284,6 @@ public class PedidoDAO {
         } catch (SQLException e) {
             System.out.println("Error al cambiar a cobrado: " + e.getMessage());
         }
+
     }
 }

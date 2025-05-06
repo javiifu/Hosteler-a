@@ -1,5 +1,6 @@
 package main;
 import config.*;
+import dao.CategoriaDAO;
 import dao.ConexionBD;
 import dao.HistorialSesionesDAO;
 import dao.PedidoDAO;
@@ -9,7 +10,10 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -149,7 +153,7 @@ public class App {
 
     }
 
-    public double totalVendidoPorTipoPago(String tipo_pago, Date fecha){
+    public double totalVendidoPorTipoPagoSinIVA(String tipo_pago, Date fecha){
         double total = 0;
         ArrayList<Pedido> lista_pedidos = PedidoDAO.pedidosPorDia(fecha);
         for(Pedido pedido : lista_pedidos){
@@ -160,10 +164,10 @@ public class App {
                 }
             }
         }
-        return (total + total*0.10);
+        return (total);
     }
 
-    public double totalVendido(Date fecha){
+    public double totalVendidoSinIVA(Date fecha){
         double total = 0;
         ArrayList<Pedido> lista_pedidos = PedidoDAO.pedidosPorDia(fecha);
         for(Pedido pedido : lista_pedidos){
@@ -172,7 +176,53 @@ public class App {
                 total += entry.getKey().getPrecio() * entry.getValue();
             }
         }
-        return (total + total*0.10);
+        return (total);
+    }
+
+    public void generarResumenDia(Date fecha){
+        StringBuilder resumen = new StringBuilder();
+        factura.append("<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Factura</title><style>body {font-family: Arial, sans-serif;margin: 20px;padding: 20px;background-color: #f4f4f4;}.factura {background-color: #fff;padding: 20px;             border-radius: 10px;box-shadow: 0 0 10px rgba(0,0,0,0.1);max-width: 400px;             margin: auto;             padding-bottom: 20px;}.factura h2, .factura p {text-align: center;}.tabla {width: 100%;margin-top: 10px;border-collapse: collapse;}.tabla th, .tabla td {padding: 10px;text-align: left;}.tabla th {background-color: #ddd;}.totales {margin-top: 20px;padding: 10px;background-color: #ddd;border-radius: 5px;}.total {font-weight: bold;text-align: right;}</style></head><body><div class=\"factura\">");
+        resumen.append("<h2>"+config.getNombre_restaurante()+"</h2>");
+        resumen.append("<p>Fecha: "+fecha+"</p>");
+        resumen.append("<table class=\"tabla\" border=\"1\"><tr><th>Descripción</th><th>Cantidad</th><th>Precio</th></tr>");
+        ArrayList<Pedido> lista_pedidos = PedidoDAO.pedidosPorDia(fecha);
+        List<Map<Producto, Integer>> lista_total_productos = new ArrayList<>();
+        for(Pedido pedido : lista_pedidos){
+            Map<Producto, Integer> lista_productos = PedidoDAO.listaPlatosPedidoFactura(pedido);
+            lista_total_productos.add(lista_productos);
+        }
+        Map<Producto, Integer> lista_total_productos_agrupados = lista_total_productos.stream().flatMap(map -> map.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Integer::sum));
+        double total_categoria = 0;
+        Map<Integer, String> lista_categorias = CategoriaDAO.obtenerCategorias();
+        for(Map.Entry<Integer, String> entry_categoria : lista_categorias.entrySet()){
+            resumen.append("<h3>"+entry_categoria.getValue()+"</h3>");
+            total_categoria = 0;
+            for(Map.Entry<Producto, Integer> entry : lista_total_productos_agrupados.entrySet()){
+                if(entry.getKey().getCategoriaCodigo() == entry_categoria.getKey()){
+                    resumen.append("<tr><td>"+entry.getKey().getNombre()+"</td><td>"+entry.getValue()+"</td><td>"+entry.getKey().getPrecio()+"</td></tr>");
+                    total_categoria += entry.getKey().getPrecio() * entry.getValue();
+                }
+            }
+            resumen.append("<tr><td class=\"total\">Total "+total_categoria+"</td><td class=\"total\">IVA "+total_categoria*0.10+"</td><td class=\"total\">Total con IVA "+(total_categoria + total_categoria*0.10)+"</tr>");
+        }
+        double tarjetaSinIVA = totalVendidoPorTipoPagoSinIVA("TARJETA", fecha);
+        double efectivoSinIVA = totalVendidoPorTipoPagoSinIVA("EFECTIVO", fecha);
+        double total = totalVendidoSinIVA(fecha);
+        resumen.append("</table><div class=\"totales\"><table class=\"tabla\"><tr><td class=\"total\">Total Tarjeta sin IVA</td><td class=\"total\">"+tarjetaSinIVA+"</td></tr><tr><td class=\"total\">IVA TArjeta(10%)</td><td class=\"total\">"+tarjetaSinIVA*0.10+"</td></tr><tr><td class=\"total\">Tarjeta con IVA</td><td class=\"total\">"+(tarjetaSinIVA + tarjetaSinIVA*0.10)+"</td></tr>");
+
+        resumen.append("<tr><td class=\"total\">Total Efectivo sin IVA</td><td class=\"total\">"+efectivoSinIVA+"</td></tr><tr><td class=\"total\">IVA Efectivo(10%)</td><td class=\"total\">"+efectivoSinIVA*0.10+"</td></tr><tr><td class=\"total\">Efectivo con IVA</td><td class=\"total\">"+(efectivoSinIVA + efectivoSinIVA*0.10)+"</td></tr>");
+
+        resumen.append("<tr><td class=\"total\">Total sin IVA</td><td class=\"total\">"+total+"</td></tr><tr><td class=\"total\">IVA(10%)</td><td class=\"total\">"+total*0.10+"</td></tr><tr><td class=\"total\" con IVA</td><td class=\"total\">"+(total + total*0.10)+"</td></tr></table></div></div></body></html>");
+
+        String html = resumen.toString();
+        String nombreArchivo = "resumen_" + fecha.toString() + ".html";
+        
+        try (java.io.FileWriter fileWriter = new java.io.FileWriter(nombreArchivo)) {
+            fileWriter.write(html);
+            System.out.println("Resumen generado: " + nombreArchivo);
+        } catch (java.io.IOException e) {
+            System.err.println("Error al generar el resumen: " + e.getMessage());
+        }
     }
 
 }

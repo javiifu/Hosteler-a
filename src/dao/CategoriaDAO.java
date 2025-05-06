@@ -141,7 +141,7 @@ public class CategoriaDAO {
         }
         return categorias;
     }
-    public int ObetenerCategoriaPorNombre(String nombre){
+    public int ObtenerCategoriaPorNombre(String nombre){
         Connection conexion = ConexionBD.conectar();
        
         if(conexion!=null){
@@ -157,6 +157,20 @@ public class CategoriaDAO {
     }
     return 0;
  }
- }
+
+    public void borrarCategoriaPorNombre(String nombre) {
+        Connection conexion = ConexionBD.conectar();
+        if (conexion != null) {
+            String query = "DELETE FROM Categoria WHERE nombre = ?";
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setString(1, nombre);
+                stmt.executeUpdate();
+                System.out.println("Categoria eliminada con exito");
+            } catch (SQLException e) {
+                System.out.println("Error al eliminar la categoria: " + e.getMessage());
+            }
+        }
+    }
+}
 
 

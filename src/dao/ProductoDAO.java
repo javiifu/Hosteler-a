@@ -280,20 +280,22 @@ public class ProductoDAO {
     return null;
 }
     
-    // TODO: Hay que cambiar este metodo para que devuelva un ArrayList de Productos (ArrayList<Producto>)
     public ArrayList<Producto> obtenerProductosPorCategoriaArray (int idCategoria){
 
     Connection conexion = ConexionBD.conectar();
     ArrayList<Producto> nombresProductoCategoria = new ArrayList<>();
     if(conexion!=null){
-        String query = "SELECT nombre FROM Producto WHERE id_categoria=" + idCategoria;
-        try (Statement stmt = conexion.createStatement();
-            ResultSet rs = stmt.executeQuery(query)) {
+        String query = "SELECT * FROM Producto WHERE id_categoria = ?";
+        try{
+                PreparedStatement stmt = conexion.prepareStatement(query);
+                stmt.setInt(1, idCategoria);
+                ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    nombresProductoCategoria.add(new Producto(
+                    nombresProductoCategoria.add(new Producto(rs.getInt("codigo"),
                         rs.getString("nombre"),
                         rs.getString("descripcion"),
-                        rs.getDouble("precio")
+                        rs.getDouble("precio"),
+                        idCategoria
                     ));
                     
                 }

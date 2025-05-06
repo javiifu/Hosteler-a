@@ -50,7 +50,7 @@ public class ProductoVIEW {
     public Producto buscarProducto() {
         System.out.print("Código del producto: ");
         int codigo = sc.nextInt();
-        Producto producto = productoDAO.buscarProducto(codigo);
+        //Producto producto = productoDAO.buscarProducto(codigo);
         return producto;
     }
     public void modificarProducto() {

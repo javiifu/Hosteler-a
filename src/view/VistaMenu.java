@@ -28,7 +28,7 @@ public class VistaMenu extends JPanel {
     private CardLayout cardLayoutCentral;
     private JPanel panelCentral;
 
-    public VistaMenu(TPVMain tpvMain, Mesa mesaSeleccionada) {
+    public VistaMenu(TPVMain tpvMain) {
         this.tpvMain = tpvMain;
         this.mesaSeleccionada = mesaSeleccionada;
 

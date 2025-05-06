@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import config.*;
@@ -43,10 +42,5 @@ public class VistaMesas extends JPanel {
         botonMenu.setActionCommand("Ir al Menu");
         botonMenu.addActionListener(tpvMain); // Usar tpvMain como ActionListener
         add(botonMenu, BorderLayout.SOUTH); // Añadir botón de menú en la parte inferior
-    }
-
-    private void mostrarMensaje(ActionEvent e) {
-        String command = e.getActionCommand();
-        JOptionPane.showMessageDialog(this, "Has seleccionado " + command);
     }
 }

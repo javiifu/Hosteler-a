@@ -1,9 +1,9 @@
 package view;
 import java.awt.*;
 import javax.swing.*;
+
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.concurrent.Flow;
 
 import config.*;
 import dao.CategoriaDAO;
@@ -31,10 +31,10 @@ public class VistaConfiguracion extends JPanel{
 
         // Botones para las opciones
         Boton botonCrearPlato = new Boton("Crear Plato");
-        botonCrearPlato.addActionListener(e -> abrirFormularioPlato("Crear Plato"));
+        botonCrearPlato.addActionListener(e -> abrirFormularioProducto("Crear Producto"));
 
         Boton botonEliminarPlato = new Boton("Eliminar Plato");
-        botonEliminarPlato.addActionListener(e -> abrirFormularioPlato("Eliminar Plato"));
+        botonEliminarPlato.addActionListener(e -> abrirFormularioProducto("Eliminar Producto"));
 
         Boton botonCrearCategoria = new Boton("Crear Categoría");
         botonCrearCategoria.addActionListener(e -> abrirFormularioCategoria("Crear Categoría"));
@@ -57,7 +57,7 @@ public class VistaConfiguracion extends JPanel{
     }
 
     // Metodo para abrir formulario para platos
-    private void abrirFormularioPlato(String tipo) {
+    private void abrirFormularioProducto(String tipo) {
         JDialog dialog = new JDialog(tpvMain, tipo, true);
         dialog.setSize(400, 300);
         dialog.setLayout(new GridLayout(4, 2, 10, 10));
@@ -115,7 +115,7 @@ public class VistaConfiguracion extends JPanel{
         dialog.add(labelPrecio);
         dialog.add(campoPrecio);
         dialog.add(labelCategoria);
-        dialog.add(comboCategoria);
+        dialog.add(comboCategorias);
         dialog.add(new JLabel()); // Espacio vacio
         dialog.add(botonGuardar);
 
@@ -123,6 +123,46 @@ public class VistaConfiguracion extends JPanel{
 
     }
 
+    // Metodo para abrir formulario para categorias
+    private void abrirFormularioCategoria(String tipo) {
+        JDialog dialog = new JDialog(tpvMain, tipo, true);
+        dialog.setSize(300,200);
+        dialog.setLayout(new GridLayout(2, 2, 10, 10));
+        dialog.setLocationRelativeTo(this);
+
+        JLabel labelNombre = new JLabel("Nombre de la Categoria:");
+        JTextField campoNombre = new JTextField();
+
+        Boton botonGuardar = new Boton("Guardar");
+        botonGuardar.addActionListener(e -> {
+            String nombre = campoNombre.getText();
+
+            if (nombre.isEmpty()) {
+                JOptionPane.showMessageDialog(dialog, "Por favor, ingrese el nombre de la categoria", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            CategoriaDAO categoriaDAO = new CategoriaDAO();
+            if (tipo.equals("Crear Categoria")) {
+                categoriaDAO.crearCategoria(nombre);
+                JOptionPane.showMessageDialog(dialog, "Categoria creada con exito");      
+            } else if (tipo.equals("Eliminar Categoria")) {
+                categoriaDAO.borrarCategoriaPorNombre(nombre);
+                JOptionPane.showMessageDialog(dialog, "Categoria eliminada con exito");
+            }
+
+            dialog.dispose();
+        });
+
+        dialog.add(labelNombre);
+        dialog.add(campoNombre);
+        dialog.add(new JLabel()); // Espacio en blanco
+        dialog.add(botonGuardar);
+
+        dialog.setVisible(true); // Mostrar el dialogo
+
+
+    }
     private void cargarCategoriasEnCombo(JComboBox<String> comboCategorias) {
         CategoriaDAO categoriaDAO = new CategoriaDAO();
         ArrayList<String> nombreCategorias = categoriaDAO.nombresCategoriaArray();

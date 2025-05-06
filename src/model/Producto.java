@@ -1,6 +1,7 @@
 package model;
 
 public class Producto {
+    private int id;
     private int codigo;
     private String nombre;
     private String descripcion;
@@ -8,14 +9,30 @@ public class Producto {
     private boolean disponible;
     private int categoriaCodigo;
 
-    public Producto(String nombre, String descripcion, double precio, boolean disponible) {
+    public Producto(String nombre, String descripcion, double precio) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.disponible = disponible;
+        this.disponible = true;
+    }
+    public Producto(String nombre, String descripcion, double precio, int categoriaCodigo) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.categoriaCodigo = categoriaCodigo; 
+        this.disponible = true;
+    }
+    public Producto(int id, String nombre, String descripcion, double precio, int categoriaCodigo) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.categoriaCodigo = categoriaCodigo; 
+        this.disponible = true;
     }
 
     // Getters
+    public int getId() { return id; }
     public int getCodigo() { return codigo; }
     public String getNombre() { return nombre; }
     public String getDescripcion() { return descripcion; }
@@ -33,6 +50,7 @@ public class Producto {
     @Override
     public String toString() {
         return "Producto {" +
+               "\n  ID: " + id +
                "\n  Código: " + codigo +
                ",\n  Nombre: " + nombre +
                ",\n  Descripción: " + descripcion +

@@ -26,7 +26,7 @@ public class VistaMesas extends JPanel {
         
         ArrayList<Mesa> mesas = mesaDAO.getMesas();  // Obtener el número de mesas desde la configuración
         for (int i = 0; i < mesas.size(); i++) {
-            int numeroMesa = mesas.get(i).getCodigo(); // Crear botones según el número de mesas configurado
+            int numeroMesa = mesas.get(i).getNumero(); // Crear botones según el número de mesas configurado
             Boton botonMesa = new Boton("Mesa " + numeroMesa); // Crear botón para cada mesa
             botonMesa.setActionCommand("Mesa " + numeroMesa); // Establecer el comando de acción del botón
             botonMesa.addActionListener(tpvMain); // Usar tpvMain como ActionListener

@@ -1,4 +1,5 @@
-
+/*Selección de la base de datos. */
+USE restaurate;
 /*Creacion de tablas*/
 CREATE TABLE IF NOT EXISTS Mesa (
     numero INT PRIMARY KEY,
@@ -24,6 +25,7 @@ CREATE TABLE IF NOT EXISTS Pedido (
     numero_mesa INT,
     completado BOOLEAN DEFAULT FALSE,
     pagado BOOLEAN DEFAULT FALSE,
+    tipo_pago ENUM('EFECTIVO', 'TARJETA') DEFAULT 'EFECTIVO',
     FOREIGN KEY (numero_mesa) REFERENCES Mesa(numero)
     );
 
@@ -47,11 +49,7 @@ CREATE TABLE IF NOT EXISTS Producto_Alergeno (
     FOREIGN KEY (id_alergeno) REFERENCES Alergeno(id)
 );
 
-CREATE TABLE IF NOT EXISTS Estadisticas_venta (
-    id_producto INT NOT NULL,
-    cantidad INT,
-    FOREIGN KEY (id_producto) REFERENCES Producto(id_producto)
-);
+d
 /*INSERT INTO Alergeno (nombre) VALUES
 ('Leche'),
 ('Huevo'),
@@ -122,15 +120,14 @@ CREATE TABLE IF NOT EXISTS Historial_sesiones(
     CONSTRAINT FOREIGN KEY(id_usuario) REFERENCES Usuarios(id)
 );
 
-/*De momento vamos a hacer que solo haya un administrador*/
 DELIMITER //
 
 CREATE TRIGGER prevenir_multiples_admins
-BEFORE INSERT ON usuarios
+BEFORE INSERT ON Usuarios
 FOR EACH ROW
 BEGIN
-  IF NEW.es_admin = TRUE THEN
-    IF (SELECT COUNT(*) FROM usuarios WHERE es_admin = TRUE) > 0 THEN
+  IF NEW.administrador = TRUE THEN
+    IF (SELECT COUNT(*) FROM Usuarios WHERE administrador = TRUE) > 0 THEN
       SIGNAL SQLSTATE '45000'
       SET MESSAGE_TEXT = 'Solo puede existir un administrador.';
     END IF;
@@ -141,26 +138,23 @@ END;
 DELIMITER ;
 
 
+
 /*Trigger para actualizar las estadisticas de ventas cada vez que se vende un producto*/
 
 DELIMITER //
+
 CREATE TRIGGER agregar_actualizar_estadisticas_venta
 AFTER INSERT ON Pedido_plato
 FOR EACH ROW
 BEGIN
-    
-    DECLARE producto_id INT;
-    SELECT id_producto INTO producto_id
-    FROM Producto
-    WHERE codigo = NEW.codigo_plato;
-
     INSERT INTO Estadisticas_venta (id_producto, cantidad)
-    VALUES (producto_id, NEW.cantidad)
+    VALUES (NEW.codigo_plato, NEW.cantidad)
     ON DUPLICATE KEY UPDATE cantidad = cantidad + NEW.cantidad;
-
 END;
 //
+
 DELIMITER ;
+
 /*Creamos el procedimiento para crear un pedido*/
 DELIMITER $$
 CREATE PROCEDURE crear_pedido(
@@ -175,7 +169,7 @@ BEGIN
 END$$
 DELIMITER ;
 /*Creamos el procedimiento para añadir un producto al pedido*/
-
+/*Mirar bien la query*/
 DELIMITER $$
 CREATE PROCEDURE agregar_producto_a_pedido(
     IN p_pedido_id INT,
@@ -261,6 +255,6 @@ DELIMITER ;
 CREATE INDEX indice_pedidos_fecha ON pedidos(fecha);
 
 /* Para detalles de un pedido. */
-CREATE INDEX indice_detalle_pedido_compuesto ON detalle_pedido(pedido_id, producto_id);
+CREATE INDEX idx_pedido_plato_compuesto ON Pedido_plato(id_pedido, codigo_plato);
  /*Índices para roles de usuarios. */
- CREATE INDEX idx_empleados_rol ON empleados(rol);
+CREATE INDEX idx_empleado_puesto ON Empleado(puesto);

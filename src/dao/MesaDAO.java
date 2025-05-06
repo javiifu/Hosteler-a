@@ -80,7 +80,7 @@ public class MesaDAO {
         Connection conexion = ConexionBD.conectar();
         try {
             PreparedStatement statement = conexion.prepareStatement(sql);
-            statement.setInt(1, mesa.getCodigo());
+            statement.setInt(1, mesa.getNumero());
             statement.setBoolean(2, mesa.getEstado());
             statement.executeUpdate();
         } catch (SQLException e) {

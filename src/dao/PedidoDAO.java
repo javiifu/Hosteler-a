@@ -1,9 +1,12 @@
 package dao;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -285,5 +288,30 @@ public class PedidoDAO {
             System.out.println("Error al cambiar a cobrado: " + e.getMessage());
         }
 
+    }
+
+    public static ArrayList<Pedido> pedidosPorDia(Date fecha){
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+        Connection conexion = ConexionBD.conectar();
+
+        if (conexion != null) {
+            String query = "SELECT * FROM Pedido WHERE fecha = ?";
+
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setDate(1, fecha);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    int numeroMesa = rs.getInt("numero_mesa");
+                    Time horaPedido = rs.getTime("hora_pedido");
+                    String tipo_pago = rs.getString("tipo_pago");
+                    pedidos.add(new Pedido(id, numeroMesa, horaPedido, fecha, tipo_pago));
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al obtener los pedidos por día: " + e.getMessage());
+            }
+        }
+        return pedidos;
     }
 }

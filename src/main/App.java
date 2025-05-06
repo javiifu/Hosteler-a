@@ -163,6 +163,18 @@ public class App {
         return (total + total*0.10);
     }
 
+    public double totalVendido(Date fecha){
+        double total = 0;
+        ArrayList<Pedido> lista_pedidos = PedidoDAO.pedidosPorDia(fecha);
+        for(Pedido pedido : lista_pedidos){
+            Map<Producto, Integer> lista_productos = PedidoDAO.listaPlatosPedidoFactura(pedido);
+            for(Map.Entry<Producto, Integer> entry : lista_productos.entrySet()){
+                total += entry.getKey().getPrecio() * entry.getValue();
+            }
+        }
+        return (total + total*0.10);
+    }
+
 }
 
 

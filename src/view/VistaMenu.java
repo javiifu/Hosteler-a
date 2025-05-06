@@ -115,11 +115,11 @@ public class VistaMenu extends JPanel {
         Categoria categoriaSeleccionada = listaCategorias.getSelectedValue();
         if (categoriaSeleccionada != null) {
             ProductoDAO productoDAO = new ProductoDAO();
-            ArrayList<String> nombresProductos = productoDAO.nombresProdcutoArray();
+            ArrayList<Producto> productos = productoDAO.obtenerProdutosPorCategoria(categoriaSeleccionada.getCodigo());
             DefaultListModel<Producto> modeloProductos = (DefaultListModel<Producto>) listaProductos.getModel();
             modeloProductos.clear();
-            for (String nombre : nombresProductos) {
-                modeloProductos.addElement(new Producto(nombre, "", 0.0, true));
+            for (Producto producto : productos) {
+                modeloProductos.addElement((producto));
             }
             cardLayoutCentral.show(panelCentral, "Productos");
         }

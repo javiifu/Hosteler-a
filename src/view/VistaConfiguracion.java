@@ -73,8 +73,8 @@ public class VistaConfiguracion extends JPanel{
         JTextField campoPrecio = new JTextField();
 
         JLabel labelCategoria = new JLabel("Categoría:");
-        JComboBox<String> comboCategoria = new JComboBox<>();
-        cargarCategoriasEnCombo(comboCategoria); // Método para cargar categorías en el combo
+        JComboBox<String> comboCategorias = new JComboBox<>();
+        cargarCategoriasEnCombo(comboCategorias); // Método para cargar categorías en el combo
         
         Boton botonGuardar = new Boton("Guardar");
         botonGuardar.addActionListener(e -> {

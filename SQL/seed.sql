@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS Producto ( /*Cambiar a producto. */
 CREATE TABLE IF NOT EXISTS Pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     precio_total DECIMAL(8,2),
-    fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
+    hora_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
+    fecha_pedido DATE DEFAULT CURRENT_DATE,
     numero_mesa INT,
     completado BOOLEAN DEFAULT FALSE,
     pagado BOOLEAN DEFAULT FALSE,
@@ -37,36 +38,6 @@ CREATE TABLE IF NOT EXISTS Pedido_plato (
     FOREIGN KEY (id_pedido) REFERENCES Pedido(id),
     FOREIGN KEY (codigo_plato) REFERENCEs Producto(codigo)
 );
-CREATE TABLE IF NOT EXISTS Alergeno (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) UNIQUE NOT NULL
-);
-CREATE TABLE IF NOT EXISTS Producto_Alergeno (
-    id_producto INT NOT NULL,
-    id_alergeno INT NOT NULL,
-    PRIMARY KEY (id_producto, id_alergeno), 
-    FOREIGN KEY (id_producto) REFERENCES Producto(codigo),
-    FOREIGN KEY (id_alergeno) REFERENCES Alergeno(id)
-);
-
-d
-/*INSERT INTO Alergeno (nombre) VALUES
-('Leche'),
-('Huevo'),
-('Pescado'),
-('Crustáceos'),
-('Frutos de cáscara'),
-('Cacahuete'),
-('Soja'),
-('Trigo'),
-('Sésamo'),
-('Apio'),
-('Mostaza'),
-('Sulfitos'),
-('Altramuces'), 
-('Moluscos');
-
-*/
 
 /*
 /*De momento no*/
@@ -136,8 +107,6 @@ END;
 //
 
 DELIMITER ;
-
-
 
 /*Trigger para actualizar las estadisticas de ventas cada vez que se vende un producto*/
 

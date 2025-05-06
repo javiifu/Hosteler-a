@@ -54,6 +54,12 @@ public class Producto {
         this.precio = precio;
     }
 
+    public Producto(String nombre, double precio, Integer categoriaCodigo) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.categoriaCodigo = categoriaCodigo;
+    }
+
     @Override
     public String toString() {
         return "Producto {" +

@@ -1,20 +1,15 @@
 package view;
 
-import javax.swing.*;
-import javax.swing.border.Border;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import config.ColorPaleta;
 import dao.CategoriaDAO;
 import dao.ProductoDAO;
-import model.Categoria;
-import model.Producto;
-import model.Mesa;
+import java.awt.*;
+import java.util.ArrayList;
+import javax.swing.*;
 import main.TPVMain;
+import model.Categoria;
+import model.Mesa;
+import model.Producto;
 
 public class VistaMenu extends JPanel {
     // Atributos
@@ -118,6 +113,7 @@ public class VistaMenu extends JPanel {
             ArrayList<Producto> productos = productoDAO.obtenerProdutosPorCategoria(categoriaSeleccionada.getCodigo());
             DefaultListModel<Producto> modeloProductos = (DefaultListModel<Producto>) listaProductos.getModel();
             modeloProductos.clear();
+          
             for (Producto producto : productos) {
                 modeloProductos.addElement((producto));
             }

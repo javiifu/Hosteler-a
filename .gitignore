@@ -24,3 +24,6 @@ replay_pid*
 
 # Visual Studio Code directory
 .vscode/
+
+# Facturas y resúmenes
+*.html

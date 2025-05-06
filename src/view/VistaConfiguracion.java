@@ -7,6 +7,7 @@ import java.util.concurrent.Flow;
 
 import config.*;
 import dao.CategoriaDAO;
+import dao.ProductoDAO;
 import main.TPVMain;
 
 public class VistaConfiguracion extends JPanel{
@@ -59,7 +60,7 @@ public class VistaConfiguracion extends JPanel{
     private void abrirFormularioPlato(String tipo) {
         JDialog dialog = new JDialog(tpvMain, tipo, true);
         dialog.setSize(400, 300);
-        dalog.setLayout(new GridLayout(4, 2, 10, 10));
+        dialog.setLayout(new GridLayout(4, 2, 10, 10));
         dialog.setLocationRelativeTo(this);
 
         JLabel labelNombre = new JLabel("Nombre del Producto:");

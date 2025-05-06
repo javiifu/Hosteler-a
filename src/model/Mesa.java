@@ -22,6 +22,11 @@ public class Mesa {
         this.codigo = codigo;
         this.estado = estado;
     }
+    // Constructor
+    public Mesa(int codigo) {
+        this.codigo = codigo;
+        
+    }
 
     @Override
     public String toString() {

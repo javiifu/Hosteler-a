@@ -13,7 +13,7 @@ import javax.swing.*;
 
 public class VistaMesas extends JPanel {
     Config config = new Config(); // Instancia de la clase Config para acceder a la configuración
-
+    MesaDAO mesaDAO = new MesaDAO(); // Instancia de la clase MesaDAO para acceder a la base de datos
     public VistaMesas(TPVMain tpvMain) {
         setLayout(new BorderLayout()); // Diseño por regiones
         JLabel titulo = new JLabel("Gestion de mesas", SwingConstants.CENTER);
@@ -24,7 +24,7 @@ public class VistaMesas extends JPanel {
         JPanel panelMesas = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Panel para las mesas
         panelMesas.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo del panel de mesas
         
-        ArrayList<Mesa> mesas = MesaDAO.getMesas();  // Obtener el número de mesas desde la configuración
+        ArrayList<Mesa> mesas = mesaDAO.getMesas();  // Obtener el número de mesas desde la configuración
         for (int i = 0; i < mesas.size(); i++) {
             int numeroMesa = mesas.get(i).getCodigo(); // Crear botones según el número de mesas configurado
             Boton botonMesa = new Boton("Mesa " + numeroMesa); // Crear botón para cada mesa

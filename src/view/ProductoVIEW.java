@@ -2,6 +2,7 @@ package view;
 
 import java.util.Scanner;
 
+import dao.ProductoDAO;
 import model.Producto;
 
 public class ProductoVIEW {
@@ -50,7 +51,8 @@ public class ProductoVIEW {
     public Producto buscarProducto() {
         System.out.print("Código del producto: ");
         int codigo = sc.nextInt();
-        Producto producto = productoDAO.buscarProducto(codigo);
+        ProductoDAO productoDAO = new ProductoDAO();
+        Producto producto = productoDAO.mostrarProductosByID(codigo);
         return producto;
     }
     public void modificarProducto() {

@@ -1,9 +1,10 @@
 package view;
 
-import java.util.Scanner;
-
-import model.Mesa;
 import dao.MesaDAO;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+import model.Mesa;
 
 public class MesaVIEW {
     Scanner sc = new Scanner(System.in);
@@ -16,20 +17,18 @@ public class MesaVIEW {
         do {
             System.out.println("Qué desea hacer con las mesas?");
             System.out.println("1. Crear mesa");
-            System.out.println("2. Modificar mesa");
+            System.out.println("2. Modificar estado mesa");
             System.out.println("3. Eliminar mesa");
             System.out.println("4. Mostrar mesas");
-            System.out.println("5. Juntar mesas");
             System.out.println("0. Atrás");
             System.out.print(">>> ");
             opcion = sc.nextInt();
 
             switch (opcion) {
                 case 1 -> { this.crearMesa(); }
-                case 2 -> { this.modificarMesa(); }
+                case 2 -> { this.cambiarEstadoMesa(); }
                 case 3 -> { this.eliminarMesa(); }
-                case 4 -> { this.mostrarMesas(); }
-                case 5 -> { this.juntarMesas(); }
+                case 4 -> { this.mostrarMesas();}
                 case 0 -> { System.out.println("Volviendo al menu anterior. ");} 
                 default -> { System.out.println("ERR0R: No se reconoció esa opción"); }
             }
@@ -38,45 +37,18 @@ public class MesaVIEW {
 
     public Mesa buscarMesa() {
         System.out.print("Código de la mesa: ");
-        String codigo = sc.next();
-        Mesa mesa = mesaDAO.buscarMesa(codigo);
+        int numero = sc.nextInt();
+        Mesa mesa = mesaDAO.buscarMesa(numero);
         return mesa;
     }
 
     public void crearMesa() {
         System.out.println("Registrar mesa");
-        System.out.print("Capacidad de la mesa: ");
-        int capacidad = sc.nextInt();
-        Mesa mesa = new Mesa(capacidad);
-        mesaDAO.registrarMesa(mesa);
-    }
-
-    public void modificarMesa() {
-        int opcion;
-
-        do {
-            System.out.println("Qué desea hacer con las mesas?");
-            System.out.println("1. Cambiar capacidad de la mesa");
-            System.out.println("2. Cambiar estado de la mesa");
-            System.out.println("0. Atrás");
-            System.out.print(">>> ");
-            opcion = sc.nextInt();
-
-            switch (opcion) {
-                case 1 -> { this.cambiarCapacidadMesa(); }
-                case 2 -> { this.cambiarEstadoMesa(); }
-                case 0 -> { System.out.println("Volviendo al menu anterior. ");} 
-                default -> { System.out.println("ERR0R: No se reconoció esa opción"); }
-            }
-        } while (opcion != 0);
-    }
-
-    public void cambiarCapacidadMesa() {
-        Mesa mesa = this.buscarMesa();
-        System.out.print("Nueva capacidad de la mesa: ");
-        int capacidad = sc.nextInt();
-        mesa.setCapacidad(capacidad);
-        mesaDAO.modificarMesa(mesa);
+        System.out.println("Intoduce numero de mesa");
+        
+        int numero = sc.nextInt();
+        Mesa mesa = new Mesa(numero);
+        mesaDAO.newMesa(mesa);
     }
 
     public void cambiarEstadoMesa() {
@@ -114,24 +86,20 @@ public class MesaVIEW {
     }
 
     public void eliminarMesa() {
+        System.out.println("Introduce el numero de mesa que quieres eliminar");
         Mesa mesa = this.buscarMesa();
-        mesaDAO.eliminarMesa(mesa.getCodigo());
+        mesaDAO.deleteMesa(mesa.getCodigo());
     }
 
+    //pendiente de haer
     public void mostrarMesas() {
-        mesaDAO.mostrarMesas();
+        ArrayList<Mesa> mesas = new ArrayList<>();
+        mesaDAO.getMesas();
+        System.out.println("Las mesas son las siguientes: ");
+        for (int i = 0; i < mesas.size(); i++) {
+            System.out.println(mesas.get(i));
+        }
     }
 
-    public void juntarMesas() {
-        System.out.println("Juntar mesas");
-        System.out.print("Código de la primera mesa: ");
-        String codigo1 = sc.next();
-        System.out.print("Código de la segunda mesa: ");
-        String codigo2 = sc.next();
-
-        mesaDAO.juntarMesas(codigo1, codigo2);
-
-        
-    }
 
 }

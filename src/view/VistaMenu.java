@@ -1,129 +1,146 @@
 package view;
-import main.TPVMain;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+import javax.swing.border.Border;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import config.ColorPaleta;
-import model.Categoria; // Importa la clase Categoria
-import model.Pedido;
+import dao.CategoriaDAO;
+import dao.ProductoDAO;
+import model.Categoria;
 import model.Producto;
+import model.Mesa;
+import main.TPVMain;
 
-public class VistaMenu extends JPanel implements ActionListener {
+public class VistaMenu extends JPanel {
+    // Atributos
+    private TPVMain tpvMain;
+    private Mesa mesaSeleccionada;
+    private JList<Categoria> listaCategorias;
+    private JList<Producto> listaProductos;
+    private JTextArea areaPedido;
+    private JButton botonVolver;
+    private JButton botonCobrar;
+    private CardLayout cardLayoutCentral;
+    private JPanel panelCentral;
 
-    public JList<Producto> listaProductos;
-    public JTextArea areaPedido;
-    public JButton botonAñadir;
-    public JButton botonCobrar;
-    public JButton botonVolver;
-    public JPanel panelBotonesCategorias;
-    public TPVMain tpvMain;
-    public Pedido pedidoActual;
-    public DefaultListModel<Producto> modeloLista;
-    public List<Producto> listaCompletaProductos;
-    public List<Categoria> listaCategorias; // Lista para almacenar las categorías
-
-    // Simulamos un método para obtener las categorías (reemplazar con tu lógica real)
-    public List<Categoria> obtenerCategorias() {
-        List<Categoria> categorias = new ArrayList<>();
-        categorias.add(new Categoria("Cafés"));
-        categorias.add(new Categoria("Bocadillos"));
-        categorias.add(new Categoria("Postres"));
-        categorias.add(new Categoria("Bebidas"));
-        return categorias;
-    }
-
-    public VistaMenu(TPVMain mainFrame, Pedido pedidoActual, List<Producto> productos) {
-        this.tpvMain = mainFrame;
-        this.pedidoActual = pedidoActual;
-        this.listaCompletaProductos = productos;
-        this.listaCategorias = obtenerCategorias(); // Obtener la lista de categorías
+    public VistaMenu(TPVMain tpvMain, Mesa mesaSeleccionada) {
+        this.tpvMain = tpvMain;
+        this.mesaSeleccionada = mesaSeleccionada;
 
         setLayout(new BorderLayout());
         setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
-        JLabel titulo = new JLabel("Menú", SwingConstants.CENTER);
+        // Titulo
+        JLabel titulo = new JLabel("Menu - Mesa " + mesaSeleccionada.getCodigo(), SwingConstants.CENTER);
         titulo.setForeground(ColorPaleta.TEXTO_PRINCIPAL_CLARO);
         add(titulo, BorderLayout.NORTH);
 
-        modeloLista = new DefaultListModel<>();
-        listaProductos = new JList<>(modeloLista);
-        JScrollPane scrollListaProductos = new JScrollPane(listaProductos);
-        add(scrollListaProductos, BorderLayout.CENTER);
+        // Panel central con CardLayout
+        cardLayoutCentral = new CardLayout();
+        panelCentral = new JPanel(cardLayoutCentral);
+        panelCentral.setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
-        // aa
-        panelBotonesCategorias = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelBotonesCategorias.setBackground(ColorPaleta.FONDO_SECUNDARIO);
-        JScrollPane scrollPanelBotones = new JScrollPane(panelBotonesCategorias);
-        scrollPanelBotones.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        add(scrollPanelBotones, BorderLayout.WEST);
-
-        JButton botonTodos = new JButton("Todos");
-        botonTodos.setActionCommand("Todos");
-        botonTodos.addActionListener(this);
-        panelBotonesCategorias.add(botonTodos);
-
-        for (Categoria categoria : listaCategorias) {
-            JButton botonCategoria = new JButton(categoria.getNombre());
-            botonCategoria.setActionCommand(categoria.getNombre());
-            botonCategoria.addActionListener(this);
-            panelBotonesCategorias.add(botonCategoria);
-        }
-        // aa
-
-        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panelInferior.setBackground(ColorPaleta.FONDO_SECUNDARIO);
-
-        Boton botonMenu = new Boton("Ir a Mesas");
-        botonMenu.setActionCommand("Ir a Mesas");
-        botonMenu.addActionListener(tpvMain);
-        panelInferior.add(botonMenu);
-
-        Boton botonCobrar = new Boton("Cobrar");
-        botonCobrar.setActionCommand("Cobrar");
-        botonCobrar.addActionListener(tpvMain);
-        panelInferior.add(botonCobrar);
-
-        add(panelInferior, BorderLayout.SOUTH);
-
-        mostrarProductosPorCategoria("Todos"); // Mostrar todos los productos al inicio
-    }
-
-    private void mostrarProductosPorCategoria(String nombreCategoria) {
-        modeloLista.clear();
-        for (Producto producto : listaCompletaProductos) {
-            CategoriaVIEW categoriaView = new CategoriaVIEW();
-            if (nombreCategoria.equals("Todos") || categoriaView.getCategoria(nombreCategoria).equals(nombreCategoria)) {
-                modeloLista.addElement(producto);
+        // Panel para categorías
+        JPanel panelCategorias = new JPanel(new BorderLayout());
+        DefaultListModel<Categoria> modeloCategorias = new DefaultListModel<>();
+        listaCategorias = new JList<>(modeloCategorias);
+        listaCategorias.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listaCategorias.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                cargarProductosDeCategoria();
             }
+        });
+        panelCategorias.add(new JScrollPane(listaCategorias), BorderLayout.CENTER);
+        panelCentral.add(panelCategorias, "Categorias");
+
+        // Panel para productos
+        JPanel panelProductos = new JPanel(new BorderLayout());
+        DefaultListModel<Producto> modeloProductos = new DefaultListModel<>();
+        listaProductos = new JList<>(modeloProductos);
+        listaProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listaProductos.addListSelectionListener(e -> agregarProductoAPedido());
+        panelProductos.add(new JScrollPane(listaProductos), BorderLayout.CENTER);
+
+        // Botón para volver a las categorías
+        JButton botonVolverCategorias = new JButton("Volver a Categorías");
+        botonVolverCategorias.addActionListener(e -> cardLayoutCentral.show(panelCentral, "Categorias"));
+        panelProductos.add(botonVolverCategorias, BorderLayout.SOUTH);
+
+        panelCentral.add(panelProductos, "Productos");
+
+        add(panelCentral, BorderLayout.CENTER);
+
+        // Área de texto para mostrar el pedido
+        areaPedido = new JTextArea();
+        areaPedido.setEditable(false);
+        areaPedido.setBackground(ColorPaleta.TEXTAREA_FONDO);
+        areaPedido.setForeground(ColorPaleta.TEXTAREA_TEXTO);
+        add(new JScrollPane(areaPedido), BorderLayout.EAST);
+
+        // Panel inferior para botones
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelBotones.setBackground(ColorPaleta.FONDO_SECUNDARIO);
+
+        botonVolver = new JButton("Volver");
+        botonVolver.addActionListener(e -> tpvMain.mostrarVista("Mesas"));
+        panelBotones.add(botonVolver);
+
+        botonCobrar = new JButton("Cobrar");
+        botonCobrar.addActionListener(e -> tpvMain.mostrarVista("Cobro"));
+        panelBotones.add(botonCobrar);
+
+        add(panelBotones, BorderLayout.SOUTH);
+
+        // Cargar categorías al iniciar
+        cargarCategorias();
+    }
+
+    private void cargarCategorias() {
+        CategoriaDAO categoriaDAO = new CategoriaDAO();
+        ArrayList<String> nombresCategorias = categoriaDAO.nombresCategoriaArray();
+        DefaultListModel<Categoria> modeloCategorias = (DefaultListModel<Categoria>) listaCategorias.getModel();
+        modeloCategorias.clear();
+        for (String nombre : nombresCategorias) {
+            modeloCategorias.addElement(new Categoria(nombre));
+        }
+        cardLayoutCentral.show(panelCentral, "Categorias");
+    }
+
+    private void cargarProductosDeCategoria() {
+        Categoria categoriaSeleccionada = listaCategorias.getSelectedValue();
+        if (categoriaSeleccionada != null) {
+            ProductoDAO productoDAO = new ProductoDAO();
+            ArrayList<String> nombresProductos = productoDAO.nombresProdcutoArray();
+            DefaultListModel<Producto> modeloProductos = (DefaultListModel<Producto>) listaProductos.getModel();
+            modeloProductos.clear();
+            for (String nombre : nombresProductos) {
+                modeloProductos.addElement(new Producto(nombre, "", 0.0, true));
+            }
+            cardLayoutCentral.show(panelCentral, "Productos");
         }
     }
 
-    public void mostrarMensaje(ActionEvent e) {
-        String command = e.getActionCommand();
-        JOptionPane.showMessageDialog(this, "Has seleccionado " + command);
+    private void agregarProductoAPedido() {
+        Producto productoSeleccionado = listaProductos.getSelectedValue();
+        if (productoSeleccionado != null) {
+            areaPedido.append(productoSeleccionado.getNombre() + "\n");
+        }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        if (command.equals("Todos")) {
-            mostrarProductosPorCategoria("Todos");
-        } else if (e.getSource() instanceof JButton) {
-            mostrarProductosPorCategoria(command);
-        }
+    public void setMesaSeleccionada(int numeroMesa) {
+        // Actualizar la mesa seleccionada
+        this.mesaSeleccionada = new Mesa(numeroMesa);
+
+        // Actualizar el título de la vista
+        JLabel titulo = (JLabel) getComponent(0);
+        titulo.setText("Menu - Mesa " + numeroMesa);
+
+        // Limpiar el área de texto del pedido
+        areaPedido.setText("");
     }
 }

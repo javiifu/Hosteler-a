@@ -165,7 +165,7 @@ public class PedidoDAO {
     }
 
 
-    public static double obtenerPrecioPlato(String nombrePlato) {
+    public double obtenerPrecioPlato(String nombrePlato) {
         double precio = 0.0;
         Connection conexion = ConexionBD.conectar();
 
@@ -271,7 +271,7 @@ public class PedidoDAO {
     }
 
     //Metodo cambiar estado pagado
-    public static void cambiarEstadoPagado(int numeroMesa) {
+    public void cambiarEstadoPagado(int numeroMesa) {
         try (Connection conexion = ConexionBD.conectar()) {
             if (conexion != null) {
                 String query = "UPDATE Mesa SET estado = NOT estado WHERE numero = ?";

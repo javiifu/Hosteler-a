@@ -57,6 +57,26 @@ public class ProductoDAO {
         }
         }
  }
+ public void borrarProductoPorNombre(String nombre){
+
+    Connection conexion = ConexionBD.conectar();
+        
+
+        if(conexion != null){
+             String query = "DELETE * Producto WHERE nombre =" + nombre;
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+
+            stmt.executeUpdate();
+            System.out.println("los datos se han actualizado con exito");
+
+        } catch (SQLException e) {
+
+            System.out.println("error al borrar los datos");
+
+        }
+        }
+ }
  public void modificarNombreProdcuto(int id, String nuevonombre){
 
     Connection conexion = ConexionBD.conectar();
@@ -189,7 +209,7 @@ public class ProductoDAO {
         }
 
         }
-        public ArrayList<String> nombresProdcutoArray(){
+        public ArrayList<String> obtenernombresProductoArray(){
 
         Connection conexion = ConexionBD.conectar();
         ArrayList<String> nombresProducto = new ArrayList<>();
@@ -207,6 +227,27 @@ public class ProductoDAO {
 
                 }
                 return nombresProducto;
+        }
+        return null;
+    }
+    public ArrayList<String> obtenerProductosPorCatagoriaArray (int idCategoria){
+
+        Connection conexion = ConexionBD.conectar();
+        ArrayList<String> nombresProductoCategoria = new ArrayList<>();
+        if(conexion!=null){ 
+            String query = "SELECT nombre FROM Producto WHERE id_categoria=" + idCategoria;
+            try (Statement stmt = conexion.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+                    while (rs.next()) {
+                        String nombreproducto = rs.getString("nombre");
+                        nombresProductoCategoria.add(nombreproducto);
+                    }
+
+                }catch(SQLException e){
+                    System.out.println("error" + e.getMessage());
+
+                }
+                return nombresProductoCategoria;
         }
         return null;
     }      

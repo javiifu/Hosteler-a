@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 
 import view.VistaMesas;
 import view.VistaMenu;
+import view.VistaConfiguracion;
 
 public class TPVMain extends JFrame implements ActionListener {
     private CardLayout cardLayout;
@@ -29,7 +30,7 @@ public class TPVMain extends JFrame implements ActionListener {
         mainPanel = new JPanel(cardLayout);
 
         vistaMesas = new VistaMesas(this);
-        vistaMenu = new VistaMenu(this, null);
+        vistaMenu = new VistaMenu(this);
         //vistaConfiguracion = new VistaConfiguracion(this); //Descomentar cuando la clase VistaConfiguracion esté implementada
 
         

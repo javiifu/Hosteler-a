@@ -1,11 +1,12 @@
 package view;
 
-import java.util.Scanner;
-
 import dao.ProductoDAO;
+import java.util.List;
+import java.util.Scanner;
 import model.Producto;
 
 public class ProductoVIEW {
+    ProductoDAO productoDAO = new ProductoDAO(); 
     Scanner sc = new Scanner(System.in);
 
     //Menu principal de la clase Producto
@@ -37,22 +38,24 @@ public class ProductoVIEW {
         System.out.println("Registrar Producto");
         System.out.print("Nombre del producto: ");
         String nombre = sc.next();
+        System.out.print("Id categoria: ");
+        int idCategoria = sc.nextInt();
         System.out.print("Descripción del producto: ");
         String descripcion = sc.next();
         System.out.print("Precio del producto: ");
         double precio = sc.nextDouble();
-        boolean disponible = false;
-
-
-        Producto producto = new Producto(nombre, descripcion, precio, disponible);
-        // productoDAO.registrarProducto(producto);
+        
+        productoDAO.crearProducto(nombre, descripcion, precio, idCategoria);
     }
 
     public Producto buscarProducto() {
         System.out.print("Código del producto: ");
         int codigo = sc.nextInt();
+
         ProductoDAO productoDAO = new ProductoDAO();
-        Producto producto = productoDAO.mostrarProductosByID(codigo);
+        Producto producto = productoDAO.buscarProductoByID(codigo);
+
+
         return producto;
     }
     public void modificarProducto() {
@@ -83,28 +86,33 @@ public class ProductoVIEW {
 
     public void modificarNombreProducto() {
         Producto producto = this.buscarProducto();
+        System.out.println("Introduzca el código del producto");
+        int codigo = sc.nextInt();
         System.out.print("Nuevo nombre del producto: ");
         String nombre = sc.nextLine();
         sc.nextLine(); 
 
         producto.setNombre(nombre);
-        // productoDAO.modificarNombreProducto(codigo, nombre);
+        productoDAO.modificarNombreProducto(codigo, nombre);
     }
 
     public void modificarDescripcionProducto() {
         Producto producto = this.buscarProducto();
+        System.out.println("Introduzca el código del producto");
+        int codigo = sc.nextInt();
         System.out.print("Nueva descripción del producto: ");
         String descripcion = sc.nextLine();
         sc.nextLine();
 
         producto.setDescripcion(descripcion);
-        // productoDAO.modificarDescripcionProducto(codigo, descripcion);
+        productoDAO.modificarDescripcionProducto(codigo, descripcion);
     }
 
     public void modificarPrecioProducto() {
         double precio;
         Producto producto = this.buscarProducto();
-
+        System.out.println("Introduzca el código del producto");
+        int codigo = sc.nextInt();
 
         do {
             System.out.print("Nuevo precio del producto: ");
@@ -114,11 +122,13 @@ public class ProductoVIEW {
             }
         } while (precio < 0);
         producto.setPrecio(precio);
-        // productoDAO.modificarPrecioProducto(codigo, precio);
+        productoDAO.modificarPrecioProducto(codigo, precio);
     }
 
     public void modificarDisponibilidadProducto() {
         Producto producto = this.buscarProducto();
+        System.out.println("Introduzca el código del producto");
+        int codigo = sc.nextInt();
         System.out.println("Disponibilidad actual del producto: " + (producto.isDisponible() ? "Disponible" : "No disponible"));
 
         int opcion;
@@ -145,7 +155,7 @@ public class ProductoVIEW {
             producto.cambiarEstadoProducto();
             System.out.println("Disponibilidad cambiada a: " + (producto.isDisponible() ? "Disponible" : "Ocupada"));
 
-            productoDAO.modificarDisponibilidadProducto(producto.getCodigo(), producto.isDisponible());
+            productoDAO.cambiarEstadoProducto(codigo);
         } else {
             System.out.println("No se cambió la disponibilidad del producto.");
         }
@@ -158,7 +168,24 @@ public class ProductoVIEW {
         System.out.print("Nuevo código de categoría del producto: ");
         int categoriaCodigo = sc.nextInt();
 
+        productoDAO.modificarCategoriaProducto(codigo, categoriaCodigo);
+    }
 
-        // productoDAO.modificarCategoriaProducto(codigo, categoriaCodigo);
+    public void eliminarProducto() {
+        System.out.println("Introduzca el codigo del producto que quiera eliminar");
+        int codigo = sc.nextInt();
+        productoDAO.borrarProducto(codigo);
+    }
+
+    public void mostrarProductos() {
+        List<Producto> productos = productoDAO.mostrarTodosProductos();
+
+        if (productos != null) {
+            for (Producto producto : productos) {
+                System.out.println(producto);
+            }
+        } else {
+            System.out.println("Error al obtener la lista de productos.");
+        }
     }
 }

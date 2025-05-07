@@ -1,21 +1,40 @@
 package model;
 
 public class Producto {
+
+ 
     private Integer codigo;
+
     private String nombre;
     private String descripcion;
     private double precio;
     private Boolean disponible;
     private Integer categoriaCodigo;
 
-    public Producto(String nombre, String descripcion, double precio, boolean disponible) {
+    public Producto(String nombre, String descripcion, double precio) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.disponible = disponible;
+        this.disponible = true;
+    }
+    public Producto(String nombre, String descripcion, double precio, int categoriaCodigo) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.categoriaCodigo = categoriaCodigo; 
+        this.disponible = true;
+    }
+    public Producto(int codigo, String nombre, String descripcion, double precio, int categoriaCodigo) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.categoriaCodigo = categoriaCodigo; 
+        this.disponible = true;
     }
 
     // Getters
+    
     public int getCodigo() { return codigo; }
     public String getNombre() { return nombre; }
     public String getDescripcion() { return descripcion; }
@@ -33,6 +52,12 @@ public class Producto {
     public Producto(String nombre, double precio) {
         this.nombre = nombre;
         this.precio = precio;
+    }
+
+    public Producto(String nombre, double precio, Integer categoriaCodigo) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.categoriaCodigo = categoriaCodigo;
     }
 
     @Override

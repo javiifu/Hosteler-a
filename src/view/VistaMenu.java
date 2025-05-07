@@ -59,7 +59,11 @@ public class VistaMenu extends JPanel {
         DefaultListModel<Producto> modeloProductos = new DefaultListModel<>();
         listaProductos = new JList<>(modeloProductos);
         listaProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listaProductos.addListSelectionListener(e -> agregarProductoAPedido());
+        listaProductos.addListSelectionListener(e -> {
+            if(!e.getValueIsAdjusting()) {
+                agregarProductoAPedido();
+            }
+        });
         panelProductos.add(new JScrollPane(listaProductos), BorderLayout.CENTER);
 
         // Botón para volver a las categorías

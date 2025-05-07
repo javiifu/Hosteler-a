@@ -1,4 +1,4 @@
-# Gestion de Restaurante
+# Gestión de Restaurante
 
 **Gestión Hostelería** es una aplicación de escritorio desarrollada en Java para la gestión integral de un restaurante o bar. Te Permite controlar usuarios, mesas, pedidos, productos, generación de facturas y resúmenes de ventas diarios, todo a través de una **interfaz gráfica** organizada por secciones.
 

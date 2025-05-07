@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS Pedido_plato (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_pedido INT NOT NULL,
     codigo_plato INT NOT NULL,
-    cantidad INT NOT NULL,
     FOREIGN KEY (id_pedido) REFERENCES Pedido(id),
     FOREIGN KEY (codigo_plato) REFERENCEs Producto(codigo)
 );

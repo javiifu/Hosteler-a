@@ -12,7 +12,7 @@ import view.VistaMenu;
 import view.Boton;
 import view.VistaConfiguracion;
 
-public class TPVMain extends JFrame implements ActionListener {
+public class TPVMain extends JFrame {
     private CardLayout cardLayout;
     private JPanel mainPanel;
     private VistaMesas vistaMesas;
@@ -38,16 +38,19 @@ public class TPVMain extends JFrame implements ActionListener {
         JPanel panelInicial = new JPanel(new GridLayout(3, 1, 20, 20));
         panelInicial.setBackground(ColorPaleta.FONDO_PRINCIPAL);
         Boton botonMesas = new Boton("Gestionar Mesas");
-        botonMesas.setActionCommand("Mesas");
-        botonMesas.addActionListener(this);
+        botonMesas.addActionListener(e -> {
+            mostrarVista("Mesas");
+        });
 
         Boton botonMenu = new Boton("Gestionar Menu");
-        botonMenu.setActionCommand("Mesas");
-        botonMenu.addActionListener(this);
+        botonMenu.addActionListener(e -> {
+            mostrarVista("Menu");
+        });
 
         Boton botonConfiguracion = new Boton("Configuracion");
-        botonConfiguracion.setActionCommand("Configuracion");
-        botonConfiguracion.addActionListener(this);
+        botonConfiguracion.addActionListener(e -> {
+            mostrarVista("Configuracion");
+        });
 
         panelInicial.add(botonMesas);
         panelInicial.add(botonMenu);
@@ -61,26 +64,6 @@ public class TPVMain extends JFrame implements ActionListener {
         add(mainPanel);
 
         cardLayout.show(mainPanel, "Inicio"); // Muestra la vista de Mesas al inicio
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
-        switch (command) {
-            case "Ir al Menu":
-                cardLayout.show(mainPanel, "Menu");
-                break;
-            case "Volver":
-                cardLayout.show(mainPanel, "Mesas");
-                break;
-            case "Configuracion":
-                cardLayout.show(mainPanel, "Configuracion");
-                break;
-            case "Inicio":
-                cardLayout.show(mainPanel, "Inicio");
-                break;
-            default:
-                break;
-        }
     }
 
     public void mostrarVista(String vista) {

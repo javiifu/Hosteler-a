@@ -25,11 +25,11 @@ public class CategoriaDAO {
         
             stmt.executeUpdate();
 
-            System.out.println("los datos se han introducido con exito");
+            System.out.println("Categoría creada con exito");
 
         } catch (SQLException e) {
 
-            System.out.println("error al introducir datos");
+            System.out.println("error al introducir datos" +e.getMessage());
 
         }
     }

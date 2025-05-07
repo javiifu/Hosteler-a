@@ -1,13 +1,10 @@
 package view;
-import java.awt.*;
-import javax.swing.*;
-
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-
 import config.*;
 import dao.CategoriaDAO;
 import dao.ProductoDAO;
+import java.awt.*;
+import java.util.ArrayList;
+import javax.swing.*;
 import main.TPVMain;
 
 public class VistaConfiguracion extends JPanel{
@@ -143,10 +140,10 @@ public class VistaConfiguracion extends JPanel{
             }
 
             CategoriaDAO categoriaDAO = new CategoriaDAO();
-            if (tipo.equals("Crear Categoria")) {
+            if (tipo.equalsIgnoreCase("Crear Categoría")) {
                 categoriaDAO.crearCategoria(nombre);
                 JOptionPane.showMessageDialog(dialog, "Categoria creada con exito");      
-            } else if (tipo.equals("Eliminar Categoria")) {
+            } else if (tipo.equals("Eliminar Categoría")) {
                 categoriaDAO.borrarCategoriaPorNombre(nombre);
                 JOptionPane.showMessageDialog(dialog, "Categoria eliminada con exito");
             }

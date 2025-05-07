@@ -11,7 +11,6 @@ import model.Pedido;
 import config.ColorPaleta;
 import dao.PedidoDAO;
 
-// TODO: Hay que cambiar esta clase, arreglar fallos y comprobar la logica
 public class VistaCobro extends JPanel implements ActionListener {
     private TPVMain tpvMain;
     private JLabel mesaLabel;
@@ -28,7 +27,7 @@ public class VistaCobro extends JPanel implements ActionListener {
         setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
         setLayout(new BorderLayout()); // Diseño por regiones
 
-        // Informacion de la mesa y total (NORTH)
+        // Información de la mesa y total (NORTH)
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         infoPanel.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
         mesaLabel = new JLabel("Mesa: ", SwingConstants.CENTER);
@@ -37,22 +36,26 @@ public class VistaCobro extends JPanel implements ActionListener {
         add(infoPanel, BorderLayout.NORTH);
 
         // Detalle de la cuenta y total (CENTER)
-        detalleCuentaArea = new JTextArea("...");
+        detalleCuentaArea = new JTextArea("Seleccione un método de pago para ver los detalles del pedido.");
         detalleCuentaArea.setEditable(false);
         detalleCuentaArea.setBackground(ColorPaleta.TEXTAREA_FONDO); // Color de fondo gris claro
         detalleCuentaArea.setForeground(ColorPaleta.TEXTAREA_TEXTO); // Color del texto gris oscuro
         add(new JScrollPane(detalleCuentaArea), BorderLayout.CENTER); // Agrega el área de texto con scroll
-        
+
         // Opciones de pago (WEST)
         JPanel pagoPanel = new JPanel(new GridLayout(2, 1, 5, 10));
         pagoPanel.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
         efectivoButton = new Boton("Efectivo");
+        efectivoButton.setActionCommand("efectivo");
+        efectivoButton.addActionListener(this);
         tarjetaButton = new Boton("Tarjeta");
+        tarjetaButton.setActionCommand("tarjeta");
+        tarjetaButton.addActionListener(this);
         pagoPanel.add(efectivoButton);
         pagoPanel.add(tarjetaButton);
         add(pagoPanel, BorderLayout.WEST);
 
-        // JPanel para boton de volver (SOUTH)
+        // JPanel para botón de volver (SOUTH)
         JPanel volverPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         volverPanel.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
         volverButton = new Boton("Volver");
@@ -62,94 +65,66 @@ public class VistaCobro extends JPanel implements ActionListener {
         add(volverPanel, BorderLayout.SOUTH);
 
         // Inicializar los datos del pedido
-        actualizarVista();
+        actualizarVistaInicial();
     }
 
-    public void actualizarVista() {
-    if (pedidoActual != null) {
-        PedidoDAO pedidoDAO = new PedidoDAO(); 
-        // Actualizar el label de la mesa
-        mesaLabel.setText("Mesa: " + pedidoActual.getNumeroMesa());
-
-        // Detalles del pedido
-        StringBuilder sb = new StringBuilder("Pedido:\n");
-        Map<String, Integer> platosPedido = pedidoDAO.obtenerPlatosPedido(pedidoActual.getNumeroMesa());
-        for (Map.Entry<String, Integer> entrada : platosPedido.entrySet()) {
-            String nombrePlato = entrada.getKey();
-            int cantidad = entrada.getValue();
-            double subtotal = cantidad * pedidoDAO.obtenerPrecioPlato(nombrePlato); // Método auxiliar para obtener el precio
-            sb.append(nombrePlato).append(" x ").append(cantidad)
-              .append(" = ").append(String.format("%.2f €", subtotal)).append("\n");
+    // Método para mostrar la vista inicial sin detalles del pedido
+    private void actualizarVistaInicial() {
+        if (pedidoActual != null) {
+            mesaLabel.setText("Mesa: " + pedidoActual.getNumeroMesa());
+            detalleCuentaArea.setText("Seleccione un método de pago para ver los detalles del pedido.");
+        } else {
+            mesaLabel.setText("Mesa: -");
+            detalleCuentaArea.setText("No hay pedido.");
         }
-
-        // Lógica para el pago
-        sb.append("\n"); // Línea en blanco antes del total
-        double total = pedidoDAO.calcularCuenta(pedidoActual.getNumeroMesa());
-        sb.append("TOTAL: ").append(String.format("%.2f €", total)); // EJ: 20.00 €
-
-        // Ventana emergente para el pago
-        int opcionPago = JOptionPane.showOptionDialog(
-            this,
-            "Seleccione el método de pago:",
-            "Método de Pago",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            new String[]{"Efectivo", "Tarjeta"},
-            "Tarjeta"
-        );
-
-        if (opcionPago == JOptionPane.YES_OPTION) {
-            // Pago en efectivo
-            String input = JOptionPane.showInputDialog(this, "Ingrese el dinero recibido:");
-            if (input != null) {
-                try {
-                    double dineroRecibido = Double.parseDouble(input);
-                    if (dineroRecibido >= total) {
-                        double cambio = dineroRecibido - total;
-                        JOptionPane.showMessageDialog(this, "Pago exitoso. Cambio: " + String.format("%.2f €", cambio));
-                    } else {
-                        JOptionPane.showMessageDialog(this, "El dinero recibido no es suficiente.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Entrada inválida. Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } else if (opcionPago == JOptionPane.NO_OPTION) {
-            // Pago con tarjeta
-            JOptionPane.showMessageDialog(this, "Continue en el datafono");
-
-            if (tpvMain != null) {
-                tpvMain.mostrarVista("Mesas"); // Cambia a la vista del datáfono
-            }
-        }
-
-        // Actualizar el área de texto con los detalles del pedido
-        detalleCuentaArea.setText(sb.toString());
-    } else {
-        // Si no hay pedido, mostrar un mensaje por defecto
-        mesaLabel.setText("Mesa: -");
-        detalleCuentaArea.setText("No hay pedido.");
     }
-}
+
+    // Método para actualizar la vista con los detalles del pedido
+    private void actualizarVistaConDetalles(String metodoPago) {
+        if (pedidoActual != null) {
+            PedidoDAO pedidoDAO = new PedidoDAO();
+            StringBuilder sb = new StringBuilder("Pedido:\n");
+            Map<String, Integer> platosPedido = pedidoDAO.obtenerPlatosPedido(pedidoActual.getNumeroMesa());
+            for (Map.Entry<String, Integer> entrada : platosPedido.entrySet()) {
+                String nombrePlato = entrada.getKey();
+                int cantidad = entrada.getValue();
+                double subtotal = cantidad * pedidoDAO.obtenerPrecioPlato(nombrePlato);
+                sb.append(nombrePlato).append(" x ").append(cantidad)
+                  .append(" = ").append(String.format("%.2f €", subtotal)).append("\n");
+            }
+
+            // Agregar total
+            sb.append("\n");
+            double total = pedidoDAO.calcularCuenta(pedidoActual.getNumeroMesa());
+            sb.append("TOTAL: ").append(String.format("%.2f €", total)).append("\n");
+
+            // Mostrar el método de pago seleccionado
+            sb.append("\nMétodo de Pago: ").append(metodoPago);
+
+            // Actualizar el área de texto con los detalles del pedido
+            detalleCuentaArea.setText(sb.toString());
+        } else {
+            mesaLabel.setText("Mesa: -");
+            detalleCuentaArea.setText("No hay pedido.");
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String comando = e.getActionCommand();
         if ("volver".equals(comando)) {
-            // Añadir logica para volver a la vista anterior
+            tpvMain.mostrarVista("Mesas");
         } else if ("efectivo".equals(comando)) {
-            // Lógica para el pago en efectivo
-            // Tiene que salir una ventana emergente para que el usuario ingrese el dinero
-            // y luego calcular el cambio
+            actualizarVistaConDetalles("Efectivo");
+            JOptionPane.showMessageDialog(this, "Pago en efectivo seleccionado. Proceda con el cobro.");
         } else if ("tarjeta".equals(comando)) {
-            // Lógica para el pago con tarjeta
-            // Tiene que salir una ventana emergente para que el usuario ingrese los datos de la tarjeta
-            // y luego procesar el pago
+            actualizarVistaConDetalles("Tarjeta");
+            JOptionPane.showMessageDialog(this, "Pago con tarjeta seleccionado. Proceda con el cobro.");
         }
     }
 
     public void setPedidoActual(Pedido pedido) {
         this.pedidoActual = pedido;
-        actualizarVista(); // Actualiza la vista con el nuevo pedido
+        actualizarVistaInicial(); // Actualiza la vista inicial sin detalles
     }
 }

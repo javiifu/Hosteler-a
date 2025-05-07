@@ -212,3 +212,18 @@ CREATE INDEX indice_pedidos_fecha ON pedidos(fecha);
 CREATE INDEX idx_pedido_plato_compuesto ON Pedido_plato(id_pedido, codigo_plato);
  /*Índices para roles de usuarios. */
 CREATE INDEX idx_empleado_puesto ON Empleado(puesto);
+
+/*Vistas ventas detalladas*/
+CREATE VIEW vista_ventas_detalladas AS
+SELECT 
+  v.id_venta,
+  v.fecha,
+  c.nombre AS cliente,
+  p.nombre AS producto,
+  dv.cantidad,
+  dv.precio_unitario,
+  (dv.cantidad * dv.precio_unitario) AS total
+FROM ventas v
+JOIN clientes c ON v.id_cliente = c.id_cliente
+JOIN detalle_ventas dv ON v.id_venta = dv.id_venta
+JOIN productos p ON dv.id_producto = p.id_producto;

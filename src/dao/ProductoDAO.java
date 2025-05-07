@@ -52,7 +52,7 @@ public class ProductoDAO {
 
         } catch (SQLException e) {
 
-            System.out.println("error al borrar los datos");
+            System.out.println("error al borrar los datos"+e.getMessage());
 
         }
     }
@@ -62,20 +62,18 @@ public class ProductoDAO {
     Connection conexion = ConexionBD.conectar();
        
  
-        if(conexion != null){
-             String query = "DELETE * Producto WHERE nombre =" + nombre;
- 
+    if (conexion != null) {
+        String query = "DELETE FROM Producto WHERE nombre = ?";
+
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
- 
+            stmt.setString(1, nombre);
             stmt.executeUpdate();
-            System.out.println("los datos se han actualizado con exito");
- 
+            System.out.println("Producto eliminado con éxito");
+
         } catch (SQLException e) {
- 
-            System.out.println("error al borrar los datos");
- 
+            System.out.println("Error al borrar el producto: " + e.getMessage());
         }
-        }
+    }
  }
     public void modificarNombreProducto(int id, String nuevonombre){
 

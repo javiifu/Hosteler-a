@@ -5,6 +5,7 @@ import dao.CategoriaDAO;
 import dao.ProductoDAO;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Map;
 import javax.swing.*;
 import main.TPVMain;
 import model.Categoria;
@@ -97,11 +98,11 @@ public class VistaMenu extends JPanel {
 
     private void cargarCategorias() {
         CategoriaDAO categoriaDAO = new CategoriaDAO();
-        ArrayList<String> nombresCategorias = categoriaDAO.nombresCategoriaArray();
+        Map<Integer, String> nombresCategorias = categoriaDAO.obtenerCategorias();
         DefaultListModel<Categoria> modeloCategorias = (DefaultListModel<Categoria>) listaCategorias.getModel();
         modeloCategorias.clear();
-        for (String nombre : nombresCategorias) {
-            modeloCategorias.addElement(new Categoria(nombre));
+        for (Map.Entry<Integer, String> entry : nombresCategorias.entrySet()) {
+            modeloCategorias.addElement(new Categoria(entry.getKey(), entry.getValue()));
         }
         cardLayoutCentral.show(panelCentral, "Categorias");
     }

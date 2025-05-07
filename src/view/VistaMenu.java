@@ -94,7 +94,11 @@ public class VistaMenu extends JPanel {
         panelBotones.add(botonVolver);
 
         Boton botonCobrar = new Boton("Cobrar");
-        botonCobrar.addActionListener(e -> tpvMain.mostrarVista("Cobro"));
+        botonCobrar.addActionListener(e -> {
+            Pedido pedidoActual = obtenerPedidoActual();
+            tpvMain.getVistaCobro().setPedidoActual(pedidoActual);
+            tpvMain.mostrarVista("Cobro");
+        });
         panelBotones.add(botonCobrar);
 
         add(panelBotones, BorderLayout.SOUTH);

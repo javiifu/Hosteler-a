@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import view.VistaMesas;
 import view.VistaMenu;
 import view.Boton;
+import view.VistaCobro;
 import view.VistaConfiguracion;
 
 public class TPVMain extends JFrame implements ActionListener {
@@ -18,7 +19,7 @@ public class TPVMain extends JFrame implements ActionListener {
     private VistaMesas vistaMesas;
     private VistaMenu vistaMenu;
     private VistaConfiguracion vistaConfiguracion;
-
+    private VistaCobro vistaCobro;
 
     public TPVMain() {
         setTitle("TPV - Restaurante/Bar");
@@ -33,7 +34,7 @@ public class TPVMain extends JFrame implements ActionListener {
         vistaMesas = new VistaMesas(this);
         vistaMenu = new VistaMenu(this);
         vistaConfiguracion = new VistaConfiguracion(this); 
-
+        vistaCobro = new VistaCobro(this, null); // Inicializa con un pedido nulo
         // Panel inicial con botones
         JPanel panelInicial = new JPanel(new GridLayout(3, 1, 20, 20));
         panelInicial.setBackground(ColorPaleta.FONDO_PRINCIPAL);
@@ -58,6 +59,7 @@ public class TPVMain extends JFrame implements ActionListener {
         mainPanel.add(vistaMesas, "Mesas");
         mainPanel.add(vistaMenu, "Menu");
         mainPanel.add(vistaConfiguracion, "Configuracion"); 
+        mainPanel.add(vistaCobro, "Cobro");
 
         add(mainPanel);
 
@@ -96,5 +98,8 @@ public class TPVMain extends JFrame implements ActionListener {
     }
     public VistaConfiguracion getVistaConfiguracion() {
         return vistaConfiguracion;
+    }
+    public VistaCobro getVistaCobro() {
+        return vistaCobro;
     }
 }

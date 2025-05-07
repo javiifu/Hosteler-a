@@ -147,4 +147,9 @@ public class VistaCobro extends JPanel implements ActionListener {
             // y luego procesar el pago
         }
     }
+
+    public void setPedidoActual(Pedido pedido) {
+        this.pedidoActual = pedido;
+        actualizarVista(); // Actualiza la vista con el nuevo pedido
+    }
 }

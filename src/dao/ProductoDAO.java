@@ -16,7 +16,7 @@ public class ProductoDAO {
        
         if(conexion != null){
 
-        String query = "INSERT INTO Prodcuto (nombre, descripcion, precio, id_categoria) VALUES (?,?,?,?)";
+        String query = "INSERT INTO Producto (nombre, descripcion, precio, id_categoria) VALUES (?,?,?,?)";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
 
@@ -27,7 +27,7 @@ public class ProductoDAO {
         
             stmt.executeUpdate();
 
-            System.out.println("los datos se han introducido con exito");
+            System.out.println("Producto creado se han introducido con exito");
 
         } catch (SQLException e) {
 
@@ -57,7 +57,7 @@ public class ProductoDAO {
         }
     }
  }
- public void borrarProductoPorNombre(String nombre){
+    public void borrarProductoPorNombre(String nombre){
  
     Connection conexion = ConexionBD.conectar();
        
@@ -291,13 +291,11 @@ public class ProductoDAO {
                 stmt.setInt(1, idCategoria);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    nombresProductoCategoria.add(new Producto(
-                        rs.getInt("codigo"),
+                    nombresProductoCategoria.add(new Producto(rs.getInt("codigo"),
                         rs.getString("nombre"),
                         rs.getString("descripcion"),
                         rs.getDouble("precio"),
-                        rs.getInt("id_categoria")
-                        
+                        idCategoria
                     ));
                     
                 }

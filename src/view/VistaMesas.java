@@ -34,7 +34,7 @@ public class VistaMesas extends JPanel {
             botonMesa.addActionListener(tpvMain); // Usar tpvMain como ActionListener
             botonMesa.addActionListener(e -> {
                 tpvMain.getVistaMenu().setMesaSeleccionada(numeroMesa); // Establecer la mesa seleccionada en la vista de menú
-                tpvMain.mostrarVista("Inicio");
+                tpvMain.mostrarVista("Menu");
                 
             }); // Mostrar mensaje al hacer clic
             

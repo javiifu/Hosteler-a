@@ -31,7 +31,7 @@ public class VistaCobro extends JPanel implements ActionListener {
         // Informacion de la mesa y total (NORTH)
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         infoPanel.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
-        mesaLabel = new JLabel("Mesa: " + pedido.getNumeroMesa());
+        mesaLabel = new JLabel("Mesa: ", SwingConstants.CENTER);
         mesaLabel.setForeground(ColorPaleta.TEXTO_PRINCIPAL_CLARO); // Color del texto del título
         infoPanel.add(mesaLabel);
         add(infoPanel, BorderLayout.NORTH);

@@ -89,12 +89,16 @@ public class VistaMenu extends JPanel {
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         panelBotones.setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
-        botonVolver = new JButton("Volver");
+        Boton botonVolver = new Boton("Volver a las Mesas");
         botonVolver.addActionListener(e -> tpvMain.mostrarVista("Mesas"));
         panelBotones.add(botonVolver);
 
-        botonCobrar = new JButton("Cobrar");
-        botonCobrar.addActionListener(e -> tpvMain.mostrarVista("Cobro"));
+        Boton botonCobrar = new Boton("Cobrar");
+        botonCobrar.addActionListener(e -> {
+            Pedido pedidoActual = obtenerPedidoActual();
+            tpvMain.getVistaCobro().setPedidoActual(pedidoActual);
+            tpvMain.mostrarVista("Cobro");
+        });
         panelBotones.add(botonCobrar);
 
         add(panelBotones, BorderLayout.SOUTH);
@@ -155,5 +159,22 @@ public class VistaMenu extends JPanel {
 
         // Limpiar el área de texto del pedido
         areaPedido.setText("");
+    }
+
+    private Pedido obtenerPedidoActual() {
+        if(mesaSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "No hay mesa seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        PedidoDAO pedidoDAO = new PedidoDAO();
+        Pedido pedido = pedidoDAO.obtenerPedidoPorMesa(mesaSeleccionada.getNumero());
+
+        if (pedido == null) {
+            pedido = new Pedido(mesaSeleccionada.getNumero());
+            pedidoDAO.insertarPedido(pedido);
+        } 
+
+        return pedido;
     }
 }

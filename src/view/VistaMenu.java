@@ -160,4 +160,21 @@ public class VistaMenu extends JPanel {
         // Limpiar el área de texto del pedido
         areaPedido.setText("");
     }
+
+    private Pedido obtenerPedidoActual() {
+        if(mesaSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "No hay mesa seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        PedidoDAO pedidoDAO = new PedidoDAO();
+        Pedido pedido = pedidoDAO.obtenerPedidoPorMesa(mesaSeleccionada.getNumero());
+
+        if (pedido == null) {
+            pedido = new Pedido(mesaSeleccionada.getNumero());
+            pedidoDAO.insertarPedido(pedido);
+        } 
+
+        return pedido;
+    }
 }

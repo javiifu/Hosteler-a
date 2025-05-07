@@ -337,4 +337,64 @@ public class PedidoDAO {
         }
         return pedidos;
     }
+
+    public Pedido obtenerPedidoPorMesa(int numeroMesa) {
+        String query = "SELECT * FROM Pedido WHERE numero_mesa = ? AND completado = FALSE ORDER BY hora_pedido DESC LIMIT 1";
+        Connection conexion = ConexionBD.conectar();
+        Pedido pedido = null;
+
+        if (conexion != null) {
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setInt(1, numeroMesa);
+                ResultSet rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    pedido = new Pedido(
+                        rs.getInt("id"),
+                        rs.getInt("numero_mesa"),
+                        rs.getTime("hora_pedido"),
+                        rs.getDate("fecha_pedido"),
+                        rs.getString("tipo_pago"),
+                        rs.getBoolean("completado"),
+                        rs.getBoolean("pagado"),
+                        rs.getDouble("precio_total")
+                    );
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al obtener el pedido por mesa: " + e.getMessage());
+            } finally {
+                try {
+                    if (conexion != null) {
+                        conexion.close();
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión: " + e.getMessage());
+                }
+            }
+        }
+
+        return pedido;
+    }
+
+    public void insertarPedido(Pedido pedido) {
+        String query = "INSERT INTO Pedido (precio_total, numero_mesa, completado, pagado, tipo_pago) VALUES (?, ?, ?, ?, ?)";
+        Connection conexion = ConexionBD.conectar();
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setDouble(1, pedido.getPrecio_total());
+            stmt.setInt(2, pedido.getNumeroMesa());
+            stmt.setBoolean(3, pedido.isCompletado());
+            stmt.setBoolean(4, pedido.isPagado());
+            stmt.setString(5, pedido.getTipo_pago());
+
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                pedido.setId(rs.getInt(1));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al insertar el pedido: " + e.getMessage());
+            
+        }
+    }
 }

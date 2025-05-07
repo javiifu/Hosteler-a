@@ -10,6 +10,9 @@ public class Pedido {
     private Time horaPedido;
     private Date fechaPedido;
     private String tipo_pago;
+    private boolean completado;
+    private boolean pagado;
+    private double precio_total;
 
     // Constructor 
     public Pedido(int numeroMesa, Time horaPedido) {
@@ -29,6 +32,17 @@ public class Pedido {
         this.tipo_pago = tipo_pago;
     }
 
+    public Pedido(int id, int numeroMesa, Time horaPedido, Date fechaPedido, String tipoPago, boolean completado, boolean pagado, double precioTotal) {
+        this.id = id;
+        this.numeroMesa = numeroMesa;
+        this.horaPedido = horaPedido;
+        this.fechaPedido = fechaPedido;
+        this.tipo_pago = tipoPago;
+        this.completado = completado;
+        this.pagado = pagado;
+        this.precio_total = precioTotal;
+    }
+
     // Getters y setters
     public int getId() { return id;}
     public int getNumeroMesa() {return numeroMesa; }
@@ -40,6 +54,12 @@ public class Pedido {
     public void setFechaPedido(Date fechaPedido) { this.fechaPedido = fechaPedido; }
     public String getTipo_pago() { return tipo_pago; }
     public void setTipo_pago(String tipo_pago) { this.tipo_pago = tipo_pago; }
+    public boolean isCompletado() { return completado; }
+    public void setCompletado(boolean completado) { this.completado = completado; }
+    public boolean isPagado() { return pagado; }
+    public void setPagado(boolean pagado) { this.pagado = pagado; }
+    public double getPrecio_total() { return precio_total; }
+    public void setPrecio_total(double precio_total) { this.precio_total = precio_total; }
 
     @Override
     public String toString() {

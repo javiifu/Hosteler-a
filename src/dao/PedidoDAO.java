@@ -27,10 +27,10 @@ public class PedidoDAO {
                 conexion.setAutoCommit(false);
 
                 // Insertar el encabezado del pedido y obtener su ID
-                String pedidoQuerry = "INSERT INTO Pedido (numero_mesa, hora_pedido) VALUES (?, ?)";
+                String pedidoQuerry = "INSERT INTO Pedido (numero_mesa, hora_pedido) VALUES (?, CURRENT_TIMESTAMP)";
                 pedidoStmt = conexion.prepareStatement(pedidoQuerry, Statement.RETURN_GENERATED_KEYS);
                 pedidoStmt.setInt(1, pedido.getNumeroMesa());
-                pedidoStmt.setObject(2, pedido.getHoraPedido()); // Usar setObject para CurrentTimeStamp
+                 // Usar setObject para CurrentTimeStamp
                 pedidoStmt.executeUpdate();
 
                 int idPedidoGenerado = -1; // Validar que se haya creado
@@ -44,7 +44,7 @@ public class PedidoDAO {
                 }
 
                 // Insertar los platos del pedido
-                String platoQuerry = "INSERT INTO Pedido_plato (id_pedido, codigo_producto) VALUES (?, ?)";
+                String platoQuerry = "INSERT INTO Pedido_plato (id_pedido, codigo_plato) VALUES (?, ?)";
                 platoStmt = conexion.prepareStatement(platoQuerry);
 
                 for (PedidoPlato plato : platos) {

@@ -1,17 +1,15 @@
 package main;
-import javax.swing.*;
-
 import config.ColorPaleta;
-
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
-import view.VistaMesas;
-import view.VistaMenu;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+import model.UserData;
 import view.Boton;
 import view.VistaCobro;
 import view.VistaConfiguracion;
+import view.VistaMenu;
+import view.VistaMesas;
 
 public class TPVMain extends JFrame implements ActionListener {
     private CardLayout cardLayout;
@@ -20,8 +18,10 @@ public class TPVMain extends JFrame implements ActionListener {
     private VistaMenu vistaMenu;
     private VistaConfiguracion vistaConfiguracion;
     private VistaCobro vistaCobro;
+    private UserData userData;
 
-    public TPVMain() {
+    public TPVMain(UserData userData) {
+        this.userData = userData;
         setTitle("TPV - Restaurante/Bar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -76,7 +76,11 @@ public class TPVMain extends JFrame implements ActionListener {
                 cardLayout.show(mainPanel, "Mesas");
                 break;
             case "Configuracion":
-                cardLayout.show(mainPanel, "Configuracion");
+                if(userData.isAdmin()) {
+                    cardLayout.show(mainPanel, "Configuracion");
+                } else {
+                    JOptionPane.showMessageDialog(this, "No tienes permisos para acceder a esta sección.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
+                }
                 break;
             case "Inicio":
                 cardLayout.show(mainPanel, "Inicio");

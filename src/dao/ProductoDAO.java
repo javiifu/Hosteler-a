@@ -291,11 +291,13 @@ public class ProductoDAO {
                 stmt.setInt(1, idCategoria);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    nombresProductoCategoria.add(new Producto(rs.getInt("codigo"),
+                    nombresProductoCategoria.add(new Producto(
+                        rs.getInt("codigo"),
                         rs.getString("nombre"),
                         rs.getString("descripcion"),
                         rs.getDouble("precio"),
-                        idCategoria
+                        rs.getInt("id_categoria")
+                        
                     ));
                     
                 }

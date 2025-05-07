@@ -31,12 +31,12 @@ public class TPVMain extends JFrame implements ActionListener {
 
         vistaMesas = new VistaMesas(this);
         vistaMenu = new VistaMenu(this);
-        vistaConfiguracion = new VistaConfiguracion(this);
+        //vistaConfiguracion = new VistaConfiguracion(this); //Descomentar cuando la clase VistaConfiguracion esté implementada
 
         
         mainPanel.add(vistaMesas, "Mesas");
         mainPanel.add(vistaMenu, "Menu");
-        mainPanel.add(vistaConfiguracion, "Configuracion");
+        //mainPanel.add(vistaConfiguracion, "Configuracion"); //Descomentar cuando la clase VistaConfiguracion esté implementada
 
 
         add(mainPanel);

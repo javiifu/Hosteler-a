@@ -3,13 +3,13 @@ USE restaurate;
 /*Creacion de tablas*/
 CREATE TABLE IF NOT EXISTS Mesa (
     numero INT PRIMARY KEY,
-    estado BOOLEAN DEFAULT TRUE /*Cambiar variable.*/
+    estado BOOLEAN DEFAULT TRUE 
 );
 CREATE TABLE IF NOT EXISTS Categoria (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) UNIQUE NOT NULL
 );
-CREATE TABLE IF NOT EXISTS Producto ( /*Cambiar a producto. */
+CREATE TABLE IF NOT EXISTS Producto ( 
     codigo INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     descripcion TEXT NOT NULL,
@@ -34,7 +34,6 @@ CREATE TABLE IF NOT EXISTS Pedido_plato (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_pedido INT NOT NULL,
     codigo_plato INT NOT NULL,
-    cantidad INT NOT NULL,
     FOREIGN KEY (id_pedido) REFERENCES Pedido(id),
     FOREIGN KEY (codigo_plato) REFERENCEs Producto(codigo)
 );
@@ -77,7 +76,7 @@ CREATE TABLE IF NOT EXISTS Historial_sesiones(
 );
 
 DELIMITER //
-
+/*Trigger para prevenir múltples admins.*/
 CREATE TRIGGER prevenir_multiples_admins
 BEFORE INSERT ON Usuarios
 FOR EACH ROW
@@ -208,7 +207,26 @@ DELIMITER ;
 /*Índice para consultas para fechas de un pedido*/
 CREATE INDEX indice_pedidos_fecha ON pedidos(fecha);
 
+/*índice de platos. */
+
+CREATE INDEX idx_producto_categoria ON Producto(nombre, id_categoria);
+
 /* Para detalles de un pedido. */
 CREATE INDEX idx_pedido_plato_compuesto ON Pedido_plato(id_pedido, codigo_plato);
  /*Índices para roles de usuarios. */
 CREATE INDEX idx_empleado_puesto ON Empleado(puesto);
+
+/*Vistas ventas detalladas*/
+CREATE VIEW vista_ventas_detalladas AS
+SELECT 
+  v.id_venta,
+  v.fecha,
+  c.nombre AS cliente,
+  p.nombre AS producto,
+  dv.cantidad,
+  dv.precio_unitario,
+  (dv.cantidad * dv.precio_unitario) AS total
+FROM ventas v
+JOIN clientes c ON v.id_cliente = c.id_cliente
+JOIN detalle_ventas dv ON v.id_venta = dv.id_venta
+JOIN productos p ON dv.id_producto = p.id_producto;

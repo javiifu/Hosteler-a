@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import model.Pedido;
 import model.PedidoPlato;
@@ -16,7 +15,7 @@ import model.Producto;
 
 public class PedidoDAO {
     //Metodo para insertar platos en los pedidos
-    public boolean insertarPedidoConPlatos(Pedido pedido, List<PedidoPlato> platos) {
+    public boolean insertarPedidoConPlatos(Pedido pedido, ArrayList<PedidoPlato> platos) {
         Connection conexion = ConexionBD.conectar();
         PreparedStatement pedidoStmt = null;
         PreparedStatement platoStmt = null;
@@ -188,19 +187,42 @@ public class PedidoDAO {
         return precio;
     }
 
+    public int obtenerNumeroPedido(int numeroMesa) {
+        int idPedido = 0 ;
+        boolean resultado = false;
+    
+        try (Connection conexion = ConexionBD.conectar()) {
+            if (conexion != null) {
+                String query = "SELECT id FROM Pedido WHERE numero_mesa = ? ORDER BY hora_pedido DESC LIMIT 1";
+                                     
+                try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                    stmt.setInt(1, numeroMesa);
+                                        
+                    idPedido = stmt.executeUpdate();
+                    resultado = (idPedido > 0);
+                    if (!resultado) {
+                        System.out.println("Error: No se pudo añadir el producto. Puede que no exista el pedido para la mesa o el producto.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al añadir el plato al pedido: " + e.getMessage());
+        }
+        return idPedido;
+    }
     //Metodo para añadir un plato a la cuenta
-    public boolean añadirPlatoPedido(int numeroMesa, String nombreProducto) {
+    public boolean añadirPlatoPedido(int numeroMesa, int codigoProducto) {
         boolean resultado = false;
     
         try (Connection conexion = ConexionBD.conectar()) {
             if (conexion != null) {
                 String query = "INSERT INTO Pedido_plato (id_pedido, codigo_plato) " +
-                                    "SELECT (SELECT id FROM Pedido WHERE numero_mesa = ? ORDER BY hora_pedido DESC LIMIT 1), " +
-                                    "(SELECT codigo FROM Producto WHERE nombre = ?) ";
+                                "VALUES (SELECT id FROM Pedido WHERE numero_mesa = ? ORDER BY hora_pedido DESC LIMIT 1 , ?)";
                                      
                 try (PreparedStatement stmt = conexion.prepareStatement(query)) {
                     stmt.setInt(1, numeroMesa);
-                    stmt.setString(2, nombreProducto);
+                    stmt.setInt(2, codigoProducto);
+                    
                     int filasInsertadas = stmt.executeUpdate();
                     resultado = (filasInsertadas > 0);
                     if (!resultado) {

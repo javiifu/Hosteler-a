@@ -130,12 +130,11 @@ public class VistaMenu extends JPanel {
     }
 
     private void agregarProductoAPedido() {
-        //obtener numero de mesa y numero de plato
-        //insertarPedidoConPlatos(Pedido pedido, List<PedidoPlato> platos)
+        
         Producto productoSeleccionado = listaProductos.getSelectedValue();
         ArrayList<PedidoPlato> pedidoPlato = new ArrayList<>();
         PedidoDAO pedidoDAO = new PedidoDAO();
-        int numeroMesa = 1 ; //falta añadir get de mesa
+        int numeroMesa = mesaSeleccionada.getNumero(); 
         Pedido pedido = new Pedido(numeroMesa);
         if (productoSeleccionado != null) {
             areaPedido.append(productoSeleccionado.getNombre() + "\n");

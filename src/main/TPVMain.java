@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 
 import view.VistaMesas;
 import view.VistaMenu;
+import view.Boton;
 import view.VistaConfiguracion;
 
 public class TPVMain extends JFrame implements ActionListener {
@@ -31,17 +32,35 @@ public class TPVMain extends JFrame implements ActionListener {
 
         vistaMesas = new VistaMesas(this);
         vistaMenu = new VistaMenu(this);
-        //vistaConfiguracion = new VistaConfiguracion(this); //Descomentar cuando la clase VistaConfiguracion esté implementada
+        vistaConfiguracion = new VistaConfiguracion(this); 
 
+        // Panel inicial con botones
+        JPanel panelInicial = new JPanel(new GridLayout(3, 1, 20, 20));
+        panelInicial.setBackground(ColorPaleta.FONDO_PRINCIPAL);
+        Boton botonMesas = new Boton("Gestionar Mesas");
+        botonMesas.setActionCommand("Mesas");
+        botonMesas.addActionListener(this);
+
+        Boton botonMenu = new Boton("Gestionar Menu");
+        botonMenu.setActionCommand("Mesas");
+        botonMenu.addActionListener(this);
+
+        Boton botonConfiguracion = new Boton("Configuracion");
+        botonConfiguracion.setActionCommand("Configuracion");
+        botonConfiguracion.addActionListener(this);
+
+        panelInicial.add(botonMesas);
+        panelInicial.add(botonMenu);
+        panelInicial.add(botonConfiguracion);
         
+        mainPanel.add(panelInicial, "Inicio");
         mainPanel.add(vistaMesas, "Mesas");
         mainPanel.add(vistaMenu, "Menu");
-        //mainPanel.add(vistaConfiguracion, "Configuracion"); //Descomentar cuando la clase VistaConfiguracion esté implementada
-
+        mainPanel.add(vistaConfiguracion, "Configuracion"); 
 
         add(mainPanel);
 
-        cardLayout.show(mainPanel, "Mesas"); // Muestra la vista de Mesas al inicio
+        cardLayout.show(mainPanel, "Inicio"); // Muestra la vista de Mesas al inicio
     }
 
     public void actionPerformed(ActionEvent e) {

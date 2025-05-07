@@ -243,8 +243,6 @@ public class ProductoDAO {
                 System.out.println("Nombre: " + rs.getString("nombre"));
                 System.out.println("Descripcion: " + rs.getString("descripcion"));
                 System.out.println("Precio: " + rs.getInt("precio"));
-                
-
                 System.out.println("-------------------------");
 
             }
@@ -256,27 +254,46 @@ public class ProductoDAO {
     }
 
     }
-    public ArrayList<String> nombresProdcutoArray(){
-
-    Connection conexion = ConexionBD.conectar();
-    ArrayList<String> nombresProducto = new ArrayList<>();
-    if(conexion!=null){ 
-        String query = "SELECT nombre FROM Producto;";
-        try (Statement stmt = conexion.createStatement();
-            ResultSet rs = stmt.executeQuery(query)) {
+    public ArrayList<String> obtenerNombresPorCategoria(String nombreCategoria) {
+        ArrayList<String> nombres = new ArrayList<>();
+        Connection conexion = ConexionBD.conectar();
+    
+        if (conexion != null) {
+            String query = "SELECT p.nombre FROM Producto p INNER JOIN Categoria c ON p.id_categoria = c.id WHERE c.nombre = ?";
+    
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+                stmt.setString(1, nombreCategoria);
+                ResultSet rs = stmt.executeQuery();
+    
                 while (rs.next()) {
-                    String nombreproducto = rs.getString("nombre");
-                    nombresProducto.add(nombreproducto);
+                    nombres.add(rs.getString("nombre"));
                 }
-
-            }catch(SQLException e){
-                System.out.println("error" + e.getMessage());
-
+    
+            } catch (SQLException e) {
+                System.out.println("Error al obtener nombres por categoría: " + e.getMessage());
             }
-            return nombresProducto;
+        }
+        return nombres;
     }
-    return null;
-}
+
+    public ArrayList<String> nombresProdcutoArray(){
+        Connection conexion = ConexionBD.conectar();
+        ArrayList<String> nombresProducto = new ArrayList<>();
+        if(conexion!=null){ 
+            String query = "SELECT nombre FROM Producto;";
+            try (Statement stmt = conexion.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+                    while (rs.next()) {
+                        String nombreproducto = rs.getString("nombre");
+                        nombresProducto.add(nombreproducto);
+                    }
+                }catch(SQLException e){
+                    System.out.println("error" + e.getMessage());
+                }
+                return nombresProducto;
+        }
+        return null;
+    }
     
     public ArrayList<Producto> obtenerProductosPorCategoriaArray (int idCategoria){
 

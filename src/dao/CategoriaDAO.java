@@ -143,19 +143,24 @@ public class CategoriaDAO {
     }
     public int ObtenerCategoriaPorNombre(String nombre){
         Connection conexion = ConexionBD.conectar();
-       
-        if(conexion!=null){
-            String query = "SELECT id FROM Categoria WHERE nombre = " + nombre;
-            try (Statement stmt = conexion.createStatement();
-            ResultSet rs = stmt.executeQuery(query)) {
-           
-         
-           return rs.getInt("id");
-        }catch(SQLException e){
-            System.out.println("error al realizar la consulta" + e.getMessage());
-        }    
+        int idCategoria = 0;
+
+    if (conexion != null) {
+        String query = "SELECT id FROM Categoria WHERE nombre = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setString(1, nombre);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                idCategoria = rs.getInt("id");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al realizar la consulta: " + e.getMessage());
+        }
     }
-    return 0;
+
+    return idCategoria;
  }
 
     public void borrarCategoriaPorNombre(String nombre) {

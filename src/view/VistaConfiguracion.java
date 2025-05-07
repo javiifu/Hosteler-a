@@ -56,8 +56,8 @@ public class VistaConfiguracion extends JPanel{
     // Metodo para abrir formulario para platos
     private void abrirFormularioProducto(String tipo) {
         JDialog dialog = new JDialog(tpvMain, tipo, true);
-        dialog.setSize(400, 300);
-        dialog.setLayout(new GridLayout(4, 2, 10, 10));
+        dialog.setSize(600, 250);
+        dialog.setLayout(new GridLayout(3, 4, 10, 10));
         dialog.setLocationRelativeTo(this);
 
         JLabel labelNombre = new JLabel("Nombre del Producto:");
@@ -123,8 +123,8 @@ public class VistaConfiguracion extends JPanel{
     // Metodo para abrir formulario para categorias
     private void abrirFormularioCategoria(String tipo) {
         JDialog dialog = new JDialog(tpvMain, tipo, true);
-        dialog.setSize(300,200);
-        dialog.setLayout(new GridLayout(2, 2, 10, 10));
+        dialog.setSize(600, 250);
+        dialog.setLayout(new GridLayout(3, 4, 10, 10));
         dialog.setLocationRelativeTo(this);
 
         JLabel labelNombre = new JLabel("Nombre de la Categoria:");

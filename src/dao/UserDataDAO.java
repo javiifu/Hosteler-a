@@ -8,7 +8,7 @@ import model.UserData;
 
 public class UserDataDAO {
     public static boolean validarCredenciales(String user, String password){
-        String sql = "SELECT contraseña FROM Usuarios WHERE nombre_usuario = ?";
+        String sql = "SELECT contraseña FROM Usuarios WHERE BINARY nombre_usuario = ?";
         Connection conexion = ConexionBD.conectar();
         try {
             PreparedStatement statement = conexion.prepareStatement(sql);

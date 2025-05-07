@@ -16,6 +16,10 @@ public class Pedido {
         this.numeroMesa = numeroMesa;
         this.horaPedido = horaPedido;
     }
+    public Pedido(int numeroMesa) {
+        this.numeroMesa = numeroMesa;
+        
+    }
     public Pedido(int id, int numeroMesa, Time horaPedido, Date fechaPedido, String tipo_pago) {
         this.id = id;
         this.numeroMesa = numeroMesa;

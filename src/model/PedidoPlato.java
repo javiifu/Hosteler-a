@@ -10,6 +10,10 @@ public class PedidoPlato {
         this.codigoProducto = codigoProducto;
         this.cantidad = cantidad;
     }
+    public PedidoPlato(int codigoProducto ) {
+        this.codigoProducto = codigoProducto;
+        
+    }
 
     // Getters y setters
     public int getPedidoId() { return pedidoId; }

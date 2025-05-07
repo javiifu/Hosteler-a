@@ -2,6 +2,7 @@ package view;
 
 import config.ColorPaleta;
 import dao.CategoriaDAO;
+import dao.PedidoDAO;
 import dao.ProductoDAO;
 import java.awt.*;
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import javax.swing.*;
 import main.TPVMain;
 import model.Categoria;
 import model.Mesa;
+import model.Pedido;
+import model.PedidoPlato;
 import model.Producto;
 
 public class VistaMenu extends JPanel {
@@ -123,10 +126,20 @@ public class VistaMenu extends JPanel {
     }
 
     private void agregarProductoAPedido() {
+        //obtener numero de mesa y numero de plato
+        //insertarPedidoConPlatos(Pedido pedido, List<PedidoPlato> platos)
         Producto productoSeleccionado = listaProductos.getSelectedValue();
+        ArrayList<PedidoPlato> pedidoPlato = new ArrayList<>();
+        PedidoDAO pedidoDAO = new PedidoDAO();
+        int numeroMesa = 1 ; //falta añadir get de mesa
+        Pedido pedido = new Pedido(numeroMesa);
         if (productoSeleccionado != null) {
             areaPedido.append(productoSeleccionado.getNombre() + "\n");
+            int codigo = productoSeleccionado.getCodigo();
+            PedidoPlato nuevoPedido = new PedidoPlato(codigo);
+            pedidoPlato.add(nuevoPedido);
         }
+        pedidoDAO.insertarPedidoConPlatos(pedido, pedidoPlato);
     }
 
     public void setMesaSeleccionada(int numeroMesa) {

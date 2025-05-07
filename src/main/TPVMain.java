@@ -37,12 +37,13 @@ public class TPVMain extends JFrame implements ActionListener {
         // Panel inicial con botones
         JPanel panelInicial = new JPanel(new GridLayout(3, 1, 20, 20));
         panelInicial.setBackground(ColorPaleta.FONDO_PRINCIPAL);
+
         Boton botonMesas = new Boton("Gestionar Mesas");
         botonMesas.setActionCommand("Mesas");
         botonMesas.addActionListener(this);
 
         Boton botonMenu = new Boton("Gestionar Menu");
-        botonMenu.setActionCommand("Mesas");
+        botonMenu.setActionCommand("Menu");
         botonMenu.addActionListener(this);
 
         Boton botonConfiguracion = new Boton("Configuracion");
@@ -66,10 +67,10 @@ public class TPVMain extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         switch (command) {
-            case "Ir al Menu":
+            case "Menu":
                 cardLayout.show(mainPanel, "Menu");
                 break;
-            case "Volver":
+            case "Mesas":
                 cardLayout.show(mainPanel, "Mesas");
                 break;
             case "Configuracion":

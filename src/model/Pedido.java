@@ -14,7 +14,8 @@ public class Pedido {
     // Constructor 
     public Pedido(int numeroMesa, Time horaPedido) {
         this.numeroMesa = numeroMesa;
-        this.horaPedido = horaPedido;
+        this.horaPedido = new Time(System.currentTimeMillis());
+        ;
     }
     public Pedido(int numeroMesa) {
         this.numeroMesa = numeroMesa;
@@ -23,8 +24,8 @@ public class Pedido {
     public Pedido(int id, int numeroMesa, Time horaPedido, Date fechaPedido, String tipo_pago) {
         this.id = id;
         this.numeroMesa = numeroMesa;
-        this.horaPedido = horaPedido;
-        this.fechaPedido = fechaPedido;
+        this.horaPedido = new Time(System.currentTimeMillis());
+        this.fechaPedido = new Date(System.currentTimeMillis());
         this.tipo_pago = tipo_pago;
     }
 

@@ -75,6 +75,9 @@ public class TPVMain extends JFrame implements ActionListener {
             case "Configuracion":
                 cardLayout.show(mainPanel, "Configuracion");
                 break;
+            case "Inicio":
+                cardLayout.show(mainPanel, "Inicio");
+                break;
             default:
                 break;
         }

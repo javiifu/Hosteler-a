@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import config.*;
@@ -11,6 +13,7 @@ import model.Mesa;
 import javax.swing.*;
 
 public class VistaMesas extends JPanel {
+    TPVMain tpvMain; 
     Config config = new Config(); // Instancia de la clase Config para acceder a la configuración
     MesaDAO mesaDAO = new MesaDAO(); // Instancia de la clase MesaDAO para acceder a la base de datos
     public VistaMesas(TPVMain tpvMain) {
@@ -31,7 +34,7 @@ public class VistaMesas extends JPanel {
             botonMesa.addActionListener(tpvMain); // Usar tpvMain como ActionListener
             botonMesa.addActionListener(e -> {
                 tpvMain.getVistaMenu().setMesaSeleccionada(numeroMesa); // Establecer la mesa seleccionada en la vista de menú
-                tpvMain.mostrarVista("Menu");
+                tpvMain.mostrarVista("Inicio");
                 
             }); // Mostrar mensaje al hacer clic
             
@@ -40,8 +43,10 @@ public class VistaMesas extends JPanel {
         add(new JScrollPane(panelMesas), BorderLayout.CENTER); // Añadir panel de mesas a la parte central
 
         Boton botonMenu = new Boton("Ir al Menu"); // Crear botón para ir al menú
-        botonMenu.setActionCommand("Ir al Menu");
-        botonMenu.addActionListener(tpvMain); // Usar tpvMain como ActionListener
+        botonMenu.addActionListener(e -> {
+            tpvMain.mostrarVista("Inicio");
+        }); 
         add(botonMenu, BorderLayout.SOUTH); // Añadir botón de menú en la parte inferior
     }
+
 }

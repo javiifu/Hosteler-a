@@ -3,13 +3,13 @@ USE restaurate;
 /*Creacion de tablas*/
 CREATE TABLE IF NOT EXISTS Mesa (
     numero INT PRIMARY KEY,
-    estado BOOLEAN DEFAULT TRUE /*Cambiar variable.*/
+    estado BOOLEAN DEFAULT TRUE 
 );
 CREATE TABLE IF NOT EXISTS Categoria (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) UNIQUE NOT NULL
 );
-CREATE TABLE IF NOT EXISTS Producto ( /*Cambiar a producto. */
+CREATE TABLE IF NOT EXISTS Producto ( 
     codigo INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     descripcion TEXT NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS Historial_sesiones(
 );
 
 DELIMITER //
-
+/*Trigger para prevenir múltples admins.*/
 CREATE TRIGGER prevenir_multiples_admins
 BEFORE INSERT ON Usuarios
 FOR EACH ROW
@@ -207,6 +207,10 @@ DELIMITER ;
 
 /*Índice para consultas para fechas de un pedido*/
 CREATE INDEX indice_pedidos_fecha ON pedidos(fecha);
+
+/*índice de platos. */
+
+CREATE INDEX idx_producto_categoria ON Producto(nombre, id_categoria);
 
 /* Para detalles de un pedido. */
 CREATE INDEX idx_pedido_plato_compuesto ON Pedido_plato(id_pedido, codigo_plato);

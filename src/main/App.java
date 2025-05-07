@@ -68,7 +68,7 @@ public class App {
         dialog.add(btn_create);
         btn_create.addActionListener(e -> {
             String user = txt_user.getText();
-            String password = txt_pass.getText();
+            String password = txt_pass.getText(); //Que pasa aquí ? 
             if (user.isEmpty() || password.isEmpty()){
                 JOptionPane.showMessageDialog(dialog, "Introduce un usuario y una contraseña");
             } else {
@@ -103,13 +103,12 @@ public class App {
     
         btn_login.addActionListener(e -> {
             String user = txt_user.getText();
-            String password = txt_pass.getText();
+            String password = txt_pass.getText(); //no entiendo porque aquí se tacha el getText.
 
             if (UserDataDAO.validarCredenciales(user, password)) {
                 currentUser[0] = UserDataDAO.obtenerUsuario(user);
                 JOptionPane.showMessageDialog(dialog, "Bienvenido " + user);
-                HistorialSesionesDAO.newLog(new LogSesion("INICIO_SESION", "Inicio de sesion del usuario " + user, Date.valueOf(java.time.LocalDate.now()), Time.valueOf(java.time.LocalTime.now()), currentUser[0].getId()));
-            
+                HistorialSesionesDAO.newLog(new LogSesion("INICIO_SESION", "Inicio de sesion del usuario " + user, Date.valueOf(java.time.LocalDate.now()), Time.valueOf(java.time.LocalTime.now()), currentUser[0].getId())); //Porque me da error esta
                 dialog.dispose();
                 // Iniciar la aplicacion princial (TPVMain)
                 SwingUtilities.invokeLater(() -> {

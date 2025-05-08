@@ -1,13 +1,15 @@
 /*Selección de la base de datos. */
 USE restaurate;
 /*Creacion de tablas*/
-CREATE TABLE IF NOT EXISTS Mesa (
+CREATE TABLE IF NOT EXISTS Mesa ( --añadir activo.
     numero INT PRIMARY KEY,
-    estado BOOLEAN DEFAULT TRUE 
+    estado BOOLEAN DEFAULT TRUE, 
+    activo BOOLEAN NOT NULL DEFAULT TRUE;
 );
-CREATE TABLE IF NOT EXISTS Categoria (
+CREATE TABLE IF NOT EXISTS Categoria (--añadir activo.
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) UNIQUE NOT NULL
+    nombre VARCHAR(50) UNIQUE NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE;
 );
 CREATE TABLE IF NOT EXISTS Producto ( 
     codigo INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,9 +17,9 @@ CREATE TABLE IF NOT EXISTS Producto (
     descripcion TEXT NOT NULL,
     precio DECIMAL(8,2),
     id_categoria INT NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (id_categoria) REFERENCES Categoría(id)
 );
-
 CREATE TABLE IF NOT EXISTS Pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     precio_total DECIMAL(8,2),
@@ -201,6 +203,31 @@ BEGIN
     SET total = total - (precio_unitario * cantidad)
     WHERE id = p_pedido_id;
 END$$
+DELIMITER ;
+
+/*Procedimiento para hacer una mesa, si id coincide con el de otra mesa, se actualiza el estado.*/
+DELIMITER $$
+
+CREATE PROCEDURE CrearOModificarMesa(IN p_numero INT, IN p_estado BOOLEAN)
+BEGIN
+    DECLARE mesa_activa BOOLEAN;
+
+    -- Verifica si existe la mesa
+    IF EXISTS (SELECT 1 FROM Mesa WHERE numero = p_numero) THEN
+        -- Si existe, verificamos si está inactiva
+        SELECT activo INTO mesa_activa FROM Mesa WHERE numero = p_numero;
+
+        IF mesa_activa = FALSE THEN
+            -- Activamos la mesa si está inactiva
+            UPDATE Mesa SET activo = TRUE, estado = p_estado WHERE numero = p_numero;
+        END IF;
+
+    ELSE
+        -- Si no existe, la insertamos
+        INSERT INTO Mesa (numero, estado, activo) VALUES (p_numero, p_estado, TRUE);
+    END IF;
+END$$
+
 DELIMITER ;
 
 

@@ -138,25 +138,25 @@ public class VistaConfiguracion extends JPanel{
             }
         });
         
-                dialog.add(labelNombre);
-                if (tipo.equals("Eliminar Producto")) {
-                    dialog.add(comboProductos);//desplegable
+        dialog.add(labelNombre);
+        if (tipo.equals("Eliminar Producto")) {
+            dialog.add(comboProductos);//desplegable
+
+        } else {
+            dialog.add(campoNombre);
+            dialog.add(labelDescripcion);
+            dialog.add(campoDescripcion);
+            dialog.add(labelPrecio);
+            dialog.add(campoPrecio);
+        }
+        dialog.add(labelCategoria);
+        dialog.add(comboCategorias);
+        dialog.add(new JLabel()); // Espacio vacio
+        dialog.add(botonGuardar);
+
+        dialog.setVisible(true); // Mostrar el diálogo
         
-                } else {
-                    dialog.add(campoNombre);
-                    dialog.add(labelDescripcion);
-                    dialog.add(campoDescripcion);
-                    dialog.add(labelPrecio);
-                    dialog.add(campoPrecio);
-                }
-                dialog.add(labelCategoria);
-                dialog.add(comboCategorias);
-                dialog.add(new JLabel()); // Espacio vacio
-                dialog.add(botonGuardar);
-        
-                dialog.setVisible(true); // Mostrar el diálogo
-        
-            }
+    }
 
     // Metodo para abrir formulario para categorias
     private void abrirFormularioCategoria(String tipo) {

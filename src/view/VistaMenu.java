@@ -170,6 +170,25 @@ public class VistaMenu extends JPanel {
 
         // Limpiar el área de texto del pedido
         areaPedido.setText("");
+
+        // Reiniciar la lista de productos del pedido
+        productosDelPedido.clear();
+
+        // Cargar el pedido de la mesa seleccionada
+        PedidoDAO pedidoDAO = new PedidoDAO();
+        Pedido pedido = pedidoDAO.obtenerPedidoPorMesa(numeroMesa);
+        if (pedido != null) {
+            Map<Producto, Integer> productos = PedidoDAO.listaPlatosPedidoFactura(pedido);
+            for (Map.Entry<Producto, Integer> entry : productos.entrySet()) {
+                productosDelPedido.add(new PedidoPlato(entry.getKey().getCodigo(), entry.getValue()));
+            }
+        }
+
+        // Actualizar el área de pedido con los productos cargados
+        actualizarAreaPedido();
+
+        // Mostrar la vista de categorías
+        cardLayoutCentral.show(panelCentral, "Categorias");
     }
 
     private Pedido obtenerPedidoActual() {

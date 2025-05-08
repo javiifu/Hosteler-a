@@ -84,12 +84,14 @@ public class VistaMenu extends JPanel {
         add(panelCentral, BorderLayout.CENTER);
 
         // Área de texto para mostrar el pedido (fija)
-        areaPedido = new JTextArea();
+        areaPedido = new JTextArea(10, 20);
         areaPedido.setEditable(false);
         areaPedido.setBackground(ColorPaleta.TEXTAREA_FONDO);
         areaPedido.setForeground(ColorPaleta.TEXTAREA_TEXTO);
         areaPedido.setBorder(BorderFactory.createTitledBorder("Pedido Actual"));
         add(new JScrollPane(areaPedido), BorderLayout.EAST); // Siempre visible en el lado derecho
+        
+        
 
         // Panel inferior para botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));

@@ -20,7 +20,9 @@ public class ColorPaleta {
     public static final Color HOVER_SECUNDARIO = new Color(0x0056b3);    // Azul ligeramente más oscuro (hover)
     public static final Color HOVER_ACENTO = new Color(0xcc3700);      // Rojo ligeramente más oscuro (hover)
     public static final Color SELECCION = new Color(0xADD8E6);       // Azul claro (para selección en listas)
-
+    public static final Color NARANJA_BOTON = new Color(0xFF8C00); // Naranja más puro (tirando a calabaza)
+    public static final Color NARANJA_HOVER = new Color(0xE67700); // Un tono ligeramente más oscuro para el hover
+    
     // Colores específicos para componentes (siguiendo las sugerencias)
     public static final Color BOTON_PRIMARIO_FONDO = SECUNDARIO;
     public static final Color BOTON_PRIMARIO_TEXTO = TEXTO_PRINCIPAL_OSCURO;

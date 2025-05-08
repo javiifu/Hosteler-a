@@ -36,25 +36,25 @@ public class VistaConfiguracion extends JPanel{
         Boton botonCrearPlato = new Boton("Crear Plato", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonCrearPlato.addActionListener(e -> abrirFormularioProducto("Crear Producto"));
 
-        Boton botonModificarPlato = new Boton("Modificar Plato",  ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
+        Boton botonModificarPlato = new Boton("Modificar Plato",  ColorPaleta.NARANJA_BOTON, ColorPaleta.NARANJA_HOVER);
         botonModificarPlato.addActionListener(e -> abrirFormularioProducto("Modificar Producto"));
         
-        Boton botonEliminarPlato = new Boton("Eliminar Plato",ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
+        Boton botonEliminarPlato = new Boton("Eliminar Plato",ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
         botonEliminarPlato.addActionListener(e -> abrirFormularioProducto("Eliminar Producto"));
         
-        Boton botonCrearCategoria = new Boton("Crear Categoría", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
+        Boton botonCrearCategoria = new Boton("Crear Categoría", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonCrearCategoria.addActionListener(e -> abrirFormularioCategoria("Crear Categoría"));
         
-        Boton botonEliminarCategoria = new Boton("Eliminar Categoría", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
+        Boton botonEliminarCategoria = new Boton("Eliminar Categoría", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
         botonEliminarCategoria.addActionListener(e -> abrirFormularioCategoria("Eliminar Categoría"));
 
-        Boton botonCrearMesa = new Boton("Crear Mesa", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
+        Boton botonCrearMesa = new Boton("Crear Mesa", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonCrearMesa.addActionListener(e -> abrirFormularioMesa("Crear Mesa"));
 
-        Boton botonEliminarMesa = new Boton("Eliminar Mesa", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
+        Boton botonEliminarMesa = new Boton("Eliminar Mesa", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
         botonEliminarMesa.addActionListener(e -> abrirFormularioMesa("Eliminar Mesa"));
         
-        Boton botonGenerarResumenDiario = new Boton("Generar Resumen del Dia", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
+        Boton botonGenerarResumenDiario = new Boton("Generar Resumen del Dia", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
 
         botonGenerarResumenDiario.addMouseListener(new MouseAdapter() {
             @Override

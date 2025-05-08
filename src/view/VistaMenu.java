@@ -137,7 +137,7 @@ public class VistaMenu extends JPanel {
         }
     }
 
-    private void agregarProductoAPedidoTabla() {
+    private void agregarProductoAPedido() {
         
         Producto productoSeleccionado = listaProductos.getSelectedValue();
         ArrayList<PedidoPlato> pedidoPlato = new ArrayList<>();

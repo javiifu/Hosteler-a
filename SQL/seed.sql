@@ -77,6 +77,27 @@ CREATE TABLE IF NOT EXISTS Historial_sesiones(
     CONSTRAINT FOREIGN KEY(id_usuario) REFERENCES Usuarios(id)
 );
 
+CREATE TABLE AuditoriaGeneral (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tabla VARCHAR(50),
+    clave_primaria VARCHAR(100),
+    usuario VARCHAR(100),
+    accion VARCHAR(10),
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+/*Trigger para registrar quien ha borrado datos de una tabla*/
+DELIMITER $$
+
+CREATE TRIGGER auditar_borrado_mesa_general
+BEFORE DELETE ON Mesa
+FOR EACH ROW
+BEGIN
+    INSERT INTO AuditoriaGeneral (tabla, clave_primaria, usuario, accion)
+    VALUES ('Mesa', CONCAT('numero=', OLD.numero), CURRENT_USER(), 'DELETE');
+END$$
+
+DELIMITER ;
+
 DELIMITER //
 /*Trigger para prevenir múltples admins.*/
 CREATE TRIGGER prevenir_multiples_admins

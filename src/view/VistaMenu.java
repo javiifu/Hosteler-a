@@ -16,14 +16,12 @@ import model.PedidoPlato;
 import model.Producto;
 
 public class VistaMenu extends JPanel {
-    // Atributos
     private TPVMain tpvMain;
     private Mesa mesaSeleccionada;
     private JList<Categoria> listaCategorias;
     private JList<Producto> listaProductos;
     private JTextArea areaPedido;
-    private Boton botonVolver;
-    private Boton botonCobrar;
+    private ArrayList<PedidoPlato> productosDelPedido = new ArrayList<>(); // Lista para almacenar los productos del pedido
     private CardLayout cardLayoutCentral;
     private JPanel panelCentral;
 
@@ -164,10 +162,6 @@ public class VistaMenu extends JPanel {
         // Actualizar la mesa seleccionada
         this.mesaSeleccionada = new Mesa(numeroMesa);
 
-        // Actualizar el título de la vista
-        JLabel titulo = (JLabel) getComponent(0);
-        titulo.setText("Menu - Mesa " + numeroMesa);
-
         // Reiniciar la lista de productos del pedido
         productosDelPedido.clear();
 
@@ -204,8 +198,6 @@ public class VistaMenu extends JPanel {
 
         return pedido;
     }
-
-    private ArrayList<PedidoPlato> productosDelPedido = new ArrayList<>(); // Lista para almacenar los productos del pedido
 
     private void agregarProductoAPedido() {
         Producto productoSeleccionado = listaProductos.getSelectedValue();

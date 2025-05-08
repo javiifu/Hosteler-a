@@ -69,12 +69,14 @@ public class VistaMenu extends JPanel {
         DefaultListModel<Producto> modeloProductos = new DefaultListModel<>();
         listaProductos = new JList<>(modeloProductos);
         listaProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
         listaProductos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     agregarProductoAPedido();
                 }
+
             }
         });
         panelProductos.add(new JScrollPane(listaProductos), BorderLayout.CENTER);

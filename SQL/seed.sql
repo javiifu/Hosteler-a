@@ -86,6 +86,14 @@ CREATE TABLE AuditoriaGeneral (
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS Estadisticas_venta (
+    id_producto INT(11) PRIMARY KEY,
+    cantidad INT(11),
+    FOREIGN KEY (id_producto) REFERENCES Producto(codigo)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
 /*Trigger para registrar quien ha borrado datos de una tabla*/
 DELIMITER $$
 

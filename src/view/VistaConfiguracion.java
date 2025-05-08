@@ -90,7 +90,6 @@ public class VistaConfiguracion extends JPanel{
         comboCategorias.removeAllItems(); // Limpia el combo si ya tiene datos
         cargarCategoriasEnCombo(comboCategorias); // Método para cargar categorías en el combo
         
-<<<<<<< HEAD
         Boton botonGuardar = new Boton("Guardar", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonGuardar.addActionListener(e -> {
             String nombre; 
@@ -102,12 +101,6 @@ public class VistaConfiguracion extends JPanel{
             String descripcion = campoDescripcion.getText();
             String precioTexto = campoPrecio.getText();
             String categoria = (String) comboCategorias.getSelectedItem();
-=======
-        Boton botonGuardar = new Boton("Guardar");
-botonGuardar.addActionListener(e -> {
-    String nombre = null;
-    String categoria = (String) comboCategorias.getSelectedItem();
->>>>>>> c35fa394a32658f648526894d79a8003a1254c72
 
     if (tipo.equals("Eliminar Producto")) {
         nombre = (String) comboProductos.getSelectedItem(); // desplegable
@@ -129,8 +122,8 @@ botonGuardar.addActionListener(e -> {
 
     } else if (tipo.equals("Crear Producto")) {
         nombre = campoNombre.getText();
-        String descripcion = campoDescripcion.getText();
-        String precioTexto = campoPrecio.getText();
+        descripcion = campoDescripcion.getText();
+        precioTexto = campoPrecio.getText();
 
         if (nombre.isEmpty() || descripcion.isEmpty() || precioTexto.isEmpty() || categoria == null) {
             JOptionPane.showMessageDialog(dialog, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);

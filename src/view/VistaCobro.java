@@ -8,15 +8,18 @@ import java.awt.event.ActionListener;
 import java.util.Map;
 import javax.swing.*;
 import main.TPVMain;
+import main.App;
 import model.Pedido;
 
 public class VistaCobro extends JPanel implements ActionListener {
+    private App app;
     private TPVMain tpvMain;
     private JLabel mesaLabel;
     private JTextArea detalleCuentaArea;
     private JButton efectivoButton;
-    private JButton tarjetaButton;
-    private JButton volverButton;
+    private Boton tarjetaButton;
+    private Boton volverButton;
+    private Boton botonFactura;
     private Pedido pedidoActual;
 
     public VistaCobro(TPVMain tpvMain, Pedido pedido) {
@@ -60,6 +63,12 @@ public class VistaCobro extends JPanel implements ActionListener {
         volverButton = new Boton("Volver",ColorPaleta.VOLVER, ColorPaleta.HOVER_VOLVER);
         volverButton.setActionCommand("volver");
         volverButton.addActionListener(this);
+        
+        botonFactura = new Boton("Factura", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
+        botonFactura.setActionCommand("factura");
+        botonFactura.addActionListener(this);
+
+        volverPanel.add(botonFactura);
         volverPanel.add(volverButton);
         add(volverPanel, BorderLayout.SOUTH);
 
@@ -127,6 +136,13 @@ public class VistaCobro extends JPanel implements ActionListener {
             pedidoDAO.cambiarEstadoPagado(pedidoActual.getId());
             pedidoDAO.setMetodoPago(pedidoActual.getId(), "TARJETA");
 
+        } else if ("factura".equals(comando)) {
+            if (pedidoActual != null) {
+                app.generarFactura(pedidoActual);
+                JOptionPane.showMessageDialog(this, "Factura generada para la mesa " + pedidoActual.getNumeroMesa() + ".");
+            } else {
+                JOptionPane.showMessageDialog(this, "No hay pedido para generar factura.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

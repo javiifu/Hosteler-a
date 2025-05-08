@@ -133,31 +133,6 @@ public class VistaMenu extends JPanel {
         }
     }
 
-    private void agregarProductoAPedido() {
-        
-        Producto productoSeleccionado = listaProductos.getSelectedValue();
-        ArrayList<PedidoPlato> pedidoPlato = new ArrayList<>();
-        PedidoDAO pedidoDAO = new PedidoDAO();
-        int numeroMesa = mesaSeleccionada.getNumero(); 
-
-        Pedido pedidoMesa = pedidoDAO.obtenerPedidoPorMesa(numeroMesa);
-        Pedido pedido;
-        if (pedidoMesa != null) {
-            pedido = pedidoMesa;
-        } else {
-            pedido = new Pedido(numeroMesa);
-            pedidoDAO.insertarPedido(pedido);
-        }
-        if (productoSeleccionado != null) {
-            areaPedido.append(productoSeleccionado.getNombre() + "\n");
-            int codigo = productoSeleccionado.getCodigo();
-            PedidoPlato nuevoPedido = new PedidoPlato(codigo);
-            nuevoPedido.setPedidoId(pedido.getId());
-            pedidoPlato.add(nuevoPedido);
-        }
-        pedidoDAO.insertarPlatosEnPedido(pedidoPlato);
-    }
-
     public void setMesaSeleccionada(int numeroMesa) {
         // Actualizar la mesa seleccionada
         this.mesaSeleccionada = new Mesa(numeroMesa);
@@ -186,4 +161,40 @@ public class VistaMenu extends JPanel {
 
         return pedido;
     }
-}
+
+    private ArrayList<PedidoPlato> productosDelPedido = new ArrayList<>(); // Lista para almacenar los productos del pedido
+
+    private void agregarProductoAPedido() {
+        Producto productoSeleccionado = listaProductos.getSelectedValue();
+        if (productoSeleccionado != null)  {
+            areaPedido.append(productoSeleccionado.getNombre() + "\n");
+            int codigo = productoSeleccionado.getCodigo();
+            PedidoPlato nuevoPedidoPlato = new PedidoPlato(codigo, 1);
+            productosDelPedido.add(nuevoPedidoPlato);
+        }
+    }
+
+    private void guardarPedido() {
+        if(mesaSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "No hay mesa seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (productosDelPedido.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay productos en el pedido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        PedidoDAO pedidoDAO = new PedidoDAO();
+        Pedido pedido = new Pedido(mesaSeleccionada.getNumero());
+        boolean resultado = pedidoDAO.insertarPedidoConPlatos(pedido, productosDelPedido);
+    
+        if (resultado) {
+            JOptionPane.showMessageDialog(this, "Pedido guardado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al guardar el pedido", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
+    }
+

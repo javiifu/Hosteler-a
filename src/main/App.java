@@ -175,10 +175,11 @@ public class App {
 
     public void generarResumenDia(){
         Date fecha = new Date(System.currentTimeMillis());
+        Time hora = new Time(System.currentTimeMillis());
         StringBuilder resumen = new StringBuilder();
         resumen.append("<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Factura</title><style>body {font-family: Arial, sans-serif;margin: 20px;padding: 20px;background-color: #f4f4f4;}.factura {background-color: #fff;padding: 20px;             border-radius: 10px;box-shadow: 0 0 10px rgba(0,0,0,0.1);max-width: 400px;             margin: auto;             padding-bottom: 20px;}.factura h2, .factura p {text-align: center;}.tabla {width: 100%;margin-top: 10px;border-collapse: collapse;}.tabla th, .tabla td {padding: 10px;text-align: left;}.tabla th {background-color: #ddd;}.totales {margin-top: 20px;padding: 10px;background-color: #ddd;border-radius: 5px;}.total {font-weight: bold;text-align: right;}</style></head><body><div class=\"factura\">");
         resumen.append("<h2>"+config.getNombre_restaurante()+"</h2>");
-        resumen.append("<p>Fecha: "+fecha+"</p>");
+        resumen.append("<p>Fecha y hora del resumen: "+fecha+" || "+hora+"</p>");
         resumen.append("<table class=\"tabla\" border=\"1\"><tr><th>Descripción</th><th>Cantidad</th><th>Precio</th></tr>");
         ArrayList<Pedido> lista_pedidos = PedidoDAO.pedidosPorDia(config.getHorarios().get(0).getInicio());
         List<Map<Producto, Integer>> lista_total_productos = new ArrayList<>();
@@ -210,7 +211,7 @@ public class App {
         resumen.append("<tr><td class=\"total\">Total sin IVA</td><td class=\"total\">"+total+"</td></tr><tr><td class=\"total\">IVA(10%)</td><td class=\"total\">"+total*0.10+"</td></tr><tr><td class=\"total\" con IVA</td><td class=\"total\">"+(total + total*0.10)+"</td></tr></table></div></div></body></html>");
 
         String html = resumen.toString();
-        String nombreArchivo = "resumen_" + fecha.toString() + ".html";
+        String nombreArchivo = "resumen_" + fecha.toString()+"_"+hora.toString() + ".html";
         
         try (java.io.FileWriter fileWriter = new java.io.FileWriter(nombreArchivo)) {
             fileWriter.write(html);

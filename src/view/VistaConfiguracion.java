@@ -91,41 +91,52 @@ public class VistaConfiguracion extends JPanel{
         cargarCategoriasEnCombo(comboCategorias); // Método para cargar categorías en el combo
         
         Boton botonGuardar = new Boton("Guardar");
-        botonGuardar.addActionListener(e -> {
-            String nombre; 
-            if (tipo.equals("Eliminar Producto")) {
-                nombre = (String) comboProductos.getSelectedItem(); //desplegable
-            } else {
-                nombre = campoNombre.getText();
-            }
-            String descripcion = campoDescripcion.getText();
-            String precioTexto = campoPrecio.getText();
-            String categoria = (String) comboCategorias.getSelectedItem();
+botonGuardar.addActionListener(e -> {
+    String nombre = null;
+    String categoria = (String) comboCategorias.getSelectedItem();
 
-            if (nombre.isEmpty() || descripcion.isEmpty() || precioTexto.isEmpty() || categoria == null) {
-                JOptionPane.showMessageDialog(dialog, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+    if (tipo.equals("Eliminar Producto")) {
+        nombre = (String) comboProductos.getSelectedItem(); // desplegable
+        if (nombre == null || categoria == null) {
+            JOptionPane.showMessageDialog(dialog, "Por favor, seleccione un producto y una categoría.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        try {
+            ProductoDAO productoDAO = new ProductoDAO();
+            productoDAO.borrarProductoPorNombre(nombre);
+            JOptionPane.showMessageDialog(dialog, "Producto eliminado con éxito.");
+            dialog.dispose(); // Cerrar el diálogo después de guardar
+            
+        }  catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(dialog, "El producto no se ha eliminado.", "Error", JOptionPane.ERROR_MESSAGE);
+    
+        }
 
-            try {
-                double precio = Double.parseDouble(precioTexto);
-                CategoriaDAO categoriaDAO = new CategoriaDAO();
-                int idCategoria = categoriaDAO.ObtenerCategoriaPorNombre(categoria);
+    } else if (tipo.equals("Crear Producto")) {
+        nombre = campoNombre.getText();
+        String descripcion = campoDescripcion.getText();
+        String precioTexto = campoPrecio.getText();
 
-                ProductoDAO productoDAO = new ProductoDAO();
-                if (tipo.equals("Crear Producto")) {
-                    productoDAO.crearProducto(nombre, descripcion, precio, idCategoria);
-                    JOptionPane.showMessageDialog(dialog, "Producto creado con éxito.");
-                } else if (tipo.equals("Eliminar Producto")) {
-                    productoDAO.borrarProductoPorNombre(nombre);
-                    JOptionPane.showMessageDialog(dialog, "Producto eliminado con éxito.");
-                }
+        if (nombre.isEmpty() || descripcion.isEmpty() || precioTexto.isEmpty() || categoria == null) {
+            JOptionPane.showMessageDialog(dialog, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-                dialog.dispose(); // Cerrar el diálogo después de guardar
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(dialog, "El precio debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        try {
+            double precio = Double.parseDouble(precioTexto);
+            CategoriaDAO categoriaDAO = new CategoriaDAO();
+            int idCategoria = categoriaDAO.ObtenerCategoriaPorNombre(categoria);
+
+            ProductoDAO productoDAO = new ProductoDAO();
+            productoDAO.crearProducto(nombre, descripcion, precio, idCategoria);
+            JOptionPane.showMessageDialog(dialog, "Producto creado con éxito.");
+            dialog.dispose(); // Cerrar el diálogo después de guardar
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(dialog, "El precio debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+});
 
         dialog.add(labelNombre);
         if (tipo.equals("Eliminar Producto")) {

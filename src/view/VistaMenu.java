@@ -95,6 +95,7 @@ public class VistaMenu extends JPanel {
 
         Boton botonCobrar = new Boton("Cobrar", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonCobrar.addActionListener(e -> {
+            guardarPedido();
             Pedido pedidoActual = obtenerPedidoActual();
             PedidoDAO pedidoDAO = new PedidoDAO();
             pedidoDAO.cambiarEstadoCompletado(pedidoActual.getId());

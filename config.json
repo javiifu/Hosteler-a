@@ -23,13 +23,13 @@
     "horarios":[
         {
             "nombre": "Mañana",
-            "inicio": "8:00",
-            "fin": "13:00"
+            "inicio": "8:00:00",
+            "fin": "13:00:00"
         },
         {
             "nombre": "Tarde",
-            "inicio": "13:01",
-            "fin": "23:00"
+            "inicio": "13:00:01",
+            "fin": "23:00:00"
         }
     ],
     "config_caja": {

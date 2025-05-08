@@ -3,8 +3,11 @@ import config.*;
 import dao.CategoriaDAO;
 import dao.ProductoDAO;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.*;
+import main.App;
 import main.TPVMain;
 
 public class VistaConfiguracion extends JPanel{
@@ -43,12 +46,29 @@ public class VistaConfiguracion extends JPanel{
         Boton botonEliminarCategoria = new Boton("Eliminar Categoría", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonEliminarCategoria.addActionListener(e -> abrirFormularioCategoria("Eliminar Categoría"));
 
+        Boton botonGenerarResumenDiario = new Boton("Generar Resumen del Dia", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
+
+        botonGenerarResumenDiario.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                try {
+                    App.generarResumenDia();
+                    JOptionPane.showMessageDialog(tpvMain, "Resumen del día generado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    
+                } catch (Exception error) {
+                    JOptionPane.showMessageDialog(tpvMain, "Error al generar el resumen del día.", "Error", JOptionPane.ERROR_MESSAGE);
+                    error.printStackTrace();
+                }
+            }
+        });
+
         // Añadir botones al panel
         panelOpciones.add(botonCrearPlato);
         panelOpciones.add(botonModificarPlato);
         panelOpciones.add(botonEliminarPlato);
         panelOpciones.add(botonCrearCategoria);
         panelOpciones.add(botonEliminarCategoria);
+        panelOpciones.add(botonGenerarResumenDiario);
 
         add(panelOpciones, BorderLayout.CENTER);
 

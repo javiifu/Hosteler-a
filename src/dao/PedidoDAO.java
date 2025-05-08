@@ -93,25 +93,24 @@ public class PedidoDAO {
     }
 
     //Metodo para obtener todos los platos/bebidas en un hasmap
-    public static Map<String, Integer> obtenerPlatosPedido(Integer numeroMesa) {
+    public static Map<String, Integer> obtenerPlatosPedido(Pedido pedido) {
         HashMap<String, Integer> mapaPlatosPedido = new HashMap<>();
         Connection conexion = ConexionBD.conectar();
 
         if (conexion != null) {
                         
-            //Hay que introducir el numero de la mesa
             String query = "SELECT pr.nombre AS nombre_plato " +
                     "FROM Pedido_plato AS pp " +
                     "INNER JOIN Producto AS pr ON pp.codigo_plato = pr.codigo " +
                     "WHERE " + 
                         "pp.id_pedido = ( " +
                             "SELECT id FROM Pedido " +
-                            "WHERE numero_mesa = ? " +
+                            "WHERE id = ? " +
                             "ORDER BY hora_pedido DESC " +
                             "LIMIT 1 )" ;
 
             try ( PreparedStatement stmt = conexion.prepareStatement(query)) {
-                stmt.setInt(1, numeroMesa);
+                stmt.setInt(1, pedido.getId());
                 ResultSet rs = stmt.executeQuery();
                 
                 while (rs.next()) {
@@ -130,8 +129,8 @@ public class PedidoDAO {
     }
     
     //Metodo Obtener precio total
-    public double calcularCuenta(Integer numeroMesa) {
-        Map<String, Integer> platosPedido = obtenerPlatosPedido(numeroMesa);
+    public double calcularCuenta(Pedido pedido) {
+        Map<String, Integer> platosPedido = obtenerPlatosPedido(pedido);
         double precioTotal = 0.0;
         Connection conexion = ConexionBD.conectar();
 
@@ -270,13 +269,14 @@ public class PedidoDAO {
         Connection conexion = ConexionBD.conectar();
 
         if (conexion != null) {
-            String query = "SELECT pr.nombre AS nombre_plato, pr.precio AS precio_plato, pr.id_categoria AS categoria, pp.cantidad AS cantidad_plato" +
-                    "FROM Pedido_plato AS pp " +
-                    "INNER JOIN Producto AS pr ON pp.codigo_producto = pr.codigo " +
-                    "WHERE pp.id_pedido = ?";
+            String query = "SELECT pr.codigo AS codigo, pr.nombre AS nombre_plato, pr.precio AS precio_plato, pr.id_categoria AS categoria, " +
+               "(SELECT COUNT(*) FROM Pedido_plato WHERE codigo_plato = pr.codigo AND id_pedido = ?) AS cantidad " +
+               "FROM Producto AS pr " +
+               "WHERE pr.codigo IN (SELECT codigo_plato FROM Pedido_plato WHERE id_pedido = ?)";
 
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {
                 stmt.setInt(1, pedido.getId());
+                stmt.setInt(2, pedido.getId());
                 ResultSet rs = stmt.executeQuery();
 
                 while (rs.next()) {
@@ -355,7 +355,8 @@ public class PedidoDAO {
                     Time horaPedido = rs.getTime("fecha_pedido");
                     Date fechaPedido = rs.getDate("fecha_pedido");
                     String tipo_pago = rs.getString("tipo_pago");
-                    pedidos.add(new Pedido(id, numeroMesa, horaPedido, fechaPedido, tipo_pago));
+                    boolean pagado = rs.getBoolean("pagado");
+                    pedidos.add(new Pedido(id, numeroMesa, horaPedido, fechaPedido, tipo_pago, pagado));
                 }
             } catch (SQLException e) {
                 System.out.println("Error al obtener los pedidos por día: " + e.getMessage());

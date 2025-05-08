@@ -1,4 +1,5 @@
 package dao;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -13,7 +14,6 @@ import java.util.Map;
 import model.Pedido;
 import model.PedidoPlato;
 import model.Producto;
-
 public class PedidoDAO {
     //Metodo para insertar platos en los pedidos
     public boolean insertarPedidoConPlatos(Pedido pedido, ArrayList<PedidoPlato> platos) {
@@ -242,28 +242,54 @@ public class PedidoDAO {
     
         try (Connection conexion = ConexionBD.conectar()) {
             if (conexion != null) {
-                String query = "DELETE FROM Pedido_plato " +
-                                "WHERE id_pedido = (SELECT id FROM Pedido WHERE numero_mesa = ? ORDER BY hora_pedido DESC LIMIT 1) " +
-                                "AND codigo_producto = (SELECT codigo FROM Producto WHERE nombre = ?) " +
-                                "LIMIT 1" ;
-
-                try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-                    stmt.setInt(1, numeroMesa);
-                    stmt.setString(2, nombreProducto);
-                    int filasEliminadas = stmt.executeUpdate();
-                    resultado = (filasEliminadas > 0);
-                    if (!resultado) {
-                        System.out.println("Error: No se encontró el producto en el pedido para ser eliminado.");
+    
+                // Obtenemos el id del pedido más reciente de esa mesa
+                String obtenerIdPedido = "SELECT id FROM Pedido WHERE numero_mesa = ? ORDER BY hora_pedido DESC LIMIT 1";
+                int idPedido = 0;
+    
+                try (PreparedStatement stmtPedido = conexion.prepareStatement(obtenerIdPedido)) {
+                    stmtPedido.setInt(1, numeroMesa);
+                    ResultSet rs = stmtPedido.executeQuery();
+                    if (rs.next()) {
+                        idPedido = rs.getInt("id");
+                    } else {
+                        System.out.println("No se encontró ningún pedido para esa mesa.");
+                        return false;
                     }
+                }
+    
+                // Obtenemos el código del producto según su nombre
+                String obtenerCodigoProducto = "SELECT codigo FROM Producto WHERE nombre = ?";
+                int codigoProducto = 0;
+    
+                try (PreparedStatement stmtProducto = conexion.prepareStatement(obtenerCodigoProducto)) {
+                    stmtProducto.setString(1, nombreProducto);
+                    ResultSet rs = stmtProducto.executeQuery();
+                    if (rs.next()) {
+                        codigoProducto = rs.getInt("codigo");
+                    } else {
+                        System.out.println("No se encontró ningún producto con ese nombre.");
+                        return false;
+                    }
+                }
+    
+                // Llamar al procedimiento almacenado
+                String callProcedure = "{CALL eliminar_producto_de_pedido(?, ?)}";
+                try (CallableStatement cs = conexion.prepareCall(callProcedure)) {
+                    cs.setInt(1, idPedido);
+                    cs.setInt(2, codigoProducto);
+                    cs.execute();
+                    resultado = true;
                 }
             }
         } catch (SQLException e) {
             System.out.println("Error al quitar el plato del pedido: " + e.getMessage());
             resultado = false;
         }
+    
         return resultado;
     }
-
+    
     public static Map<Producto, Integer> listaPlatosPedidoFactura(Pedido pedido) {
         Map<Producto, Integer> platosPedido = new HashMap<>();
         Connection conexion = ConexionBD.conectar();

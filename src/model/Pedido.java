@@ -31,6 +31,14 @@ public class Pedido {
         this.fechaPedido = new Date(System.currentTimeMillis());
         this.tipo_pago = tipo_pago;
     }
+    public Pedido(int id, int numeroMesa, Time horaPedido, Date fechaPedido, String tipo_pago, boolean pagado) {
+        this.id = id;
+        this.numeroMesa = numeroMesa;
+        this.horaPedido = new Time(System.currentTimeMillis());
+        this.fechaPedido = new Date(System.currentTimeMillis());
+        this.tipo_pago = tipo_pago;
+        this.pagado = pagado;
+    }
 
     public Pedido(int id, int numeroMesa, Time horaPedido, Date fechaPedido, String tipoPago, boolean completado, boolean pagado, double precioTotal) {
         this.id = id;

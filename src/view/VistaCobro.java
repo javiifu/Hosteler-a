@@ -83,7 +83,7 @@ public class VistaCobro extends JPanel implements ActionListener {
         if (pedidoActual != null) {
             PedidoDAO pedidoDAO = new PedidoDAO();
             StringBuilder sb = new StringBuilder("Pedido:\n");
-            Map<String, Integer> platosPedido = pedidoDAO.obtenerPlatosPedido(pedidoActual.getNumeroMesa());
+            Map<String, Integer> platosPedido = pedidoDAO.obtenerPlatosPedido(pedidoActual);
             for (Map.Entry<String, Integer> entrada : platosPedido.entrySet()) {
                 String nombrePlato = entrada.getKey();
                 int cantidad = entrada.getValue();
@@ -94,7 +94,7 @@ public class VistaCobro extends JPanel implements ActionListener {
 
             // Agregar total
             sb.append("\n");
-            double total = pedidoDAO.calcularCuenta(pedidoActual.getNumeroMesa());
+            double total = pedidoDAO.calcularCuenta(pedidoActual);
             sb.append("TOTAL: ").append(String.format("%.2f €", total)).append("\n");
 
             // Mostrar el método de pago seleccionado

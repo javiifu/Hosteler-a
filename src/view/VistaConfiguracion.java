@@ -92,59 +92,52 @@ public class VistaConfiguracion extends JPanel{
         
         Boton botonGuardar = new Boton("Guardar", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonGuardar.addActionListener(e -> {
-            String nombre; 
-            if (tipo.equals("Eliminar Producto")) {
-                nombre = (String) comboProductos.getSelectedItem(); //desplegable
-            } else {
-                nombre = campoNombre.getText();
-            }
-            String descripcion = campoDescripcion.getText();
-            String precioTexto = campoPrecio.getText();
+            String nombre = null;
             String categoria = (String) comboCategorias.getSelectedItem();
-
-    if (tipo.equals("Eliminar Producto")) {
-        nombre = (String) comboProductos.getSelectedItem(); // desplegable
-        if (nombre == null || categoria == null) {
-            JOptionPane.showMessageDialog(dialog, "Por favor, seleccione un producto y una categoría.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        try {
-            ProductoDAO productoDAO = new ProductoDAO();
-            productoDAO.borrarProductoPorNombre(nombre);
-            JOptionPane.showMessageDialog(dialog, "Producto eliminado con éxito.");
-            dialog.dispose(); // Cerrar el diálogo después de guardar
+        
+            if (tipo.equals("Eliminar Producto")) {
+                nombre = (String) comboProductos.getSelectedItem(); // desplegable
+                if (nombre == null || categoria == null) {
+                    JOptionPane.showMessageDialog(dialog, "Por favor, seleccione un producto y una categoría.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                try {
+                    ProductoDAO productoDAO = new ProductoDAO();
+                    productoDAO.borrarProductoPorNombre(nombre);
+                    JOptionPane.showMessageDialog(dialog, "Producto eliminado con éxito.");
+                    dialog.dispose(); // Cerrar el diálogo después de guardar
+                    
+                }  catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(dialog, "El producto no se ha eliminado.", "Error", JOptionPane.ERROR_MESSAGE);
             
-        }  catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(dialog, "El producto no se ha eliminado.", "Error", JOptionPane.ERROR_MESSAGE);
-    
-        }
-
-    } else if (tipo.equals("Crear Producto")) {
-        nombre = campoNombre.getText();
-        descripcion = campoDescripcion.getText();
-        precioTexto = campoPrecio.getText();
-
-        if (nombre.isEmpty() || descripcion.isEmpty() || precioTexto.isEmpty() || categoria == null) {
-            JOptionPane.showMessageDialog(dialog, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try {
-            double precio = Double.parseDouble(precioTexto);
-            CategoriaDAO categoriaDAO = new CategoriaDAO();
-            int idCategoria = categoriaDAO.ObtenerCategoriaPorNombre(categoria);
-
-            ProductoDAO productoDAO = new ProductoDAO();
-            productoDAO.crearProducto(nombre, descripcion, precio, idCategoria);
-            JOptionPane.showMessageDialog(dialog, "Producto creado con éxito.");
-            dialog.dispose(); // Cerrar el diálogo después de guardar
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(dialog, "El precio debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-});
-
+                }
+        
+            } else if (tipo.equals("Crear Producto")) {
+                nombre = campoNombre.getText();
+                String descripcion = campoDescripcion.getText();
+                String precioTexto = campoPrecio.getText();
+        
+                if (nombre.isEmpty() || descripcion.isEmpty() || precioTexto.isEmpty() || categoria == null) {
+                    JOptionPane.showMessageDialog(dialog, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+        
+                try {
+                    double precio = Double.parseDouble(precioTexto);
+                    CategoriaDAO categoriaDAO = new CategoriaDAO();
+                    int idCategoria = categoriaDAO.ObtenerCategoriaPorNombre(categoria);
+        
+                    ProductoDAO productoDAO = new ProductoDAO();
+                    productoDAO.crearProducto(nombre, descripcion, precio, idCategoria);
+                    JOptionPane.showMessageDialog(dialog, "Producto creado con éxito.");
+                    dialog.dispose(); // Cerrar el diálogo después de guardar
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(dialog, "El precio debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
         dialog.add(labelNombre);
         if (tipo.equals("Eliminar Producto")) {
             dialog.add(comboProductos);//desplegable
@@ -162,7 +155,7 @@ public class VistaConfiguracion extends JPanel{
         dialog.add(botonGuardar);
 
         dialog.setVisible(true); // Mostrar el diálogo
-
+        
     }
 
     // Metodo para abrir formulario para categorias

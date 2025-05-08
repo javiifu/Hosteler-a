@@ -205,7 +205,31 @@ BEGIN
 END$$
 DELIMITER ;
 
---Procedimiento para hacer una mesa, si id coincide con el de otra mesa, se actualiza el estado.
+/*Procedimiento para hacer una mesa, si id coincide con el de otra mesa, se actualiza el estado.*/
+DELIMITER $$
+
+CREATE PROCEDURE CrearOModificarMesa(IN p_numero INT, IN p_estado BOOLEAN)
+BEGIN
+    DECLARE mesa_activa BOOLEAN;
+
+    -- Verifica si existe la mesa
+    IF EXISTS (SELECT 1 FROM Mesa WHERE numero = p_numero) THEN
+        -- Si existe, verificamos si está inactiva
+        SELECT activo INTO mesa_activa FROM Mesa WHERE numero = p_numero;
+
+        IF mesa_activa = FALSE THEN
+            -- Activamos la mesa si está inactiva
+            UPDATE Mesa SET activo = TRUE, estado = p_estado WHERE numero = p_numero;
+        END IF;
+
+    ELSE
+        -- Si no existe, la insertamos
+        INSERT INTO Mesa (numero, estado, activo) VALUES (p_numero, p_estado, TRUE);
+    END IF;
+END$$
+
+DELIMITER ;
+
 
 /*Índice para consultas para fechas de un pedido*/
 CREATE INDEX indice_pedidos_fecha ON pedidos(fecha);

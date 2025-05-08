@@ -6,6 +6,7 @@ public class ColorPaleta {
     public static final Color PRIMARIO = new Color(0xFFD700);      // Amarillo brillante
     public static final Color SECUNDARIO = new Color(0x007BFF);   // Azul brillante
     public static final Color ACENTO = new Color(0xFF4500);       // Naranja rojizo
+    public static final Color VOLVER = new Color(0xFF4C4C);     // Rojo claro
     public static final Color FONDO_PRINCIPAL = new Color(0x222222); // Gris oscuro (fondo principal)
     public static final Color FONDO_SECUNDARIO = new Color(0xF8F9FA); // Gris muy claro (para áreas de contenido)
     public static final Color TEXTO_PRINCIPAL_OSCURO = new Color(0xFFFFFF); // Blanco (sobre fondos oscuros)
@@ -13,8 +14,10 @@ public class ColorPaleta {
     public static final Color TEXTO_PRINCIPAL_CLARO = new Color(0x333333);  // Gris oscuro (sobre fondos claros)
     public static final Color TEXTO_SECUNDARIO_CLARO = new Color(0x777777);  // Gris más claro (sobre fondos claros)
     public static final Color ENFASIS_ACCION = new Color(0x00FF7F);    // Verde lima brillante
-    public static final Color HOVER_PRIMARIO = new Color(0x0056b3);    // Azul ligeramente más oscuro (hover)
-    public static final Color HOVER_SECUNDARIO = new Color(0x5a6268);  // Gris ligeramente más claro (hover)
+    public static final Color HOVER_PRIMARIO = new Color(0xE6C200); // Verde brillante (hover)
+    public static final Color HOVER_VOLVER = new Color(0xCC3B3B);
+    public static final Color HOVER_ENFASIS_ACCION = new Color(0x00CC66); // Verde brillante (hover)
+    public static final Color HOVER_SECUNDARIO = new Color(0x0056b3);    // Azul ligeramente más oscuro (hover)
     public static final Color HOVER_ACENTO = new Color(0xcc3700);      // Rojo ligeramente más oscuro (hover)
     public static final Color SELECCION = new Color(0xADD8E6);       // Azul claro (para selección en listas)
 

@@ -28,16 +28,16 @@ public class VistaConfiguracion extends JPanel{
         panelOpciones.setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
         // Botones para las opciones
-        Boton botonCrearPlato = new Boton("Crear Plato");
+        Boton botonCrearPlato = new Boton("Crear Plato", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonCrearPlato.addActionListener(e -> abrirFormularioProducto("Crear Producto"));
-
-        Boton botonEliminarPlato = new Boton("Eliminar Plato");
+        
+        Boton botonEliminarPlato = new Boton("Eliminar Plato", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
         botonEliminarPlato.addActionListener(e -> abrirFormularioProducto("Eliminar Producto"));
-
-        Boton botonCrearCategoria = new Boton("Crear Categoría");
+        
+        Boton botonCrearCategoria = new Boton("Crear Categoría", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonCrearCategoria.addActionListener(e -> abrirFormularioCategoria("Crear Categoría"));
-
-        Boton botonEliminarCategoria = new Boton("Eliminar Categoría");
+        
+        Boton botonEliminarCategoria = new Boton("Eliminar Categoría", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
         botonEliminarCategoria.addActionListener(e -> abrirFormularioCategoria("Eliminar Categoría"));
 
         // Añadir botones al panel
@@ -49,7 +49,7 @@ public class VistaConfiguracion extends JPanel{
         add(panelOpciones, BorderLayout.CENTER);
 
         // Botón para volver al menú principal
-        JButton botonVolver = new JButton("Volver");
+        Boton botonVolver = new Boton("Volver", ColorPaleta.VOLVER, ColorPaleta.HOVER_VOLVER);
         botonVolver.addActionListener(e -> tpvMain.mostrarVista("Inicio"));
         add(botonVolver, BorderLayout.SOUTH);
     }
@@ -90,10 +90,24 @@ public class VistaConfiguracion extends JPanel{
         comboCategorias.removeAllItems(); // Limpia el combo si ya tiene datos
         cargarCategoriasEnCombo(comboCategorias); // Método para cargar categorías en el combo
         
+<<<<<<< HEAD
+        Boton botonGuardar = new Boton("Guardar", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
+        botonGuardar.addActionListener(e -> {
+            String nombre; 
+            if (tipo.equals("Eliminar Producto")) {
+                nombre = (String) comboProductos.getSelectedItem(); //desplegable
+            } else {
+                nombre = campoNombre.getText();
+            }
+            String descripcion = campoDescripcion.getText();
+            String precioTexto = campoPrecio.getText();
+            String categoria = (String) comboCategorias.getSelectedItem();
+=======
         Boton botonGuardar = new Boton("Guardar");
 botonGuardar.addActionListener(e -> {
     String nombre = null;
     String categoria = (String) comboCategorias.getSelectedItem();
+>>>>>>> c35fa394a32658f648526894d79a8003a1254c72
 
     if (tipo.equals("Eliminar Producto")) {
         nombre = (String) comboProductos.getSelectedItem(); // desplegable
@@ -173,7 +187,7 @@ botonGuardar.addActionListener(e -> {
             cargarCategoriasEnCombo(comboCategorias);
         }
 
-        Boton botonGuardar = new Boton("Guardar");
+        Boton botonGuardar = new Boton("Guardar", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonGuardar.addActionListener(e -> {
             String nombre = campoNombre.getText();
 

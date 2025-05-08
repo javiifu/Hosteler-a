@@ -4,33 +4,34 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import config.ColorPaleta;
 
 public class Boton extends JButton {
 
     private Color originalBackgroundColor;
     private Color hoverBackgroundColor;
 
-    public Boton(String text) {
+    // Constructor que recibe el texto, el color de fondo y el color de hover
+    public Boton(String text, Color backgroundColor, Color hoverColor) {
         super(text);
-        // Establecer colores por defecto (puedes ajustarlos)
-        setBackground(ColorPaleta.BOTON_SECUNDARIO_FONDO);
-        setForeground(ColorPaleta.BOTON_SECUNDARIO_TEXTO);
 
-        // Guardar el color original y definir el color de hover
-        originalBackgroundColor = getBackground();
-        hoverBackgroundColor = ColorPaleta.HOVER_SECUNDARIO; // Color de hover por defecto
+        // Establecer colores personalizados
+        setBackground(backgroundColor);
+        setForeground(Color.WHITE); // Puedes ajustar el color del texto según sea necesario
+
+        // Guardar los colores originales y de hover
+        originalBackgroundColor = backgroundColor;
+        hoverBackgroundColor = hoverColor;
 
         // Añadir el MouseListener para el efecto hover
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                setBackground(hoverBackgroundColor);
+                setBackground(hoverBackgroundColor); // Cambiar al color de hover
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                setBackground(originalBackgroundColor);
+                setBackground(originalBackgroundColor); // Restaurar el color original
             }
         });
     }

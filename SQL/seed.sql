@@ -1,12 +1,12 @@
 /*Selección de la base de datos. */
 USE restaurate;
 /*Creacion de tablas*/
-CREATE TABLE IF NOT EXISTS Mesa ( --añadir activo.
+CREATE TABLE IF NOT EXISTS Mesa (
     numero INT PRIMARY KEY,
     estado BOOLEAN DEFAULT TRUE, 
     activo BOOLEAN NOT NULL DEFAULT TRUE;
 );
-CREATE TABLE IF NOT EXISTS Categoria (--añadir activo.
+CREATE TABLE IF NOT EXISTS Categoria (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) UNIQUE NOT NULL,
     activo BOOLEAN NOT NULL DEFAULT TRUE;
@@ -85,6 +85,7 @@ CREATE TABLE AuditoriaGeneral (
     accion VARCHAR(10),
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 /*Trigger para registrar quien ha borrado datos de una tabla*/
 DELIMITER $$
 
@@ -94,7 +95,7 @@ FOR EACH ROW
 BEGIN
     INSERT INTO AuditoriaGeneral (tabla, clave_primaria, usuario, accion)
     VALUES ('Mesa', CONCAT('numero=', OLD.numero), CURRENT_USER(), 'DELETE');
-END$$
+END $$
 
 DELIMITER ;
 
@@ -114,6 +115,24 @@ END;
 //
 
 DELIMITER ;
+/*Trigger para Recalcular total de un pedido automáticamente*/
+DELIMITER $$
+
+CREATE TRIGGER actualizar_total_pedido
+AFTER INSERT ON Pedido_plato
+FOR EACH ROW
+BEGIN
+    UPDATE Pedido
+    SET precio_total = (
+        SELECT SUM(pr.precio)
+        FROM Pedido_plato pp
+        JOIN Producto pr ON pp.codigo_plato = pr.codigo
+        WHERE pp.id_pedido = NEW.id_pedido
+    )
+    WHERE id = NEW.id_pedido;
+END$$
+
+DELIMITER ;
 
 /*Trigger para actualizar las estadisticas de ventas cada vez que se vende un producto*/
 
@@ -131,7 +150,7 @@ END;
 
 DELIMITER ;
 
-/*Creamos el procedimiento para crear un pedido*/
+/*procedimiento para crear un pedido*/
 DELIMITER $$
 CREATE PROCEDURE crear_pedido(
     IN p_cliente_id INT,
@@ -142,10 +161,10 @@ CREATE PROCEDURE crear_pedido(
 BEGIN
     INSERT INTO pedidos(cliente_id, mesa_id, fecha, hora, facturado, total)
     VALUES (p_cliente_id, p_mesa_id, p_fecha, p_hora, 0, 0);
-END$$
+END $$
 DELIMITER ;
 /*Creamos el procedimiento para añadir un producto al pedido*/
-/*Mirar bien la query*/
+
 DELIMITER $$
 CREATE PROCEDURE agregar_producto_a_pedido(
     IN p_pedido_id INT,
@@ -247,7 +266,7 @@ BEGIN
         -- Si no existe, la insertamos
         INSERT INTO Mesa (numero, estado, activo) VALUES (p_numero, p_estado, TRUE);
     END IF;
-END$$
+END $$
 
 DELIMITER ;
 
@@ -278,3 +297,42 @@ FROM ventas v
 JOIN clientes c ON v.id_cliente = c.id_cliente
 JOIN detalle_ventas dv ON v.id_venta = dv.id_venta
 JOIN productos p ON dv.id_producto = p.id_producto;
+/*Vista de productos activos por categoría*/
+CREATE VIEW vista_productos_activos AS
+SELECT 
+    pr.codigo,
+    pr.nombre,
+    pr.precio,
+    c.nombre AS categoria
+FROM Producto pr
+JOIN Categoria c ON pr.id_categoria = c.id
+WHERE pr.activo = TRUE;
+/*Vista para historial de pedidos. */
+CREATE VIEW vista_historial_pedidos AS
+SELECT 
+    id,
+    numero_mesa,
+    precio_total,
+    tipo_pago,
+    fecha_pedido
+FROM Pedido
+WHERE pagado = TRUE
+ORDER BY fecha_pedido DESC;
+/*Vista de pedidos con los detalles de los prodcutos*/
+CREATE VIEW vista_pedidos_detallados AS
+SELECT 
+    p.id AS id_pedido,
+    m.numero AS numero_mesa,
+    pr.nombre AS producto,
+    pr.precio,
+    p.fecha_pedido,
+    p.hora_pedido,
+    p.pagado,
+    p.tipo_pago
+FROM Pedido p
+JOIN Pedido_plato pp ON p.id = pp.id_pedido
+JOIN Producto pr ON pp.codigo_plato = pr.codigo
+JOIN Mesa m ON p.numero_mesa = m.numero;
+
+
+

@@ -5,6 +5,8 @@ import dao.CategoriaDAO;
 import dao.PedidoDAO;
 import dao.ProductoDAO;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.*;
@@ -62,9 +64,12 @@ public class VistaMenu extends JPanel {
         DefaultListModel<Producto> modeloProductos = new DefaultListModel<>();
         listaProductos = new JList<>(modeloProductos);
         listaProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listaProductos.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                agregarProductoAPedido();
+        listaProductos.addMouseListener(new MouseAdapter() {    
+            @Override 
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+              agregarProductoAPedido();
+                }   
             }
         });
         panelProductos.add(new JScrollPane(listaProductos), BorderLayout.CENTER);

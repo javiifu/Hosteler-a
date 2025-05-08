@@ -1,9 +1,11 @@
 package config;
 
+import java.sql.Time;
+
 public class Horario {
     private String nombre;
-    private String inicio;
-    private String fin;
+    private Time inicio;
+    private Time fin;
 
     // Getters y Setters
     public String getNombre() {
@@ -14,19 +16,19 @@ public class Horario {
         this.nombre = nombre;
     }
 
-    public String getInicio() {
+    public Time getInicio() {
         return inicio;
     }
 
-    public void setInicio(String inicio) {
+    public void setInicio(Time inicio) {
         this.inicio = inicio;
     }
 
-    public String getFin() {
+    public Time getFin() {
         return fin;
     }
 
-    public void setFin(String fin) {
+    public void setFin(Time fin) {
         this.fin = fin;
     }
 }

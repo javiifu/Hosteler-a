@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -313,23 +314,46 @@ public class PedidoDAO {
 
     }
 
-    public static ArrayList<Pedido> pedidosPorDia(Date fecha){
+    public static ArrayList<Pedido> pedidosPorDia(Time horaApertura){
         ArrayList<Pedido> pedidos = new ArrayList<>();
         Connection conexion = ConexionBD.conectar();
 
+        Date hoy = new Date(System.currentTimeMillis());
+        Time hora = new Time(System.currentTimeMillis());
+
+        Date fechaInicio;
+        Date fechaFin;
+
+        if(hora.after(horaApertura)){
+            fechaInicio = new Date(hoy.getTime());
+            fechaFin = fechaInicio;
+        }
+        else{
+            fechaInicio = new Date(hoy.getTime() - 24 * 60 * 60 * 1000);
+            fechaFin = hoy;
+        }
+
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");
+        String inicioFormatted = dateFormatter.format(fechaInicio) + " " + timeFormatter.format(horaApertura);
+        String finFormatted = dateFormatter.format(fechaFin) + " " + timeFormatter.format(hora);
+
         if (conexion != null) {
-            String query = "SELECT * FROM Pedido WHERE fecha = ?";
+            String query = "SELECT * FROM Pedido WHERE fecha_pedido BETWEEN ? AND ?;";
 
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-                stmt.setDate(1, fecha);
+                stmt.setString(1, inicioFormatted);
+                stmt.setString(2, finFormatted);
+
                 ResultSet rs = stmt.executeQuery();
 
                 while (rs.next()) {
                     int id = rs.getInt("id");
                     int numeroMesa = rs.getInt("numero_mesa");
-                    Time horaPedido = rs.getTime("hora_pedido");
+                    Time horaPedido = rs.getTime("fecha_pedido");
+                    Date fechaPedido = rs.getDate("fecha_pedido");
                     String tipo_pago = rs.getString("tipo_pago");
-                    pedidos.add(new Pedido(id, numeroMesa, horaPedido, fecha, tipo_pago));
+                    pedidos.add(new Pedido(id, numeroMesa, horaPedido, fechaPedido, tipo_pago));
                 }
             } catch (SQLException e) {
                 System.out.println("Error al obtener los pedidos por día: " + e.getMessage());
@@ -352,7 +376,7 @@ public class PedidoDAO {
                     pedido = new Pedido(
                         rs.getInt("id"),
                         rs.getInt("numero_mesa"),
-                        rs.getTime("hora_pedido"),
+                        rs.getTime("fecha_pedido"),
                         rs.getDate("fecha_pedido"),
                         rs.getString("tipo_pago"),
                         rs.getBoolean("completado"),
@@ -377,7 +401,7 @@ public class PedidoDAO {
     }
 
     public void insertarPedido(Pedido pedido) {
-        String query = "INSERT INTO Pedido (precio_total, numero_mesa, completado, pagado, tipo_pago) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Pedido (precio_total, numero_mesa, completado, pagado, tipo_pago, fecha_pedido) VALUES (?, ?, ?, ?, ?, ?)";
         Connection conexion = ConexionBD.conectar();
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setDouble(1, pedido.getPrecio_total());
@@ -385,6 +409,7 @@ public class PedidoDAO {
             stmt.setBoolean(3, pedido.isCompletado());
             stmt.setBoolean(4, pedido.isPagado());
             stmt.setString(5, pedido.getTipo_pago());
+            stmt.setTimestamp(6, new java.sql.Timestamp(System.currentTimeMillis()));
 
             stmt.executeUpdate();
 

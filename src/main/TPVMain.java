@@ -31,6 +31,9 @@ public class TPVMain extends JFrame implements ActionListener {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
+        // Aplicar margen
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
         vistaMesas = new VistaMesas(this);
         vistaMenu = new VistaMenu(this);
         vistaConfiguracion = new VistaConfiguracion(this); 

@@ -1,13 +1,15 @@
 /*Selección de la base de datos. */
 USE restaurate;
 /*Creacion de tablas*/
-CREATE TABLE IF NOT EXISTS Mesa (
+CREATE TABLE IF NOT EXISTS Mesa ( --añadir activo.
     numero INT PRIMARY KEY,
-    estado BOOLEAN DEFAULT TRUE 
+    estado BOOLEAN DEFAULT TRUE, 
+    activo BOOLEAN NOT NULL DEFAULT TRUE;
 );
-CREATE TABLE IF NOT EXISTS Categoria (
+CREATE TABLE IF NOT EXISTS Categoria (--añadir activo.
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) UNIQUE NOT NULL
+    nombre VARCHAR(50) UNIQUE NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE;
 );
 CREATE TABLE IF NOT EXISTS Producto ( 
     codigo INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,9 +17,9 @@ CREATE TABLE IF NOT EXISTS Producto (
     descripcion TEXT NOT NULL,
     precio DECIMAL(8,2),
     id_categoria INT NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (id_categoria) REFERENCES Categoría(id)
 );
-
 CREATE TABLE IF NOT EXISTS Pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     precio_total DECIMAL(8,2),
@@ -203,6 +205,7 @@ BEGIN
 END$$
 DELIMITER ;
 
+--Procedimiento para hacer una mesa, si id coincide con el de otra mesa, se actualiza el estado.
 
 /*Índice para consultas para fechas de un pedido*/
 CREATE INDEX indice_pedidos_fecha ON pedidos(fecha);

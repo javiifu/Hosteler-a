@@ -201,6 +201,7 @@ public class VistaConfiguracion extends JPanel{
         dialog.add(labelNombre);
         if (tipo.equals("Eliminar Producto")) {
             dialog.add(comboProductos);//desplegable
+            dialog.add(labelCategoria);
         } else if (tipo.equals("Modificar Producto")) {
             cargarTodosProductosCombo(comboProductos);
             dialog.add(labelNombre);

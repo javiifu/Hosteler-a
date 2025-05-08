@@ -35,7 +35,7 @@ public class VistaMenu extends JPanel {
         setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
         // Titulo
-        JLabel titulo = new JLabel("Menu - Mesa " , SwingConstants.CENTER);
+        JLabel titulo = new JLabel("Menu - Mesa ", SwingConstants.CENTER);
         titulo.setForeground(ColorPaleta.TEXTO_PRINCIPAL_CLARO);
         add(titulo, BorderLayout.NORTH);
 
@@ -63,7 +63,7 @@ public class VistaMenu extends JPanel {
         listaProductos = new JList<>(modeloProductos);
         listaProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listaProductos.addListSelectionListener(e -> {
-            if(!e.getValueIsAdjusting()) {
+            if (!e.getValueIsAdjusting()) {
                 agregarProductoAPedido();
             }
         });
@@ -78,12 +78,13 @@ public class VistaMenu extends JPanel {
 
         add(panelCentral, BorderLayout.CENTER);
 
-        // Área de texto para mostrar el pedido
+        // Área de texto para mostrar el pedido (fija)
         areaPedido = new JTextArea();
         areaPedido.setEditable(false);
         areaPedido.setBackground(ColorPaleta.TEXTAREA_FONDO);
         areaPedido.setForeground(ColorPaleta.TEXTAREA_TEXTO);
-        add(new JScrollPane(areaPedido), BorderLayout.EAST);
+        areaPedido.setBorder(BorderFactory.createTitledBorder("Pedido Actual"));
+        add(new JScrollPane(areaPedido), BorderLayout.EAST); // Siempre visible en el lado derecho
 
         // Panel inferior para botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
@@ -192,11 +193,28 @@ public class VistaMenu extends JPanel {
 
     private void agregarProductoAPedido() {
         Producto productoSeleccionado = listaProductos.getSelectedValue();
-        if (productoSeleccionado != null)  {
-            areaPedido.append(productoSeleccionado.getNombre() + "\n");
+        if (productoSeleccionado != null) {
+            // Agregar el producto a la lista de productos del pedido
             int codigo = productoSeleccionado.getCodigo();
             PedidoPlato nuevoPedidoPlato = new PedidoPlato(codigo, 1);
             productosDelPedido.add(nuevoPedidoPlato);
+
+            // Actualizar el área de pedido
+            actualizarAreaPedido();
+
+            // Deseleccionar el producto para permitir seleccionarlo nuevamente
+            listaProductos.clearSelection();
+        }
+    }
+
+    private void actualizarAreaPedido() {
+        areaPedido.setText(""); // Limpiar el área de texto
+        for (PedidoPlato pedidoPlato : productosDelPedido) {
+            ProductoDAO productoDAO = new ProductoDAO();
+            Producto producto = productoDAO.buscarProductoByID(pedidoPlato.getCodigoProducto());
+            if (producto != null) {
+                areaPedido.append(producto.getNombre() + " x " + pedidoPlato.getCantidad() + "\n");
+            }
         }
     }
 

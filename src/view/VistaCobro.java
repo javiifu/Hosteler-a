@@ -45,10 +45,10 @@ public class VistaCobro extends JPanel implements ActionListener {
         // Opciones de pago (WEST)
         JPanel pagoPanel = new JPanel(new GridLayout(2, 1, 5, 10));
         pagoPanel.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
-        efectivoButton = new Boton("Efectivo", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_PRIMARIO);
+        efectivoButton = new Boton("Efectivo", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
         efectivoButton.setActionCommand("efectivo");
         efectivoButton.addActionListener(this);
-        tarjetaButton = new Boton("Tarjeta", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_PRIMARIO);
+        tarjetaButton = new Boton("Tarjeta", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
         tarjetaButton.setActionCommand("tarjeta");
         tarjetaButton.addActionListener(this);
         pagoPanel.add(efectivoButton);

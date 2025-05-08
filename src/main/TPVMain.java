@@ -25,7 +25,7 @@ public class TPVMain extends JFrame implements ActionListener {
     public TPVMain(UserData userData, App app) {
         this.userData = userData;
         this.app = app;
-        initialize();
+        inicializar();
     }
 
     // Nuevo constructor que solo recibe UserData
@@ -33,7 +33,7 @@ public class TPVMain extends JFrame implements ActionListener {
         this(userData, new App()); // Llama al constructor principal y crea una nueva instancia de App
     }
 
-    private void initialize() {
+    private void inicializar() {
         setTitle("TPV - Restaurante/Bar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);

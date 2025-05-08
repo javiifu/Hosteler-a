@@ -204,4 +204,25 @@ public class MesaDAO {
         }
         return null; 
     }
+
+    //Metodo obtener numeros de mesa
+    public ArrayList<Integer> obtenerMesas() {
+        Connection conexion = ConexionBD.conectar();
+        ArrayList<Integer> numerosMesa = new ArrayList<>();
+    
+        if (conexion != null) {
+            String query = "SELECT numero FROM Mesa WHERE activo = true";
+    
+            try (PreparedStatement stmt = conexion.prepareStatement(query);
+                 ResultSet rs = stmt.executeQuery()) {
+    
+                while (rs.next()) {
+                    numerosMesa.add(rs.getInt("numero"));
+                }    
+            } catch (SQLException e) {
+                System.out.println("Error al buscar mesas: " + e.getMessage());
+            }
+        }    
+        return numerosMesa;
+    }
 }

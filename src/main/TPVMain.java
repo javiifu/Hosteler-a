@@ -18,10 +18,12 @@ public class TPVMain extends JFrame implements ActionListener {
     private VistaMenu vistaMenu;
     private VistaConfiguracion vistaConfiguracion;
     private VistaCobro vistaCobro;
+    private App app;
     private UserData userData;
 
-    public TPVMain(UserData userData) {
+    public TPVMain(UserData userData, App app) {
         this.userData = userData;
+        this.app = app;
         setTitle("TPV - Restaurante/Bar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -38,6 +40,7 @@ public class TPVMain extends JFrame implements ActionListener {
         vistaMenu = new VistaMenu(this);
         vistaConfiguracion = new VistaConfiguracion(this); 
         vistaCobro = new VistaCobro(this, null); // Inicializa con un pedido nulo
+        vistaCobro.setApp(app); // Inyectar la instancia de App en VistaCobro
         // Panel inicial con botones
         JPanel panelInicial = new JPanel(new GridLayout(3, 1, 20, 20));
         panelInicial.setBackground(ColorPaleta.FONDO_PRINCIPAL);

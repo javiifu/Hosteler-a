@@ -112,7 +112,8 @@ public class App {
                 dialog.dispose();
                 // Iniciar la aplicacion princial (TPVMain)
                 SwingUtilities.invokeLater(() -> {
-                    TPVMain tpvMain = new TPVMain(currentUser[0]);
+                    // TODO: Arreglar la inicializacion del TPVMain, si hace falta, se hace reset
+                    TPVMain tpvMain = new TPVMain(currentUser[0], );
                     tpvMain.setVisible(true);
                 });
             } else {

@@ -276,6 +276,23 @@ public class ProductoDAO {
         return nombres;
     }
 
+    public int obtenerIdProductoPorNombre(String nombreProducto) {
+        String sql = "SELECT codigo FROM Producto WHERE nombre = ?";
+        int idProducto = -1; 
+
+        try (Connection conexion = ConexionBD.conectar();
+             PreparedStatement statement = conexion.prepareStatement(sql)) {
+            statement.setString(1, nombreProducto);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                idProducto = resultSet.getInt("codigo"); 
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener ID del producto por nombre: " + e.getMessage());
+        }
+        return idProducto;
+    }
+
     public ArrayList<String> nombresProdcutoArray(){
         Connection conexion = ConexionBD.conectar();
         ArrayList<String> nombresProducto = new ArrayList<>();
@@ -323,4 +340,25 @@ public class ProductoDAO {
     }
     return null;
 }            
+
+    public boolean actualizarCampoProducto(String columna, int codigoProducto, Object valor) {
+        String query = "UPDATE Producto SET " + columna + " = ? WHERE codigo = ?";
+        try (Connection conexion = ConexionBD.conectar();
+            PreparedStatement stmt = conexion.prepareStatement(query)) {
+            if (valor instanceof Double) {
+                stmt.setDouble(1, (Double) valor);
+            } else if (valor instanceof Integer) {
+                stmt.setInt(1, (Integer) valor);
+            } else {
+                stmt.setString(1, (String) valor);
+            }
+            stmt.setInt(2, codigoProducto);
+
+            int filas_afectadas = stmt.executeUpdate();
+            return filas_afectadas == 1;
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar producto (" + columna + "): " + e.getMessage());
+            return false;
+        }
+    }
 }

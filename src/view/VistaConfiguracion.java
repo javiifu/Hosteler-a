@@ -29,15 +29,19 @@ public class VistaConfiguracion extends JPanel{
 
         // Botones para las opciones
         Boton botonCrearPlato = new Boton("Crear Plato");
+        botonCrearPlato.setBackground(ColorPaleta.ENFASIS_ACCION);
         botonCrearPlato.addActionListener(e -> abrirFormularioProducto("Crear Producto"));
-
+        
         Boton botonEliminarPlato = new Boton("Eliminar Plato");
+        botonEliminarPlato.setBackground(ColorPaleta.BOTON_ACENTO_FONDO);
         botonEliminarPlato.addActionListener(e -> abrirFormularioProducto("Eliminar Producto"));
-
+        
         Boton botonCrearCategoria = new Boton("Crear Categoría");
+        botonCrearCategoria.setBackground(ColorPaleta.ENFASIS_ACCION);
         botonCrearCategoria.addActionListener(e -> abrirFormularioCategoria("Crear Categoría"));
-
+        
         Boton botonEliminarCategoria = new Boton("Eliminar Categoría");
+        botonEliminarCategoria.setBackground(ColorPaleta.BOTON_ACENTO_FONDO);
         botonEliminarCategoria.addActionListener(e -> abrirFormularioCategoria("Eliminar Categoría"));
 
         // Añadir botones al panel

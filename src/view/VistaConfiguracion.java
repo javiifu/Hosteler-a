@@ -1,6 +1,7 @@
 package view;
 import config.*;
 import dao.CategoriaDAO;
+import dao.MesaDAO;
 import dao.ProductoDAO;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 import main.App;
 import main.TPVMain;
+import model.Mesa;
 
 public class VistaConfiguracion extends JPanel{
     private TPVMain tpvMain;
@@ -27,7 +29,7 @@ public class VistaConfiguracion extends JPanel{
         add(titulo, BorderLayout.NORTH);
 
         // Panel central con botones
-        JPanel panelOpciones = new JPanel(new GridLayout(5, 1, 20, 20));
+        JPanel panelOpciones = new JPanel(new GridLayout(4, 3, 10, 10));
         panelOpciones.setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
         // Botones para las opciones
@@ -46,6 +48,12 @@ public class VistaConfiguracion extends JPanel{
         Boton botonEliminarCategoria = new Boton("Eliminar Categoría", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonEliminarCategoria.addActionListener(e -> abrirFormularioCategoria("Eliminar Categoría"));
 
+        Boton botonCrearMesa = new Boton("Crear Mesa", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
+        botonCrearMesa.addActionListener(e -> abrirFormularioMesa("Crear Mesa"));
+
+        Boton botonEliminarMesa = new Boton("Eliminar Mesa", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
+        botonEliminarMesa.addActionListener(e -> abrirFormularioMesa("Eliminar Mesa"));
+        
         Boton botonGenerarResumenDiario = new Boton("Generar Resumen del Dia", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
 
         botonGenerarResumenDiario.addMouseListener(new MouseAdapter() {
@@ -63,11 +71,20 @@ public class VistaConfiguracion extends JPanel{
         });
 
         // Añadir botones al panel
+            //1 Linea
         panelOpciones.add(botonCrearPlato);
         panelOpciones.add(botonModificarPlato);
         panelOpciones.add(botonEliminarPlato);
+            //2 Linea
         panelOpciones.add(botonCrearCategoria);
+        panelOpciones.add(new JLabel());
         panelOpciones.add(botonEliminarCategoria);
+            //3 Linea
+        panelOpciones.add(botonCrearMesa);
+        panelOpciones.add(new JLabel());
+        panelOpciones.add(botonEliminarMesa);
+            //4 Linea
+            
         panelOpciones.add(botonGenerarResumenDiario);
 
         add(panelOpciones, BorderLayout.CENTER);
@@ -306,6 +323,69 @@ public class VistaConfiguracion extends JPanel{
 
 
     }
+
+    // Metodo para abrir formulario para mesas
+    private void abrirFormularioMesa(String tipo) {
+        JComboBox<Integer> comboMesas = new JComboBox<>();
+        JDialog dialog = new JDialog(tpvMain, tipo, true);
+        dialog.setSize(300, 250);
+        dialog.setLayout(new GridLayout(3, 2, 10, 10));
+        dialog.setLocationRelativeTo(this);
+
+        JLabel labelMesa = new JLabel("Número de la mesa:");
+        JTextField campoNumero = new JTextField();
+        
+        if (tipo.equalsIgnoreCase("Eliminar Mesa")) {
+            cargarNumerosMesaCombo(comboMesas);
+        }
+
+        Boton botonGuardar = new Boton("Guardar", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
+        botonGuardar.addActionListener(e -> {
+            Integer numero = null;
+
+            if (tipo.equalsIgnoreCase("Eliminar mesa")) {
+                numero = (Integer) comboMesas.getSelectedItem(); 
+            } else {
+                try {
+                    numero = Integer.parseInt(campoNumero.getText());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(dialog, "Ingrese un número válido para la mesa", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+    
+            if (numero == null) { 
+                JOptionPane.showMessageDialog(dialog, "Seleccione o ingrese el número de la mesa", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+    
+            MesaDAO mesaDAO = new MesaDAO();
+            if (tipo.equalsIgnoreCase("Crear Mesa")) {
+                Mesa mesa = new Mesa(numero);
+                mesaDAO.newMesa(mesa);
+                JOptionPane.showMessageDialog(dialog, "Mesa creada con exito");      
+            } else if (tipo.equals("Eliminar Mesa")) {
+                mesaDAO.desactivarMesa(numero);
+                JOptionPane.showMessageDialog(dialog, "Mesa eliminada con exito");
+            }
+
+            dialog.dispose();
+        });
+
+        dialog.add(labelMesa);
+        if (tipo.equalsIgnoreCase("Eliminar Mesa")) {
+            dialog.add(comboMesas);//desplegable si es eliminar
+        } else {
+            dialog.add(campoNumero);
+        }
+        dialog.add(new JLabel()); // Espacio en blanco
+        dialog.add(botonGuardar);
+
+        dialog.setVisible(true); // Mostrar el dialogo
+
+
+    }
+
     private void cargarCategoriasEnCombo(JComboBox<String> comboCategorias) {
         CategoriaDAO categoriaDAO = new CategoriaDAO();
         ArrayList<String> nombreCategorias = categoriaDAO.nombresCategoriaArray();
@@ -330,6 +410,16 @@ public class VistaConfiguracion extends JPanel{
         ArrayList<String> productos = productoDAO.nombresProdcutoArray();
         for (String nombre : productos) {
             comboProductos.addItem(nombre);
+        }
+    }
+
+    //Metodo abrir desplegable mesas
+    private void cargarNumerosMesaCombo(JComboBox<Integer> comboMesas) {
+        comboMesas.removeAllItems();
+        MesaDAO mesaDAO = new MesaDAO();
+        ArrayList<Integer> numerosMesa = mesaDAO.obtenerMesas();
+        for (Integer numero : numerosMesa) {
+            comboMesas.addItem(numero);
         }
     }
 

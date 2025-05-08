@@ -35,27 +35,32 @@ public class CategoriaDAO {
     }
  }  
  
- public void borrarCategoria(int id){
+ public void borrarCategoria(int id) {
+    Connection conexion = ConexionBD.conectar();
 
-        Connection conexion = ConexionBD.conectar();
-        
+    if (conexion != null) {
+        String desactivarCategoria = "UPDATE Categoria SET activo = FALSE WHERE id = ?";
+        String desactivarProductos = "UPDATE Producto SET activo = FALSE WHERE id_categoria = ?";
 
-        if(conexion != null){
-             String query = "DELETE * Categoria WHERE id =" + id;
+        try (
+            PreparedStatement stmtCategoria = conexion.prepareStatement(desactivarCategoria);
+            PreparedStatement stmtProducto = conexion.prepareStatement(desactivarProductos)
+        ) {
+            // Desactivar la categoría
+            stmtCategoria.setInt(1, id);
+            stmtCategoria.executeUpdate();
 
-        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            // Desactivar los productos de esa categoría
+            stmtProducto.setInt(1, id);
+            stmtProducto.executeUpdate();
 
-            
-            stmt.executeUpdate();
-            System.out.println("los datos se han actualizado con exito");
-
+            System.out.println("Categoría y productos desactivados correctamente.");
         } catch (SQLException e) {
-
-            System.out.println("error al borrar los datos");
-
+            System.out.println("Error al desactivar la categoría o productos: " + e.getMessage());
         }
-        }
- }
+    }
+}
+
 
  public void modificarNombreCategoria(String nombre, String nuevonombre){
 
@@ -102,32 +107,30 @@ public class CategoriaDAO {
     }
     
     public ArrayList<String> nombresCategoriaArray(){
-
         Connection conexion = ConexionBD.conectar();
         ArrayList<String> nombresCategorias = new ArrayList<>();
-        if(conexion!=null){ 
-            String query = "SELECT nombre FROM Categoria;";
+        if(conexion != null){ 
+            String query = "SELECT nombre FROM Categoria WHERE activo = TRUE";
             try (Statement stmt = conexion.createStatement();
-                ResultSet rs = stmt.executeQuery(query)) {
-                    while (rs.next()) {
-                        String nombreCategoria = rs.getString("nombre");
-                        nombresCategorias.add(nombreCategoria);
-                    }
-
-                }catch(SQLException e){
-                    System.out.println("error al realizar la consulta" + e.getMessage());
-
+                 ResultSet rs = stmt.executeQuery(query)) {
+                while (rs.next()) {
+                    nombresCategorias.add(rs.getString("nombre"));
                 }
-                return nombresCategorias;
+            } catch(SQLException e){
+                System.out.println("error al realizar la consulta" + e.getMessage());
+            }
+            return nombresCategorias;
         }
         return null;
     }
+    
+    
 
     public static Map<Integer, String> obtenerCategorias() {
         Map<Integer, String> categorias = new HashMap<>();
         Connection conexion = ConexionBD.conectar();
         if (conexion != null) {
-            String query = "SELECT id, nombre FROM Categoria";
+            String query = "SELECT id, nombre FROM Categoria WHERE activo = TRUE";
             try (Statement stmt = conexion.createStatement();
                  ResultSet rs = stmt.executeQuery(query)) {
                 while (rs.next()) {
@@ -146,7 +149,9 @@ public class CategoriaDAO {
         int idCategoria = 0;
 
     if (conexion != null) {
-        String query = "SELECT id FROM Categoria WHERE nombre = ?";
+        String query = "SELECT id FROM Categoria WHERE nombre = ? AND activo = TRUE";
+        // Se utiliza un PreparedStatement para evitar inyecciones SQL
+         // y mejorar la seguridad de la consulta.
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, nombre);
             ResultSet rs = stmt.executeQuery();
@@ -163,19 +168,48 @@ public class CategoriaDAO {
     return idCategoria;
  }
 
-    public void borrarCategoriaPorNombre(String nombre) {
-        Connection conexion = ConexionBD.conectar();
-        if (conexion != null) {
-            String query = "DELETE FROM Categoria WHERE nombre = ?";
-            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-                stmt.setString(1, nombre);
-                stmt.executeUpdate();
-                System.out.println("Categoria eliminada con exito");
-            } catch (SQLException e) {
-                System.out.println("Error al eliminar la categoria: " + e.getMessage());
+ public void borrarCategoriaPorNombre(String nombre) {
+    Connection conexion = ConexionBD.conectar();
+
+    if (conexion != null) {
+        String obtenerIdCategoria = "SELECT id FROM Categoria WHERE nombre = ?";
+        String desactivarCategoria = "UPDATE Categoria SET activo = FALSE WHERE id = ?";
+        String desactivarProductos = "UPDATE Producto SET activo = FALSE WHERE id_categoria = ?";
+
+        try (
+            PreparedStatement stmtId = conexion.prepareStatement(obtenerIdCategoria);
+        ) {
+            stmtId.setString(1, nombre);
+            ResultSet rs = stmtId.executeQuery();
+
+            if (rs.next()) {
+                int idCategoria = rs.getInt("id");
+
+                try (
+                    PreparedStatement stmtCategoria = conexion.prepareStatement(desactivarCategoria);
+                    PreparedStatement stmtProductos = conexion.prepareStatement(desactivarProductos)
+                ) {
+                    // Desactivar categoría
+                    stmtCategoria.setInt(1, idCategoria);
+                    stmtCategoria.executeUpdate();
+
+                    // Desactivar productos relacionados
+                    stmtProductos.setInt(1, idCategoria);
+                    stmtProductos.executeUpdate();
+
+                    System.out.println("La categoría y sus productos han sido desactivados correctamente.");
+                }
+
+            } else {
+                System.out.println("No se encontró ninguna categoría con ese nombre.");
             }
+
+        } catch (SQLException e) {
+            System.out.println("Error al desactivar la categoría o productos: " + e.getMessage());
         }
     }
+}
+
 }
 
 

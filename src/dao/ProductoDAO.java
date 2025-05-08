@@ -259,7 +259,8 @@ public class ProductoDAO {
         Connection conexion = ConexionBD.conectar();
     
         if (conexion != null) {
-            String query = "SELECT p.nombre FROM Producto p INNER JOIN Categoria c ON p.id_categoria = c.id WHERE c.nombre = ? AND p.activo = TRUE";
+            String query = "SELECT p.nombre FROM Producto p INNER JOIN Categoria c ON p.id_categoria = c.id WHERE c.nombre = ? AND p.activo = TRUE AND c.activo = TRUE";
+
     
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {
                 stmt.setString(1, nombreCategoria);

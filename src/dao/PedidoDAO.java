@@ -294,14 +294,14 @@ public class PedidoDAO {
     }
 
     //Metodo cambiar estado pagado
-    public void cambiarEstadoPagado(int numeroMesa) {
+    public void cambiarEstadoPagado(int idPedido) {
         try (Connection conexion = ConexionBD.conectar()) {
             if (conexion != null) {
-                String query = "UPDATE Mesa SET estado = NOT estado WHERE numero = ?";
+                String query = "UPDATE Pedido SET pagado = NOT pagado WHERE id = ?";
                 
                 try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             
-                    stmt.setInt(1, numeroMesa);
+                    stmt.setInt(1, idPedido);
                     stmt.executeUpdate();
             
                 } catch (SQLException e) {
@@ -313,6 +313,8 @@ public class PedidoDAO {
         }
 
     }
+
+    
 
     public static ArrayList<Pedido> pedidosPorDia(Time horaApertura){
         ArrayList<Pedido> pedidos = new ArrayList<>();
@@ -435,6 +437,43 @@ public class PedidoDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error al insertar los platos en el pedido: " + e.getMessage());
+        }
+    }
+
+    public void sumarPrecioPedido(Pedido pedio, double precio) {
+        String query = "UPDATE Pedido SET precio_total = ? WHERE id = ?";
+        Connection conexion = ConexionBD.conectar();
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setDouble(1, pedio.getPrecio_total() + precio);
+            stmt.setInt(2, pedio.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al sumar el precio al pedido: " + e.getMessage());
+        }
+    }
+    public void cambiarEstadoCompletado(int idPedido) {
+        String query = "UPDATE Pedido SET completado = NOT completado WHERE id = ?";
+        Connection conexion = ConexionBD.conectar();
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setInt(1, idPedido);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar el estado a completado: " + e.getMessage());
+        }
+    }
+
+    public void setMetodoPago(int idPedido, String metodoPago) {
+        String query = "UPDATE Pedido SET tipo_pago = ? WHERE id = ?";
+        Connection conexion = ConexionBD.conectar();
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setString(1, metodoPago);
+            stmt.setInt(2, idPedido);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al establecer el método de pago: " + e.getMessage());
         }
     }
 }

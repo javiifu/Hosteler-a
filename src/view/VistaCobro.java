@@ -1,15 +1,14 @@
 package view;
 
-import javax.swing.*;
+import config.ColorPaleta;
+import dao.PedidoDAO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
-
+import javax.swing.*;
 import main.TPVMain;
 import model.Pedido;
-import config.ColorPaleta;
-import dao.PedidoDAO;
 
 public class VistaCobro extends JPanel implements ActionListener {
     private TPVMain tpvMain;
@@ -117,9 +116,19 @@ public class VistaCobro extends JPanel implements ActionListener {
         } else if ("efectivo".equals(comando)) {
             actualizarVistaConDetalles("Efectivo");
             JOptionPane.showMessageDialog(this, "Pago en efectivo seleccionado. Proceda con el cobro.");
+            PedidoDAO pedidoDAO = new PedidoDAO();
+            pedidoDAO.cambiarEstadoPagado(pedidoActual.getId());
+            pedidoDAO.cambiarEstadoCompletado(pedidoActual.getId());
+            pedidoDAO.setMetodoPago(pedidoActual.getId(), "EFECTIVO");
+
         } else if ("tarjeta".equals(comando)) {
             actualizarVistaConDetalles("Tarjeta");
             JOptionPane.showMessageDialog(this, "Pago con tarjeta seleccionado. Proceda con el cobro.");
+            PedidoDAO pedidoDAO = new PedidoDAO();
+            pedidoDAO.cambiarEstadoPagado(pedidoActual.getId());
+            pedidoDAO.cambiarEstadoCompletado(pedidoActual.getId());
+            pedidoDAO.setMetodoPago(pedidoActual.getId(), "TARJETA");
+
         }
     }
 

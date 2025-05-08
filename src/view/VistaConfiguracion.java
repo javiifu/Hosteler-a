@@ -28,20 +28,16 @@ public class VistaConfiguracion extends JPanel{
         panelOpciones.setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
         // Botones para las opciones
-        Boton botonCrearPlato = new Boton("Crear Plato");
-        botonCrearPlato.setBackground(ColorPaleta.ENFASIS_ACCION);
+        Boton botonCrearPlato = new Boton("Crear Plato", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonCrearPlato.addActionListener(e -> abrirFormularioProducto("Crear Producto"));
         
-        Boton botonEliminarPlato = new Boton("Eliminar Plato");
-        botonEliminarPlato.setBackground(ColorPaleta.BOTON_ACENTO_FONDO);
+        Boton botonEliminarPlato = new Boton("Eliminar Plato", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
         botonEliminarPlato.addActionListener(e -> abrirFormularioProducto("Eliminar Producto"));
         
-        Boton botonCrearCategoria = new Boton("Crear Categoría");
-        botonCrearCategoria.setBackground(ColorPaleta.ENFASIS_ACCION);
+        Boton botonCrearCategoria = new Boton("Crear Categoría", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonCrearCategoria.addActionListener(e -> abrirFormularioCategoria("Crear Categoría"));
         
-        Boton botonEliminarCategoria = new Boton("Eliminar Categoría");
-        botonEliminarCategoria.setBackground(ColorPaleta.BOTON_ACENTO_FONDO);
+        Boton botonEliminarCategoria = new Boton("Eliminar Categoría", ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
         botonEliminarCategoria.addActionListener(e -> abrirFormularioCategoria("Eliminar Categoría"));
 
         // Añadir botones al panel
@@ -94,7 +90,7 @@ public class VistaConfiguracion extends JPanel{
         comboCategorias.removeAllItems(); // Limpia el combo si ya tiene datos
         cargarCategoriasEnCombo(comboCategorias); // Método para cargar categorías en el combo
         
-        Boton botonGuardar = new Boton("Guardar");
+        Boton botonGuardar = new Boton("Guardar", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonGuardar.addActionListener(e -> {
             String nombre; 
             if (tipo.equals("Eliminar Producto")) {
@@ -166,7 +162,7 @@ public class VistaConfiguracion extends JPanel{
             cargarCategoriasEnCombo(comboCategorias);
         }
 
-        Boton botonGuardar = new Boton("Guardar");
+        Boton botonGuardar = new Boton("Guardar", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonGuardar.addActionListener(e -> {
             String nombre = campoNombre.getText();
 

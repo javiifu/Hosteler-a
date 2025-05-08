@@ -13,6 +13,7 @@ public class ColorPaleta {
     public static final Color TEXTO_PRINCIPAL_CLARO = new Color(0x333333);  // Gris oscuro (sobre fondos claros)
     public static final Color TEXTO_SECUNDARIO_CLARO = new Color(0x777777);  // Gris más claro (sobre fondos claros)
     public static final Color ENFASIS_ACCION = new Color(0x00FF7F);    // Verde lima brillante
+    public static final Color HOVER_ENFASIS_ACCION = new Color(0x00CC66); // Verde brillante (hover)
     public static final Color HOVER_PRIMARIO = new Color(0x0056b3);    // Azul ligeramente más oscuro (hover)
     public static final Color HOVER_SECUNDARIO = new Color(0x5a6268);  // Gris ligeramente más claro (hover)
     public static final Color HOVER_ACENTO = new Color(0xcc3700);      // Rojo ligeramente más oscuro (hover)

@@ -183,7 +183,7 @@ public class ProductoDAO {
         Connection conexion = ConexionBD.conectar();
         Producto producto = null;
         if(conexion != null){
-            String query = "SELECT * FROM Productos WHERE codigo=" + codigo;
+            String query = "SELECT * FROM Producto WHERE codigo=" + codigo;
             try (Statement stmt = conexion.createStatement();
                 ResultSet rs = stmt.executeQuery(query)) {
                 

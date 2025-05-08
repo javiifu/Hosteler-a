@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS Pedido (
     numero_mesa INT,
     completado BOOLEAN DEFAULT FALSE,
     pagado BOOLEAN DEFAULT FALSE,
-    tipo_pago ENUM('EFECTIVO', 'TARJETA') DEFAULT 'EFECTIVO',
+    tipo_pago ENUM('EFECTIVO', 'TARJETA'),
     FOREIGN KEY (numero_mesa) REFERENCES Mesa(numero)
     );
 

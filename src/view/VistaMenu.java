@@ -29,12 +29,11 @@ public class VistaMenu extends JPanel {
 
     public VistaMenu(TPVMain tpvMain) {
         this.tpvMain = tpvMain;
-        this.mesaSeleccionada = mesaSeleccionada;
 
         setLayout(new BorderLayout());
         setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
-        // Titulo
+        // Título
         JLabel titulo = new JLabel("Menu - Mesa ", SwingConstants.CENTER);
         titulo.setForeground(ColorPaleta.TEXTO_PRINCIPAL_CLARO);
         add(titulo, BorderLayout.NORTH);
@@ -84,6 +83,7 @@ public class VistaMenu extends JPanel {
         areaPedido.setBackground(ColorPaleta.TEXTAREA_FONDO);
         areaPedido.setForeground(ColorPaleta.TEXTAREA_TEXTO);
         areaPedido.setBorder(BorderFactory.createTitledBorder("Pedido Actual"));
+        areaPedido.setText("No hay productos en el pedido."); // Mensaje inicial
         add(new JScrollPane(areaPedido), BorderLayout.EAST); // Siempre visible en el lado derecho
 
         // Panel inferior para botones
@@ -168,9 +168,6 @@ public class VistaMenu extends JPanel {
         JLabel titulo = (JLabel) getComponent(0);
         titulo.setText("Menu - Mesa " + numeroMesa);
 
-        // Limpiar el área de texto del pedido
-        areaPedido.setText("");
-
         // Reiniciar la lista de productos del pedido
         productosDelPedido.clear();
 
@@ -228,17 +225,21 @@ public class VistaMenu extends JPanel {
 
     private void actualizarAreaPedido() {
         areaPedido.setText(""); // Limpiar el área de texto
-        for (PedidoPlato pedidoPlato : productosDelPedido) {
+        if (productosDelPedido.isEmpty()) {
+            areaPedido.setText("No hay productos en el pedido."); // Mensaje si no hay productos
+        } else {
             ProductoDAO productoDAO = new ProductoDAO();
-            Producto producto = productoDAO.buscarProductoByID(pedidoPlato.getCodigoProducto());
-            if (producto != null) {
-                areaPedido.append(producto.getNombre() + " x " + pedidoPlato.getCantidad() + "\n");
+            for (PedidoPlato pedidoPlato : productosDelPedido) {
+                Producto producto = productoDAO.buscarProductoByID(pedidoPlato.getCodigoProducto());
+                if (producto != null) {
+                    areaPedido.append(producto.getNombre() + " x " + pedidoPlato.getCantidad() + "\n");
+                }
             }
         }
     }
 
     private void guardarPedido() {
-        if(mesaSeleccionada == null) {
+        if (mesaSeleccionada == null) {
             JOptionPane.showMessageDialog(this, "No hay mesa seleccionada", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -249,15 +250,14 @@ public class VistaMenu extends JPanel {
         }
 
         PedidoDAO pedidoDAO = new PedidoDAO();
-        Pedido pedido = new Pedido(mesaSeleccionada.getNumero());
+        Pedido pedido = obtenerPedidoActual(); // Obtener el pedido actual
         boolean resultado = pedidoDAO.insertarPedidoConPlatos(pedido, productosDelPedido);
-    
+
         if (resultado) {
             JOptionPane.showMessageDialog(this, "Pedido guardado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "Error al guardar el pedido", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
     }
-    }
+}
 

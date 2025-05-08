@@ -39,15 +39,15 @@ public class TPVMain extends JFrame implements ActionListener {
         JPanel panelInicial = new JPanel(new GridLayout(3, 1, 20, 20));
         panelInicial.setBackground(ColorPaleta.FONDO_PRINCIPAL);
 
-        Boton botonMesas = new Boton("Gestionar Mesas");
+        Boton botonMesas = new Boton("Gestionar Mesas",ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
         botonMesas.setActionCommand("Mesas");
         botonMesas.addActionListener(this);
 
-        Boton botonMenu = new Boton("Gestionar Menu");
+        Boton botonMenu = new Boton("Gestionar Menu",ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
         botonMenu.setActionCommand("Menu");
         botonMenu.addActionListener(this);
 
-        Boton botonConfiguracion = new Boton("Configuracion");
+        Boton botonConfiguracion = new Boton("Configuracion",ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
         botonConfiguracion.setActionCommand("Configuracion");
         botonConfiguracion.addActionListener(this);
 

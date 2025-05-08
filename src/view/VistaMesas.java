@@ -29,7 +29,7 @@ public class VistaMesas extends JPanel {
         ArrayList<Mesa> mesas = mesaDAO.getMesas();  // Obtener el número de mesas desde la configuración
         for (int i = 0; i < mesas.size(); i++) {
             int numeroMesa = mesas.get(i).getNumero(); // Crear botones según el número de mesas configurado
-            Boton botonMesa = new Boton("Mesa " + numeroMesa); // Crear botón para cada mesa
+            Boton botonMesa = new Boton("Mesa " + numeroMesa, ColorPaleta.PRIMARIO, ColorPaleta.HOVER_PRIMARIO); // Crear botón para cada mesa
             botonMesa.setActionCommand("Mesa " + numeroMesa); // Establecer el comando de acción del botón
             botonMesa.addActionListener(tpvMain); // Usar tpvMain como ActionListener
             botonMesa.addActionListener(e -> {
@@ -42,7 +42,7 @@ public class VistaMesas extends JPanel {
         }
         add(new JScrollPane(panelMesas), BorderLayout.CENTER); // Añadir panel de mesas a la parte central
 
-        Boton botonMenu = new Boton("Ir al Menu"); // Crear botón para ir al menú
+        Boton botonMenu = new Boton("Ir al Menu", ColorPaleta.VOLVER, ColorPaleta.HOVER_VOLVER); // Crear botón para ir al menú
         botonMenu.addActionListener(e -> {
             tpvMain.mostrarVista("Inicio");
         }); 

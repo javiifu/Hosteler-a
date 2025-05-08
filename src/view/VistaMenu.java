@@ -89,11 +89,11 @@ public class VistaMenu extends JPanel {
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         panelBotones.setBackground(ColorPaleta.FONDO_SECUNDARIO);
 
-        Boton botonVolver = new Boton("Volver a las Mesas");
+        Boton botonVolver = new Boton("Volver a las Mesas", ColorPaleta.VOLVER, ColorPaleta.HOVER_VOLVER);
         botonVolver.addActionListener(e -> tpvMain.mostrarVista("Mesas"));
         panelBotones.add(botonVolver);
 
-        Boton botonCobrar = new Boton("Cobrar");
+        Boton botonCobrar = new Boton("Cobrar", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonCobrar.addActionListener(e -> {
             Pedido pedidoActual = obtenerPedidoActual();
             tpvMain.getVistaCobro().setPedidoActual(pedidoActual);

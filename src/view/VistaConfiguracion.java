@@ -49,7 +49,7 @@ public class VistaConfiguracion extends JPanel{
         add(panelOpciones, BorderLayout.CENTER);
 
         // Botón para volver al menú principal
-        JButton botonVolver = new JButton("Volver");
+        Boton botonVolver = new Boton("Volver", ColorPaleta.VOLVER, ColorPaleta.HOVER_VOLVER);
         botonVolver.addActionListener(e -> tpvMain.mostrarVista("Inicio"));
         add(botonVolver, BorderLayout.SOUTH);
     }

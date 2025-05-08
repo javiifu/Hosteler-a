@@ -58,7 +58,7 @@ public class VistaCobro extends JPanel implements ActionListener {
         // JPanel para botón de volver (SOUTH)
         JPanel volverPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         volverPanel.setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
-        volverButton = new Boton("Volver",ColorPaleta.ACENTO, ColorPaleta.HOVER_ACENTO);
+        volverButton = new Boton("Volver",ColorPaleta.VOLVER, ColorPaleta.HOVER_VOLVER);
         volverButton.setActionCommand("volver");
         volverButton.addActionListener(this);
         volverPanel.add(volverButton);

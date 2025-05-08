@@ -147,15 +147,20 @@ public class VistaMenu extends JPanel {
         } else {
             pedido = new Pedido(numeroMesa);
             pedidoDAO.insertarPedido(pedido);
+            pedido = pedidoDAO.obtenerPedidoPorMesa(numeroMesa);
         }
+        double precio = 0;
         if (productoSeleccionado != null) {
             areaPedido.append(productoSeleccionado.getNombre() + "\n");
             int codigo = productoSeleccionado.getCodigo();
             PedidoPlato nuevoPedido = new PedidoPlato(codigo);
             nuevoPedido.setPedidoId(pedido.getId());
             pedidoPlato.add(nuevoPedido);
+            precio += productoSeleccionado.getPrecio();
         }
         pedidoDAO.insertarPlatosEnPedido(pedidoPlato);
+
+        pedidoDAO.sumarPrecioPedido(pedido, precio);
     }
 
     public void setMesaSeleccionada(int numeroMesa) {

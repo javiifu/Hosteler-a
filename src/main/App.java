@@ -103,16 +103,23 @@ public class App {
     
         btn_login.addActionListener(e -> {
             String user = txt_user.getText();
-            String password = txt_pass.getText(); //no entiendo porque aquí se tacha el getText.
+            String password = txt_pass.getText();
 
             if (UserDataDAO.validarCredenciales(user, password)) {
                 currentUser[0] = UserDataDAO.obtenerUsuario(user);
                 JOptionPane.showMessageDialog(dialog, "Bienvenido " + user);
-                HistorialSesionesDAO.newLog(new LogSesion("INICIO_SESION", "Inicio de sesion del usuario " + user, Date.valueOf(java.time.LocalDate.now()), Time.valueOf(java.time.LocalTime.now()), currentUser[0].getId())); //Porque me da error esta
+                HistorialSesionesDAO.newLog(new LogSesion(
+                    "INICIO_SESION",
+                    "Inicio de sesion del usuario " + user,
+                    Date.valueOf(java.time.LocalDate.now()),
+                    Time.valueOf(java.time.LocalTime.now()),
+                    currentUser[0].getId()
+                ));
                 dialog.dispose();
-                // Iniciar la aplicacion princial (TPVMain)
+
+                // Iniciar la aplicación principal (TPVMain)
                 SwingUtilities.invokeLater(() -> {
-                    TPVMain tpvMain = new TPVMain(currentUser[0]);
+                    TPVMain tpvMain = new TPVMain(currentUser[0]); // Usa el nuevo constructor
                     tpvMain.setVisible(true);
                 });
             } else {

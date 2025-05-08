@@ -150,4 +150,8 @@ public class VistaCobro extends JPanel implements ActionListener {
         this.pedidoActual = pedido;
         actualizarVistaInicial(); // Actualiza la vista inicial sin detalles
     }
+
+    public void setApp(App app) {
+        this.app = app;
+    }
 }

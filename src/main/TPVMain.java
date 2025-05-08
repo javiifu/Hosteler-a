@@ -18,16 +18,28 @@ public class TPVMain extends JFrame implements ActionListener {
     private VistaMenu vistaMenu;
     private VistaConfiguracion vistaConfiguracion;
     private VistaCobro vistaCobro;
+    private App app;
     private UserData userData;
 
-    public TPVMain(UserData userData) {
+    // Constructor principal que recibe UserData y App
+    public TPVMain(UserData userData, App app) {
         this.userData = userData;
+        this.app = app;
+        inicializar();
+    }
+
+    // Nuevo constructor que solo recibe UserData
+    public TPVMain(UserData userData) {
+        this(userData, new App()); // Llama al constructor principal y crea una nueva instancia de App
+    }
+
+    private void inicializar() {
         setTitle("TPV - Restaurante/Bar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null); // Centra la ventana en la pantalla
         setBackground(ColorPaleta.FONDO_PRINCIPAL); // Color de fondo gris oscuro
-        
+
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
@@ -36,39 +48,42 @@ public class TPVMain extends JFrame implements ActionListener {
 
         vistaMesas = new VistaMesas(this);
         vistaMenu = new VistaMenu(this);
-        vistaConfiguracion = new VistaConfiguracion(this); 
+        vistaConfiguracion = new VistaConfiguracion(this);
         vistaCobro = new VistaCobro(this, null); // Inicializa con un pedido nulo
-        // Panel inicial con botones
+        vistaCobro.setApp(app); // Inyectar la instancia de App en VistaCobro
+
+        // Configurar panel inicial con botones
         JPanel panelInicial = new JPanel(new GridLayout(3, 1, 20, 20));
         panelInicial.setBackground(ColorPaleta.FONDO_PRINCIPAL);
 
-        Boton botonMesas = new Boton("Gestionar Mesas",ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
+        Boton botonMesas = new Boton("Gestionar Mesas", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
         botonMesas.setActionCommand("Mesas");
         botonMesas.addActionListener(this);
 
-        Boton botonMenu = new Boton("Gestionar Menu",ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
+        Boton botonMenu = new Boton("Gestionar Menu", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
         botonMenu.setActionCommand("Menu");
         botonMenu.addActionListener(this);
 
-        Boton botonConfiguracion = new Boton("Configuracion",ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
+        Boton botonConfiguracion = new Boton("Configuracion", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
         botonConfiguracion.setActionCommand("Configuracion");
         botonConfiguracion.addActionListener(this);
 
         panelInicial.add(botonMesas);
         panelInicial.add(botonMenu);
         panelInicial.add(botonConfiguracion);
-        
+
         mainPanel.add(panelInicial, "Inicio");
         mainPanel.add(vistaMesas, "Mesas");
         mainPanel.add(vistaMenu, "Menu");
-        mainPanel.add(vistaConfiguracion, "Configuracion"); 
+        mainPanel.add(vistaConfiguracion, "Configuracion");
         mainPanel.add(vistaCobro, "Cobro");
 
         add(mainPanel);
 
-        cardLayout.show(mainPanel, "Inicio"); // Muestra la vista de Mesas al inicio
+        cardLayout.show(mainPanel, "Inicio"); // Muestra la vista inicial
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
         switch (command) {
@@ -79,7 +94,7 @@ public class TPVMain extends JFrame implements ActionListener {
                 cardLayout.show(mainPanel, "Mesas");
                 break;
             case "Configuracion":
-                if(userData.isAdmin()) {
+                if (userData.isAdmin()) {
                     cardLayout.show(mainPanel, "Configuracion");
                 } else {
                     JOptionPane.showMessageDialog(this, "No tienes permisos para acceder a esta sección.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);

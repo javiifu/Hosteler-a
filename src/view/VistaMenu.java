@@ -22,8 +22,8 @@ public class VistaMenu extends JPanel {
     private JList<Categoria> listaCategorias;
     private JList<Producto> listaProductos;
     private JTextArea areaPedido;
-    private JButton botonVolver;
-    private JButton botonCobrar;
+    private Boton botonVolver;
+    private Boton botonCobrar;
     private CardLayout cardLayoutCentral;
     private JPanel panelCentral;
 
@@ -95,12 +95,9 @@ public class VistaMenu extends JPanel {
 
         Boton botonCobrar = new Boton("Cobrar", ColorPaleta.ENFASIS_ACCION, ColorPaleta.HOVER_ENFASIS_ACCION);
         botonCobrar.addActionListener(e -> {
-            guardarPedido();
+            guardarPedido(); // Guardar el pedido antes de cambiar de vista
             Pedido pedidoActual = obtenerPedidoActual();
-            PedidoDAO pedidoDAO = new PedidoDAO();
-            pedidoDAO.cambiarEstadoCompletado(pedidoActual.getId());
-
-            tpvMain.getVistaCobro().setPedidoActual(pedidoActual);
+            tpvMain.getVistaCobro().setPedidoActual(pedidoActual); // Pasar el pedido actual a VistaCobro
             tpvMain.mostrarVista("Cobro");
         });
         panelBotones.add(botonCobrar);
@@ -137,7 +134,7 @@ public class VistaMenu extends JPanel {
         }
     }
 
-    private void agregarProductoAPedido() {
+    private void agregarProductoAPedidoTabla() {
         
         Producto productoSeleccionado = listaProductos.getSelectedValue();
         ArrayList<PedidoPlato> pedidoPlato = new ArrayList<>();

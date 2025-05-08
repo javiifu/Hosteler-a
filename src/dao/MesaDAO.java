@@ -75,6 +75,27 @@ public class MesaDAO {
         }
     }
 
+    // Metodo para desactivar la mesa
+    public void desactivarMesa(int num_mesa) {
+        String sql = "UPDATE Mesa SET activo = NOT activo WHERE numero = ?";
+        Connection conexion = ConexionBD.conectar();
+        try {
+            PreparedStatement statement = conexion.prepareStatement(sql);
+            statement.setInt(1, num_mesa);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al desactivar la mesa: " + e.getMessage());
+        } finally {
+            try {
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }
+    }
+
     public void newMesa(Mesa mesa){
         String sql = "INSERT INTO Mesa (numero, estado) VALUES (?, ?)";
         Connection conexion = ConexionBD.conectar();

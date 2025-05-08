@@ -137,7 +137,7 @@ public class App {
             factura.append("<tr><td>"+entry.getKey().getNombre()+"</td><td>"+entry.getValue()+"</td><td>"+entry.getKey().getPrecio()+"</td></tr>");
             total += entry.getKey().getPrecio() * entry.getValue();
         }
-        factura.append("</table><div class=\"totales\"><table class=\"tabla\"><tr><td class=\"total\">Total sin IVA</td><td class=\"total\">"+total+"</td></tr><tr><td class=\"total\">IVA (10%)</td><td class=\"total\">"+total*0.10+"</td></tr><tr><td class=\"total\">Total con IVA</td><td class=\"total\">"+(total + total*0.10)+"</td></tr><tr><td class=\"total\">Tipo de pago</td><td class=\"total\">"+pedido.getTipo_pago()+"</td></tr></table></div></div></body></html>");
+        factura.append("</table><div class=\"totales\"><table class=\"tabla\"><tr><td class=\"total\">Total sin IVA</td><td class=\"total\">"+total+"</td></tr><tr><td class=\"total\">IVA (10%)</td><td class=\"total\">"+total*0.10+"</td></tr><tr><td class=\"total\">Total con IVA</td><td class=\"total\">"+(total + total*0.10)+"</td></tr></table></div></div></body></html>");
 
         String html = factura.toString();
         String nombreArchivo = "factura_" + pedido.getId() + ".html";

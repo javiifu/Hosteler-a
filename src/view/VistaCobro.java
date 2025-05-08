@@ -118,7 +118,6 @@ public class VistaCobro extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(this, "Pago en efectivo seleccionado. Proceda con el cobro.");
             PedidoDAO pedidoDAO = new PedidoDAO();
             pedidoDAO.cambiarEstadoPagado(pedidoActual.getId());
-            pedidoDAO.cambiarEstadoCompletado(pedidoActual.getId());
             pedidoDAO.setMetodoPago(pedidoActual.getId(), "EFECTIVO");
 
         } else if ("tarjeta".equals(comando)) {
@@ -126,7 +125,6 @@ public class VistaCobro extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(this, "Pago con tarjeta seleccionado. Proceda con el cobro.");
             PedidoDAO pedidoDAO = new PedidoDAO();
             pedidoDAO.cambiarEstadoPagado(pedidoActual.getId());
-            pedidoDAO.cambiarEstadoCompletado(pedidoActual.getId());
             pedidoDAO.setMetodoPago(pedidoActual.getId(), "TARJETA");
 
         }

@@ -43,7 +43,7 @@ public class ProductoDAO {
             
 
         if(conexion != null){
-            String query = "DELETE * Producto WHERE id =" + id;
+            String query = "UPDATE Producto SET activo = FALSE WHERE id =" + id;
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
 
@@ -63,7 +63,7 @@ public class ProductoDAO {
        
  
     if (conexion != null) {
-        String query = "DELETE FROM Producto WHERE nombre = ?";
+        String query = "UPDATE Producto SET activo = FALSE WHERE nombre = ?";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, nombre);
@@ -259,7 +259,7 @@ public class ProductoDAO {
         Connection conexion = ConexionBD.conectar();
     
         if (conexion != null) {
-            String query = "SELECT p.nombre FROM Producto p INNER JOIN Categoria c ON p.id_categoria = c.id WHERE c.nombre = ?";
+            String query = "SELECT p.nombre FROM Producto p INNER JOIN Categoria c ON p.id_categoria = c.id WHERE c.nombre = ? AND p.activo = TRUE";
     
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {
                 stmt.setString(1, nombreCategoria);

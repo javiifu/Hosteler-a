@@ -53,23 +53,20 @@ public class TPVMain extends JFrame implements ActionListener {
         vistaCobro.setApp(app); // Inyectar la instancia de App en VistaCobro
 
         // Configurar panel inicial con botones
-        JPanel panelInicial = new JPanel(new GridLayout(3, 1, 20, 20));
+        JPanel panelInicial = new JPanel(new GridLayout(2, 1, 10, 10));
         panelInicial.setBackground(ColorPaleta.FONDO_PRINCIPAL);
 
         Boton botonMesas = new Boton("Gestionar Mesas", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
         botonMesas.setActionCommand("Mesas");
         botonMesas.addActionListener(this);
 
-        Boton botonMenu = new Boton("Gestionar Menu", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
-        botonMenu.setActionCommand("Menu");
-        botonMenu.addActionListener(this);
+        
 
         Boton botonConfiguracion = new Boton("Configuracion", ColorPaleta.SECUNDARIO, ColorPaleta.HOVER_SECUNDARIO);
         botonConfiguracion.setActionCommand("Configuracion");
         botonConfiguracion.addActionListener(this);
 
         panelInicial.add(botonMesas);
-        panelInicial.add(botonMenu);
         panelInicial.add(botonConfiguracion);
 
         mainPanel.add(panelInicial, "Inicio");

@@ -64,11 +64,11 @@ public class VistaMenu extends JPanel {
         DefaultListModel<Producto> modeloProductos = new DefaultListModel<>();
         listaProductos = new JList<>(modeloProductos);
         listaProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listaProductos.addMouseListener(new MouseAdapter() {    
-            @Override 
+        listaProductos.addMouseListener(new MouseAdapter() {    //Esta parte es para agregar el producto al pedido al hacer doble click 
+            @Override //realizamos un overrida para el evento de click
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-              agregarProductoAPedido();
+                if (e.getClickCount() == 2) { // Aqui es el verificador de si se hace doble click. 
+              agregarProductoAPedido();//llamamos al metodo agregar producto al pedido
                 }   
             }
         });

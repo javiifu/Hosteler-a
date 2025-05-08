@@ -194,9 +194,12 @@ public class VistaMenu extends JPanel {
         Producto productoSeleccionado = listaProductos.getSelectedValue();
         if (productoSeleccionado != null)  {
             areaPedido.append(productoSeleccionado.getNombre() + "\n");
+
             int codigo = productoSeleccionado.getCodigo();
             PedidoPlato nuevoPedidoPlato = new PedidoPlato(codigo, 1);
             productosDelPedido.add(nuevoPedidoPlato);
+
+            listaProductos.clearSelection(); // Deselecionar el prodcuto
         }
     }
 

@@ -422,4 +422,19 @@ public class PedidoDAO {
             
         }
     }
+
+    public void insertarPlatosEnPedido(ArrayList<PedidoPlato> platos) {
+        String query = "INSERT INTO Pedido_plato (id_pedido, codigo_plato) VALUES (?, ?)";
+        Connection conexion = ConexionBD.conectar();
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            for (PedidoPlato plato : platos) {
+                stmt.setInt(1, plato.getPedidoId());
+                stmt.setInt(2, plato.getCodigoProducto());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al insertar los platos en el pedido: " + e.getMessage());
+        }
+    }
 }

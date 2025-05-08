@@ -139,14 +139,23 @@ public class VistaMenu extends JPanel {
         ArrayList<PedidoPlato> pedidoPlato = new ArrayList<>();
         PedidoDAO pedidoDAO = new PedidoDAO();
         int numeroMesa = mesaSeleccionada.getNumero(); 
-        Pedido pedido = new Pedido(numeroMesa);
+
+        Pedido pedidoMesa = pedidoDAO.obtenerPedidoPorMesa(numeroMesa);
+        Pedido pedido;
+        if (pedidoMesa != null) {
+            pedido = pedidoMesa;
+        } else {
+            pedido = new Pedido(numeroMesa);
+            pedidoDAO.insertarPedido(pedido);
+        }
         if (productoSeleccionado != null) {
             areaPedido.append(productoSeleccionado.getNombre() + "\n");
             int codigo = productoSeleccionado.getCodigo();
             PedidoPlato nuevoPedido = new PedidoPlato(codigo);
+            nuevoPedido.setPedidoId(pedido.getId());
             pedidoPlato.add(nuevoPedido);
         }
-        pedidoDAO.insertarPedidoConPlatos(pedido, pedidoPlato);
+        pedidoDAO.insertarPlatosEnPedido(pedidoPlato);
     }
 
     public void setMesaSeleccionada(int numeroMesa) {

@@ -323,7 +323,7 @@ public class PedidoDAO {
     public void cambiarEstadoPagado(int idPedido) {
         try (Connection conexion = ConexionBD.conectar()) {
             if (conexion != null) {
-                String query = "UPDATE Pedido SET pagado = NOT pagado WHERE id = ?";
+                String query = "UPDATE Pedido SET pagado = TRUE WHERE id = ? AND pagado = FALSE";
                 
                 try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             
@@ -392,15 +392,15 @@ public class PedidoDAO {
     }
 
     public Pedido obtenerPedidoPorMesa(int numeroMesa) {
-        String query = "SELECT * FROM Pedido WHERE numero_mesa = ? AND completado = FALSE ORDER BY hora_pedido DESC LIMIT 1";
+        String query = "SELECT * FROM Pedido WHERE numero_mesa = ? AND pagado = FALSE ORDER BY hora_pedido DESC LIMIT 1";
         Connection conexion = ConexionBD.conectar();
         Pedido pedido = null;
-
-        if (conexion != null) {
+    
+        if (conexion !=null) {
             try (PreparedStatement stmt = conexion.prepareStatement(query)) {
                 stmt.setInt(1, numeroMesa);
                 ResultSet rs = stmt.executeQuery();
-
+    
                 if (rs.next()) {
                     pedido = new Pedido(
                         rs.getInt("id"),
@@ -425,9 +425,10 @@ public class PedidoDAO {
                 }
             }
         }
-
+    
         return pedido;
     }
+    
 
     public void insertarPedido(Pedido pedido) {
         String query = "INSERT INTO Pedido (precio_total, numero_mesa, completado, pagado, tipo_pago, fecha_pedido) VALUES (?, ?, ?, ?, ?, ?)";

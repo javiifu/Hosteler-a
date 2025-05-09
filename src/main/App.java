@@ -245,7 +245,7 @@ public class App {
         resumen.append("<tr><td class=\"total\">Total sin IVA</td><td class=\"total\">"+total+"</td></tr><tr><td class=\"total\">IVA(10%)</td><td class=\"total\">"+String.format("%.2f",total*0.10)+"</td></tr><tr><td class=\"total\" con IVA</td></tr><td class=\"total\">Total con IVA</td><td class=\"total\">"+String.format("%.2f",(total + total*0.10))+"</td></tr></table></div></div></body></html>");
 
         String html = resumen.toString();
-        String nombreArchivo = "resumen_" + fecha.toString()+"_"+hora.toString() + ".html";
+        String nombreArchivo = "resumen_" + fecha.toString()+"_"+hora.getHours()+"-"+hora.getMinutes()+"-"+hora.getSeconds() +".html";
         
         try (java.io.FileWriter fileWriter = new java.io.FileWriter(nombreArchivo)) {
             fileWriter.write(html);

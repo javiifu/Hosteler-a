@@ -10,102 +10,57 @@ import java.util.Map;
 
 public class CategoriaDAO {
     
- public void crearCategoria( String nombre){
-   
-        Connection conexion = ConexionBD.conectar();
-       
-        if(conexion != null){
-
-        String query = "INSERT INTO Categoria (nombre) VALUES (?)";
-
-        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-
-            
-            stmt.setString(1, nombre);
+    public void crearCategoria( String nombre){
+    
+            Connection conexion = ConexionBD.conectar();
         
-            stmt.executeUpdate();
+            if(conexion != null){
 
-            System.out.println("Categoría creada con exito");
+            String query = "INSERT INTO Categoria (nombre) VALUES (?)";
 
-        } catch (SQLException e) {
+            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
 
-            System.out.println("error al introducir datos" +e.getMessage());
+                
+                stmt.setString(1, nombre);
+            
+                stmt.executeUpdate();
 
-        }
-    }
- }  
- 
- public void borrarCategoria(int id) {
-    Connection conexion = ConexionBD.conectar();
+                System.out.println("Categoría creada con exito");
 
-    if (conexion != null) {
-        String desactivarCategoria = "UPDATE Categoria SET activo = FALSE WHERE id = ?";
-        String desactivarProductos = "UPDATE Producto SET activo = FALSE WHERE id_categoria = ?";
+            } catch (SQLException e) {
 
-        try (
-            PreparedStatement stmtCategoria = conexion.prepareStatement(desactivarCategoria);
-            PreparedStatement stmtProducto = conexion.prepareStatement(desactivarProductos)
-        ) {
-            // Desactivar la categoría
-            stmtCategoria.setInt(1, id);
-            stmtCategoria.executeUpdate();
-
-            // Desactivar los productos de esa categoría
-            stmtProducto.setInt(1, id);
-            stmtProducto.executeUpdate();
-
-            System.out.println("Categoría y productos desactivados correctamente.");
-        } catch (SQLException e) {
-            System.out.println("Error al desactivar la categoría o productos: " + e.getMessage());
-        }
-    }
-}
-
-
- public void modificarNombreCategoria(String nombre, String nuevonombre){
-
-    Connection conexion = ConexionBD.conectar();
-    if(conexion != null){
-        String query = "UPDATE Categoria SET nombre = "+nuevonombre+" WHERE nombre=" + nombre;
-
-        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-
-          
-            stmt.executeUpdate();
-            System.out.println("los datos se han actualizado con exito");
-
-        } catch (SQLException e) {
-
-            System.out.println("error al borrar los datos");
-
-        }
-        }
-    }
-
-    public void mostrarCategorias(){
-
-        Connection conexion = ConexionBD.conectar();
-        if(conexion != null){
-            String query = "SELECT * FROM Categoria";
-        try (Statement stmt = conexion.createStatement();
-                ResultSet rs = stmt.executeQuery(query)) {
-
-            while (rs.next()) {
-                System.out.println("ID: " + rs.getInt("id"));
-                System.out.println("Nombre: " + rs.getString("nombre"));
-
-                System.out.println("-------------------------");
+                System.out.println("error al introducir datos" +e.getMessage());
 
             }
-
-        } catch (SQLException e) {
-            System.out.println("error al realizar la consulta" + e.getMessage());
-
         }
-        }
-
-    }
+    }  
     
+    public void borrarCategoria(int id) {
+        Connection conexion = ConexionBD.conectar();
+
+        if (conexion != null) {
+            String desactivarCategoria = "UPDATE Categoria SET activo = FALSE WHERE id = ?";
+            String desactivarProductos = "UPDATE Producto SET activo = FALSE WHERE id_categoria = ?";
+
+            try (
+                PreparedStatement stmtCategoria = conexion.prepareStatement(desactivarCategoria);
+                PreparedStatement stmtProducto = conexion.prepareStatement(desactivarProductos)
+            ) {
+                // Desactivar la categoría
+                stmtCategoria.setInt(1, id);
+                stmtCategoria.executeUpdate();
+
+                // Desactivar los productos de esa categoría
+                stmtProducto.setInt(1, id);
+                stmtProducto.executeUpdate();
+
+                System.out.println("Categoría y productos desactivados correctamente.");
+            } catch (SQLException e) {
+                System.out.println("Error al desactivar la categoría o productos: " + e.getMessage());
+            }
+        }
+    }
+        
     public ArrayList<String> nombresCategoriaArray(){
         Connection conexion = ConexionBD.conectar();
         ArrayList<String> nombresCategorias = new ArrayList<>();
@@ -124,8 +79,6 @@ public class CategoriaDAO {
         return null;
     }
     
-    
-
     public static Map<Integer, String> obtenerCategorias() {
         Map<Integer, String> categorias = new HashMap<>();
         Connection conexion = ConexionBD.conectar();

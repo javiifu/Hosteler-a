@@ -341,6 +341,16 @@ public class VistaConfiguracion extends JPanel{
 
         JLabel labelMesa = new JLabel("Número de la mesa:");
         JTextField campoNumero = new JTextField();
+        try {
+            int numeroMesa = Integer.parseInt(campoNumero.getText());
+            if (numeroMesa < 0) {
+            JOptionPane.showMessageDialog(dialog, "El número de la mesa no puede ser negativo", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(dialog, "Ingrese un número válido para la mesa", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         
         if (tipo.equalsIgnoreCase("Eliminar Mesa")) {
             cargarNumerosMesaCombo(comboMesas);

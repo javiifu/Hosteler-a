@@ -372,7 +372,7 @@ public class VistaConfiguracion extends JPanel{
                 mesaDAO.newMesa(mesa);
                 JOptionPane.showMessageDialog(dialog, "Mesa creada con exito");      
             } else if (tipo.equals("Eliminar Mesa")) {
-                mesaDAO.desactivarMesa(numero);
+                mesaDAO.deleteMesa(numero);
                 JOptionPane.showMessageDialog(dialog, "Mesa eliminada con exito");
             }
 

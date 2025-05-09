@@ -101,9 +101,24 @@ public class VistaConfiguracion extends JPanel{
 
         JDialog dialog = new JDialog(tpvMain, tipo, true);
         dialog.setSize(600, 250);
-        dialog.setLayout(new GridLayout(4, 4, 10, 10));
         dialog.setLocationRelativeTo(this);
 
+        int numeroFilas = 0;
+        int numeroColumnas = 0;
+
+        if (tipo.equals("Crear Producto")) {
+            numeroFilas = 3; 
+            numeroColumnas = 4; 
+        } else if (tipo.equals("Eliminar Producto")) {
+            numeroFilas = 3; 
+            numeroColumnas = 2; 
+
+        } else if (tipo.equals("Modificar Producto")) {
+            numeroFilas = 4; 
+            numeroColumnas = 3; 
+        }
+        dialog.setLayout(new GridLayout(numeroFilas, numeroColumnas, 10, 10));
+        
         JLabel labelNombre = new JLabel("Nombre del Producto:");
         JLabel labelNuevoNombre = new JLabel("Nuevo nombre:");
         JTextField campoNombre = new JTextField();
@@ -123,10 +138,6 @@ public class VistaConfiguracion extends JPanel{
                 cargarProductosPorCategoriaEnCombo(comboProductos, (String) comboCategorias.getSelectedItem());
             }
         }
-
-        
-       /* JLabel labelDescripcion = new JLabel("Descripción:");
-        JTextArea campoDescripcion = new JTextArea(); */
 
         JLabel labelDescripcion = new JLabel("Descripción:");
         JTextField campoDescripcion = new JTextField();
@@ -268,10 +279,14 @@ public class VistaConfiguracion extends JPanel{
             dialog.add(campoPrecio);
             dialog.add(labelCategoria);
         }
+        //comunes para crear, modificar y eliminar
         dialog.add(comboCategorias);
         dialog.add(new JLabel()); // Espacio vacio
-        dialog.add(botonGuardar);
 
+        dialog.add(botonGuardar);
+        if (tipo.equals("Crear Producto")) {
+            dialog.add(new JLabel()); // Espacio vacio para que no se descuadre
+        }
         dialog.setVisible(true); // Mostrar el diálogo
         
     }

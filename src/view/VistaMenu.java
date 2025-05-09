@@ -132,6 +132,12 @@ public class VistaMenu extends JPanel {
             }
         });
         panelBotonesPrincipal.add(botonCobrar);
+        
+        // Botón para actualizar categorías
+        Boton botonActualizarCategorias = new Boton("Actualizar Categorías", ColorPaleta.PRIMARIO, ColorPaleta.HOVER_PRIMARIO);
+        botonActualizarCategorias.addActionListener(e -> cargarCategorias());
+        panelBotonesPrincipal.add(botonActualizarCategorias);
+        
         add(panelBotonesPrincipal, BorderLayout.SOUTH);
 
         // Cargar categorías al iniciar
@@ -142,11 +148,11 @@ public class VistaMenu extends JPanel {
         CategoriaDAO categoriaDAO = new CategoriaDAO();
         Map<Integer, String> nombresCategorias = categoriaDAO.obtenerCategorias();
         DefaultListModel<Categoria> modeloCategorias = (DefaultListModel<Categoria>) listaCategorias.getModel();
-        modeloCategorias.clear();
+        modeloCategorias.clear(); // Limpiar la lista de categorías existente
         for (Map.Entry<Integer, String> entry : nombresCategorias.entrySet()) {
-            modeloCategorias.addElement(new Categoria(entry.getKey(), entry.getValue()));
+            modeloCategorias.addElement(new Categoria(entry.getKey(), entry.getValue())); // Agregar las categorías actualizadas
         }
-        cardLayoutCentral.show(panelCentral, "Categorias");
+        cardLayoutCentral.show(panelCentral, "Categorias"); // Mostrar la vista de categorías
     }
 
     private void cargarProductosDeCategoria() {

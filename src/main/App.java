@@ -5,7 +5,9 @@ import dao.ConexionBD;
 import dao.HistorialSesionesDAO;
 import dao.PedidoDAO;
 import dao.UserDataDAO;
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Time;
@@ -13,13 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import model.LogSesion;
 import model.Pedido;
@@ -82,55 +87,70 @@ public class App {
 
     public static UserData iniciarSesion(JFrame frame) {
     JDialog dialog = new JDialog(frame, "Inicio de Sesión", true);
-    dialog.setSize(300, 200);
-    dialog.setLayout(new FlowLayout());
-    dialog.setUndecorated(true);
+    dialog.setSize(350, 200);
+    dialog.setLayout(new BorderLayout());
+    dialog.setUndecorated(false); 
     dialog.setLocationRelativeTo(frame);
 
+    // titulo
+    JLabel lblTitulo = new JLabel("Bienvenido a la gestión del restaurante", SwingConstants.CENTER);
+    lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0)); //margen superior e inferior
 
+    //login
+    JPanel panelCentral = new JPanel();
+    panelCentral.setLayout(new GridLayout(3, 2, 5, 10));
+    panelCentral.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+    JLabel lblUser = new JLabel("Usuario:");
     JTextField txt_user = new JTextField(16);
+    JLabel lblPass = new JLabel("Contraseña:");
     JPasswordField txt_pass = new JPasswordField(16);
-
     JButton btn_login = new JButton("Iniciar Sesión");
-    
+    JLabel espacio = new JLabel(""); // espaciar el botón
 
-    dialog.add(txt_user);
-    dialog.add(txt_pass);
-    dialog.add(btn_login);
-    
+    //descripcion y caja txt
+    panelCentral.add(lblUser);
+    panelCentral.add(txt_user);
+    panelCentral.add(lblPass);
+    panelCentral.add(txt_pass);
+    panelCentral.add(espacio);
+    panelCentral.add(btn_login);
+
+    //añadir titulo y login
+    dialog.add(lblTitulo, BorderLayout.NORTH);
+    dialog.add(panelCentral, BorderLayout.CENTER);
 
     final UserData[] currentUser = {null};
-    
-        btn_login.addActionListener(e -> {
-            String user = txt_user.getText();
-            String password = txt_pass.getText();
 
-            if (UserDataDAO.validarCredenciales(user, password)) {
-                currentUser[0] = UserDataDAO.obtenerUsuario(user);
-                JOptionPane.showMessageDialog(dialog, "Bienvenido " + user);
-                HistorialSesionesDAO.newLog(new LogSesion(
+    btn_login.addActionListener(e -> {
+        String user = txt_user.getText();
+        String password = new String(txt_pass.getPassword()); // Obtener contraseña
+
+        if (UserDataDAO.validarCredenciales(user, password)) {
+            currentUser[0] = UserDataDAO.obtenerUsuario(user);
+            JOptionPane.showMessageDialog(dialog, "¡Bienvenido, " + user + "!", "Inicio de Sesión", JOptionPane.INFORMATION_MESSAGE);
+            HistorialSesionesDAO.newLog(new LogSesion(
                     "INICIO_SESION",
-                    "Inicio de sesion del usuario " + user,
+                    "Inicio de sesión del usuario " + user,
                     Date.valueOf(java.time.LocalDate.now()),
                     Time.valueOf(java.time.LocalTime.now()),
                     currentUser[0].getId()
-                ));
-                dialog.dispose();
+            ));
+            dialog.dispose();
 
-                // Iniciar la aplicación principal (TPVMain)
-                SwingUtilities.invokeLater(() -> {
-                    TPVMain tpvMain = new TPVMain(currentUser[0]); // Usa el nuevo constructor
-                    tpvMain.setVisible(true);
-                });
-            } else {
-                JOptionPane.showMessageDialog(dialog, "Usuario o contraseña incorrectos.");
-            }
-        });
+            SwingUtilities.invokeLater(() -> {
+                TPVMain tpvMain = new TPVMain(currentUser[0]);
+                tpvMain.setVisible(true);
+            });
+        } else {
+            JOptionPane.showMessageDialog(dialog, "Usuario o contraseña incorrectos.", "Error de Inicio de Sesión", JOptionPane.ERROR_MESSAGE);
+        }
+    });
 
-        dialog.setVisible(true);
-        
-        return currentUser[0];
-    }
+    dialog.setVisible(true);
+
+    return currentUser[0];
+}
 
     public void generarFactura(Pedido pedido) {
         StringBuilder factura = new StringBuilder();

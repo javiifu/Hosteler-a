@@ -160,7 +160,7 @@ public class VistaCobro extends JPanel implements ActionListener {
 
     private void mostrarFacturaEnDialogo(Pedido pedido) {
         String nombreArchivo = "factura_" + pedido.getId() + ".html";
-        JDialog dialogoFactura = new JDialog(tpvmain, "Factura - Mesa " + pedido.getNumeroMesa(), true );
+        JDialog dialogoFactura = new JDialog(tpvMain, "Factura - Mesa " + pedido.getNumeroMesa(), true );
         dialogoFactura.setSize(800, 600);
         dialogoFactura.setLocationRelativeTo(this);
 

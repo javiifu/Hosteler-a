@@ -177,7 +177,10 @@ public class VistaConfiguracion extends JPanel{
                     double precio = Double.parseDouble(precioTexto);
                     CategoriaDAO categoriaDAO = new CategoriaDAO();
                     int idCategoria = categoriaDAO.ObtenerCategoriaPorNombre(categoria);
-        
+                    if(precio<0){
+                        JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un precio valido.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                     productoDAO.crearProducto(nombre, descripcion, precio, idCategoria);
                     JOptionPane.showMessageDialog(dialog, "Producto creado con éxito.");
                     dialog.dispose(); // Cerrar el diálogo después de guardar

@@ -175,6 +175,11 @@ public class VistaConfiguracion extends JPanel{
         
                 try {
                     double precio = Double.parseDouble(precioTexto);
+                    // Validacion Añadida
+                    if (precio <= 0) {
+                        throw new IllegalArgumentException("El precio debe ser positivo");
+                    }
+
                     CategoriaDAO categoriaDAO = new CategoriaDAO();
                     int idCategoria = categoriaDAO.ObtenerCategoriaPorNombre(categoria);
         

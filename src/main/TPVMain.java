@@ -49,7 +49,7 @@ public class TPVMain extends JFrame implements ActionListener {
         vistaMesas = new VistaMesas(this);
         vistaMenu = new VistaMenu(this);
         vistaConfiguracion = new VistaConfiguracion(this);
-        vistaCobro = new VistaCobro(this, null); // Inicializa con un pedido nulo
+        vistaCobro = new VistaCobro(this, null, app); // Inicializa con un pedido nulo
         vistaCobro.setApp(app); // Inyectar la instancia de App en VistaCobro
 
         // Configurar panel inicial con botones

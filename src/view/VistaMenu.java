@@ -186,6 +186,10 @@ public class VistaMenu extends JPanel {
     }
 
     public void setMesaSeleccionada(int numeroMesa) {
+        // Validacion añadida
+        if(numeroMesa <= 0) {
+            throw new IllegalArgumentException("Número de mesa inválido");
+        }
         this.mesaSeleccionada = new Mesa(numeroMesa);
         JLabel titulo = (JLabel) getComponent(0);
         titulo.setText("Menu - Mesa " + numeroMesa);

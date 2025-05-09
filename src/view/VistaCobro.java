@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
+import java.util.Objects;
+
 import javax.swing.*;
 import main.TPVMain;
 import main.App;
@@ -22,9 +24,11 @@ public class VistaCobro extends JPanel implements ActionListener {
     private Boton botonFactura;
     private Pedido pedidoActual;
 
-    public VistaCobro(TPVMain tpvMain, Pedido pedido) {
-        this.tpvMain = tpvMain;
+    public VistaCobro(TPVMain tpvMain, Pedido pedido, App app) {
+        this.tpvMain = Objects.requireNonNull(tpvMain, "TPVMain no puede ser null");
         this.pedidoActual = pedido;
+        //Nueva seccion contructor añadida APP not null
+        this.app = Objects.requireNonNull(app,"App no puede ser null");
 
         setBackground(ColorPaleta.FONDO_SECUNDARIO); // Color de fondo gris oscuro
         setLayout(new BorderLayout()); // Diseño por regiones
@@ -135,14 +139,12 @@ public class VistaCobro extends JPanel implements ActionListener {
             PedidoDAO pedidoDAO = new PedidoDAO();
             pedidoDAO.cambiarEstadoPagado(pedidoActual.getId());
             pedidoDAO.setMetodoPago(pedidoActual.getId(), "TARJETA");
-
-        } else if ("factura".equals(comando)) {
-            if (pedidoActual != null) {
+        
+        } else if (pedidoActual != null) {
                 app.generarFactura(pedidoActual);
                 JOptionPane.showMessageDialog(this, "Factura generada para la mesa " + pedidoActual.getNumeroMesa() + ".");
             } else {
                 JOptionPane.showMessageDialog(this, "No hay pedido para generar factura.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
         }
     }
 
@@ -152,6 +154,6 @@ public class VistaCobro extends JPanel implements ActionListener {
     }
 
     public void setApp(App app) {
-        this.app = app;
+        this.app = Objects.requireNonNull(app, "App no puede ser null");
     }
 }

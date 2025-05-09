@@ -47,6 +47,6 @@ public class VistaMesas extends JPanel {
             tpvMain.mostrarVista("Inicio");
         }); 
         add(botonMenu, BorderLayout.SOUTH); // Añadir botón de menú en la parte inferior
+  
     }
-
 }

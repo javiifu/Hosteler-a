@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import main.TPVMain;
 import main.App;
 import model.Pedido;
@@ -139,6 +141,7 @@ public class VistaCobro extends JPanel implements ActionListener {
         } else if ("factura".equals(comando)) {
             if (pedidoActual != null) {
                 app.generarFactura(pedidoActual);
+                mostrarFacturaEnDialogo(pedidoActual);
                 JOptionPane.showMessageDialog(this, "Factura generada para la mesa " + pedidoActual.getNumeroMesa() + ".");
             } else {
                 JOptionPane.showMessageDialog(this, "No hay pedido para generar factura.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -153,5 +156,33 @@ public class VistaCobro extends JPanel implements ActionListener {
 
     public void setApp(App app) {
         this.app = app;
+    }
+
+    private void mostrarFacturaEnDialogo(Pedido pedido) {
+        String nombreArchivo = "factura_" + pedido.getId() + ".html";
+        JDialog dialogoFactura = new JDialog(tpvMain, "Factura - Mesa " + pedido.getNumeroMesa(), true );
+        dialogoFactura.setSize(800, 600);
+        dialogoFactura.setLocationRelativeTo(this);
+
+        try {
+            JEditorPane editorPane = new JEditorPane();
+            editorPane.setEditable(false);
+            editorPane.setContentType("text/html");
+            editorPane.setPage(new java.io.File(nombreArchivo).toURI().toURL());
+
+            JScrollPane scrollPane = new JScrollPane(editorPane);
+            dialogoFactura.add(scrollPane, BorderLayout.CENTER);
+
+            Boton botonCerrar = new Boton("Cerrar", ColorPaleta.VOLVER, ColorPaleta.HOVER_VOLVER);
+            botonCerrar.addActionListener(e -> dialogoFactura.dispose());
+            JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelBotones.add(botonCerrar);
+            dialogoFactura.add(panelBotones, BorderLayout.SOUTH);
+
+            dialogoFactura.setVisible(true);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar la factura " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

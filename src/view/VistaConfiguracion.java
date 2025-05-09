@@ -368,6 +368,7 @@ public class VistaConfiguracion extends JPanel{
     
             MesaDAO mesaDAO = new MesaDAO();
             if (tipo.equalsIgnoreCase("Crear Mesa")) {
+                numero = Integer.parseInt(campoNumero.getText());
                 Mesa mesa = new Mesa(numero);
                 mesaDAO.newMesa(mesa);
                 JOptionPane.showMessageDialog(dialog, "Mesa creada con exito");      

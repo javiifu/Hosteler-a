@@ -310,7 +310,8 @@ public class PedidoDAO {
                     double precioPlato = rs.getDouble("precio_plato");
                     int cantidad = rs.getInt("cantidad");
                     Integer categoria = rs.getInt("categoria");
-                    platosPedido.put(new Producto(nombrePlato, precioPlato, categoria), cantidad);
+                    Integer codigo = rs.getInt("codigo");
+                    platosPedido.put(new Producto(codigo, nombrePlato, precioPlato, categoria), cantidad);
                 }
             } catch (SQLException e) {
                 System.out.println("Error al obtener los platos del pedido: " + e.getMessage());

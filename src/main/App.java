@@ -164,7 +164,7 @@ public class App {
             factura.append("<tr><td>"+entry.getKey().getNombre()+"</td><td>"+entry.getValue()+"</td><td>"+entry.getKey().getPrecio()+"</td></tr>");
             total += entry.getKey().getPrecio() * entry.getValue();
         }
-        factura.append("</table><div class=\"totales\"><table class=\"tabla\"><tr><td class=\"total\">Total sin IVA</td><td class=\"total\">"+total+"</td></tr><tr><td class=\"total\">IVA (10%)</td><td class=\"total\">"+total*0.10+"</td></tr><tr><td class=\"total\">Total con IVA</td><td class=\"total\">"+(total + total*0.10)+"</td></tr></table></div></div></body></html>");
+        factura.append("</table><div class=\"totales\"><table class=\"tabla\"><tr><td class=\"total\">Total sin IVA</td><td class=\"total\">"+total+"</td></tr><tr><td class=\"total\">IVA (10%)</td><td class=\"total\">"+String.format("%.2f",total*0.10)+"</td></tr><tr><td class=\"total\">Total con IVA</td><td class=\"total\">"+String.format("%.2f",total + total*0.10)+"</td></tr></table></div></div></body></html>");
 
         String html = factura.toString();
         String nombreArchivo = "factura_" + pedido.getId() + ".html";
@@ -206,7 +206,7 @@ public class App {
         Date fecha = new Date(System.currentTimeMillis());
         Time hora = new Time(System.currentTimeMillis());
         StringBuilder resumen = new StringBuilder();
-        resumen.append("<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Factura</title><style>body {font-family: Arial, sans-serif;margin: 20px;padding: 20px;background-color: #f4f4f4;}.factura {background-color: #fff;padding: 20px;             border-radius: 10px;box-shadow: 0 0 10px rgba(0,0,0,0.1);max-width: 400px;             margin: auto;             padding-bottom: 20px;}.factura h2, .factura p {text-align: center;}.tabla {width: 100%;margin-top: 10px;border-collapse: collapse;}.tabla th, .tabla td {padding: 10px;text-align: left;}.tabla th {background-color: #ddd;}.totales {margin-top: 20px;padding: 10px;background-color: #ddd;border-radius: 5px;}.total {font-weight: bold;text-align: right;}</style></head><body><div class=\"factura\">");
+        resumen.append("<!DOCTYPE html><html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Resumen</title><style>body {font-family: Arial, sans-serif;margin: 20px;padding: 20px;background-color: #f4f4f4;}.factura {background-color: #fff;padding: 20px;             border-radius: 10px;box-shadow: 0 0 10px rgba(0,0,0,0.1);max-width: 400px;             margin: auto;             padding-bottom: 20px;}.factura h2, .factura p {text-align: center;}.tabla {width: 100%;margin-top: 10px;border-collapse: collapse;}.tabla th, .tabla td {padding: 10px;text-align: left;}.tabla th {background-color: #ddd;}.totales {margin-top: 20px;padding: 10px;background-color: #ddd;border-radius: 5px;}.total {font-weight: bold;text-align: right;}</style></head><body><div class=\"factura\">");
         resumen.append("<h2>"+config.getNombre_restaurante()+"</h2>");
         resumen.append("<p>Fecha y hora del resumen: "+fecha+" || "+hora+"</p>");
         ArrayList<Pedido> lista_pedidos = PedidoDAO.pedidosPorDia(config.getHorarios().get(0).getInicio());
@@ -215,8 +215,13 @@ public class App {
             Map<Producto, Integer> lista_productos = PedidoDAO.listaPlatosPedidoFactura(pedido);
             lista_total_productos.add(lista_productos);
         }
-        Map<Producto, Integer> lista_total_productos_agrupados = lista_total_productos.stream().flatMap(map -> map.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Integer::sum));
-        double total_categoria = 0;
+        Map<Producto, Integer> lista_total_productos_agrupados = lista_total_productos.stream()
+        .flatMap(map -> map.entrySet().stream())
+        .collect(Collectors.groupingBy(
+            Map.Entry::getKey, 
+            Collectors.summingInt(Map.Entry::getValue)
+        ));
+            double total_categoria = 0;
         Map<Integer, String> lista_categorias = CategoriaDAO.obtenerCategorias();
         for(Map.Entry<Integer, String> entry_categoria : lista_categorias.entrySet()){
             resumen.append("<h3>"+entry_categoria.getValue()+"</h3>");
@@ -233,11 +238,11 @@ public class App {
         double tarjetaSinIVA = totalVendidoPorTipoPagoSinIVA("TARJETA");
         double efectivoSinIVA = totalVendidoPorTipoPagoSinIVA("EFECTIVO");
         double total = totalVendidoSinIVA();
-        resumen.append("<div class=\"totales\"><table class=\"tabla\"><tr><td class=\"total\">Total Tarjeta sin IVA</td><td class=\"total\">"+tarjetaSinIVA+"</td></tr><tr><td class=\"total\">IVA Tarjeta(10%)</td><td class=\"total\">"+tarjetaSinIVA*0.10+"</td></tr><tr><td class=\"total\">Tarjeta con IVA</td><td class=\"total\">"+(tarjetaSinIVA + tarjetaSinIVA*0.10)+"</td></tr>");
+        resumen.append("<div class=\"totales\"><table class=\"tabla\"><tr><td class=\"total\">Total Tarjeta sin IVA</td><td class=\"total\">"+tarjetaSinIVA+"</td></tr><tr><td class=\"total\">IVA Tarjeta(10%)</td><td class=\"total\">"+String.format("%.2f", (tarjetaSinIVA*0.10))+"</td></tr><tr><td class=\"total\">Tarjeta con IVA</td><td class=\"total\">"+String.format("%.2f",(tarjetaSinIVA + tarjetaSinIVA*0.10))+"</td></tr>");
 
-        resumen.append("<tr><td class=\"total\">Total Efectivo sin IVA</td><td class=\"total\">"+efectivoSinIVA+"</td></tr><tr><td class=\"total\">IVA Efectivo(10%)</td><td class=\"total\">"+efectivoSinIVA*0.10+"</td></tr><tr><td class=\"total\">Efectivo con IVA</td><td class=\"total\">"+(efectivoSinIVA + efectivoSinIVA*0.10)+"</td></tr>");
+        resumen.append("<tr><td class=\"total\">Total Efectivo sin IVA</td><td class=\"total\">"+efectivoSinIVA+"</td></tr><tr><td class=\"total\">IVA Efectivo(10%)</td><td class=\"total\">"+String.format("%.2f",efectivoSinIVA*0.10)+"</td></tr><tr><td class=\"total\">Efectivo con IVA</td><td class=\"total\">"+String.format("%.2f",(efectivoSinIVA + efectivoSinIVA*0.10))+"</td></tr>");
 
-        resumen.append("<tr><td class=\"total\">Total sin IVA</td><td class=\"total\">"+total+"</td></tr><tr><td class=\"total\">IVA(10%)</td><td class=\"total\">"+total*0.10+"</td></tr><tr><td class=\"total\" con IVA</td></tr><td class=\"total\">Total con IVA</td><td class=\"total\">"+(total + total*0.10)+"</td></tr></table></div></div></body></html>");
+        resumen.append("<tr><td class=\"total\">Total sin IVA</td><td class=\"total\">"+total+"</td></tr><tr><td class=\"total\">IVA(10%)</td><td class=\"total\">"+String.format("%.2f",total*0.10)+"</td></tr><tr><td class=\"total\" con IVA</td></tr><td class=\"total\">Total con IVA</td><td class=\"total\">"+String.format("%.2f",(total + total*0.10))+"</td></tr></table></div></div></body></html>");
 
         String html = resumen.toString();
         String nombreArchivo = "resumen_" + fecha.toString()+"_"+hora.toString() + ".html";

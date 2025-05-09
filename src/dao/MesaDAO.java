@@ -117,26 +117,6 @@ public class MesaDAO {
         }
     }
 
-    public void deleteMesa(int num_mesa) {
-        String sql = "DELETE FROM Mesa WHERE numero = ?";
-        Connection conexion = ConexionBD.conectar();
-        try {
-            PreparedStatement statement = conexion.prepareStatement(sql);
-            statement.setInt(1, num_mesa);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error al eliminar la mesa: " + e.getMessage());
-        } finally {
-            try {
-                if (conexion != null) {
-                    conexion.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar la conexión: " + e.getMessage());
-            }
-        }
-    }
-
     public ArrayList<Mesa> getMesas() {
         ArrayList<Mesa> mesas = new ArrayList<>();
         String sql = "SELECT * FROM Mesa";
@@ -160,51 +140,7 @@ public class MesaDAO {
         }
         return mesas;
     }
-     //Metodo para actualizar un Mesa
-    public boolean actualizarNumero(Integer numeroNuevo, Integer numeroViejo ) {
-        Connection conexion = ConexionBD.conectar();
-        if (conexion != null) {
-            //El primero es el nuemero nuevo y el segunod es el numero viejo
-            String query = "UPDATE Mesa SET numero = ? WHERE numero = ?";
-            try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-                stmt.setInt(1, numeroNuevo); 
-                stmt.setInt(2, numeroViejo); 
     
-                int filas_afectadas = stmt.executeUpdate();
-                return filas_afectadas == 1;
-            } catch (SQLException e) {
-                System.out.println("Error al actualizar Mesa: " + e.getMessage());
-            } 
-        }
-        return false;
-    }
-
-    //Metodo buscar mesa
-    public Mesa buscarMesa(Integer numeroMesa) {
-        Connection conexion = ConexionBD.conectar();
-
-        if (conexion != null) {
-            Mesa mesa = null;
-            String query = "SELECT * FROM Mesa WHERE numero = " + numeroMesa;
-
-            try ( PreparedStatement stmt = conexion.prepareStatement(query)) {
-                
-                ResultSet rs = stmt.executeQuery();
-
-                if (rs.next()) {
-                    mesa = new Mesa(
-                        rs.getInt("numero"),
-                        rs.getBoolean("estado")
-                    );
-                }
-            } catch (SQLException e) {
-                System.out.println("Error al buscar mesa: " + e.getMessage());
-            }
-            return mesa; 
-        }
-        return null; 
-    }
-
     //Metodo obtener numeros de mesa
     public ArrayList<Integer> obtenerMesas() {
         Connection conexion = ConexionBD.conectar();

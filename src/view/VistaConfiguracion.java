@@ -211,6 +211,10 @@ public class VistaConfiguracion extends JPanel{
                             try {
                                 double precio = Double.parseDouble(precioTexto);
                                 modificado = productoDAO.actualizarCampoProducto("precio", idProductoAModificar, precio) || modificado;
+                                if(precio<0){
+                                    JOptionPane.showMessageDialog(dialog, "Por favor, ingresa un precio valido.", "Error", JOptionPane.ERROR_MESSAGE);
+                                    return;
+                                }
                             } catch (NumberFormatException ex) {
                                 JOptionPane.showMessageDialog(dialog, "El precio debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
                                 return;

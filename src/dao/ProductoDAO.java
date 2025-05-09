@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 import model.Producto;
 
 public class ProductoDAO {
@@ -37,27 +36,7 @@ public class ProductoDAO {
     }
  }  
 
-    public void borrarProducto(int id){
-
-        Connection conexion = ConexionBD.conectar();
-            
-
-        if(conexion != null){
-            String query = "UPDATE Producto SET activo = FALSE WHERE id =" + id;
-
-        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-
-            stmt.executeUpdate();
-            System.out.println("los datos se han actualizado con exito");
-
-        } catch (SQLException e) {
-
-            System.out.println("error al borrar los datos"+e.getMessage());
-
-        }
-    }
- }
-    public void borrarProductoPorNombre(String nombre){
+     public void borrarProductoPorNombre(String nombre){
  
     Connection conexion = ConexionBD.conectar();
        
@@ -151,35 +130,7 @@ public class ProductoDAO {
             }
             }
         }
-    public List<Producto> mostrarTodosProductos(){
-        Connection conexion = ConexionBD.conectar();
-        List<Producto> productos = new ArrayList<>();
-        if(conexion != null){
-            String query = "SELECT * FROM Productos";
-            try (Statement stmt = conexion.createStatement();
-                    ResultSet rs = stmt.executeQuery(query)) {
-
-                while (rs.next()) {
-                    Producto producto = new Producto(
-                    rs.getInt("id"),
-                    rs.getString("nombre"),
-                    rs.getString("descripcion"),
-                    rs.getInt("precio"),
-                    rs.getInt("id_categoria")
-                    );
-                    productos.add(producto);
-
-                }
-
-            } catch (SQLException e) {
-                System.out.println("error al realizar la consulta" + e.getMessage());
-
-            }
-        }
-        return productos;
-
-    }
-    public Producto buscarProductoByID(int codigo){
+     public Producto buscarProductoByID(int codigo){
         Connection conexion = ConexionBD.conectar();
         Producto producto = null;
         if(conexion != null){
@@ -205,55 +156,6 @@ public class ProductoDAO {
         return producto;
     }
 
-    public void cambiarEstadoProducto(int id) {
-        try (Connection conexion = ConexionBD.conectar()) {
-            if (conexion != null) {
-                String query = "UPDATE Producto SET estado = NOT estado WHERE numero = ?";
-                
-                try (PreparedStatement stmt = conexion.prepareStatement(query)) {
-            
-                    stmt.setInt(1, id);
-                    stmt.executeUpdate();
-
-
-                    int filasActualizadas = stmt.executeUpdate();
-                    if (filasActualizadas > 0) {
-                        System.out.println("Estado del producto con ID " + id + " ha sido actualizado.");
-                    } else {
-                        System.out.println("No se encontró ningún producto con ID " + id + ".");
-                    }
-            
-                } catch (SQLException e) {
-                    System.out.println("Error: no se encuentra el producto " + e.getMessage());
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al cambiar a no disponible: " + e.getMessage());
-        }
-    }
-    public void mostrarProductosByCategoria(int idcategoria){
-        Connection conexion = ConexionBD.conectar();
-        if(conexion != null){
-            String query = "SELECT * FROM Productos WHERE id_categoria="+idcategoria;
-        try (Statement stmt = conexion.createStatement();
-                ResultSet rs = stmt.executeQuery(query)) {
-
-            while (rs.next()) {
-                System.out.println("Codigo: " + rs.getInt("id"));
-                System.out.println("Nombre: " + rs.getString("nombre"));
-                System.out.println("Descripcion: " + rs.getString("descripcion"));
-                System.out.println("Precio: " + rs.getInt("precio"));
-                System.out.println("-------------------------");
-
-            }
-
-        } catch (SQLException e) {
-            System.out.println("error" + e.getMessage());
-
-    }
-    }
-
-    }
     public ArrayList<String> obtenerNombresPorCategoria(String nombreCategoria) {
         ArrayList<String> nombres = new ArrayList<>();
         Connection conexion = ConexionBD.conectar();
